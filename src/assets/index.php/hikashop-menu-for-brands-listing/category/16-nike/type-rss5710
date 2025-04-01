@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generator="Joomla! - Open Source Content Management" -->
+<?xml-stylesheet href="/media/com_hikashop/css/hikashop.css?v=502" type="text/css"?>
+<?xml-stylesheet href="/media/com_hikashop/css/frontend_default.css?t=1714035548" type="text/css"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Nike</title>
+		<description><![CDATA[]]></description>
+		<link>https://powfit.jollyany.co</link>
+		<lastBuildDate>Tue, 11 Mar 2025 08:43:35 +0000</lastBuildDate>
+		<generator>Joomla! - Open Source Content Management</generator>
+		<atom:link rel="self" type="application/rss+xml" href="https://powfit.jollyany.co/index.php/hikashop-menu-for-brands-listing/category/16-nike/type-rss?format=feed"/>
+		<language>en-gb</language>
+		<item>
+			<title>Under Armour Cotton T-Shirt</title>
+			<link>https://powfit.jollyany.co/index.php?option=com_hikashop&amp;ctrl=product&amp;task=show&amp;cid=14&amp;name=under-armour-cotton-t-shirt&amp;Itemid=130&amp;category_pathway=16</link>
+			<guid isPermaLink="true">https://powfit.jollyany.co/index.php?option=com_hikashop&amp;ctrl=product&amp;task=show&amp;cid=14&amp;name=under-armour-cotton-t-shirt&amp;Itemid=130&amp;category_pathway=16</guid>
+			<description><![CDATA[<table><tr><td><img src="https://powfit.jollyany.co/images/com_hikashop/upload/thumbnails/450x450/47.jpg"/></td><td><div id="featurebullets_feature_div" class="celwidget flavor-2955" data-feature-name="featurebullets" data-csa-c-type="widget" data-csa-c-slot-id="ppd-center.46" data-csa-c-component="featurebullets" data-csa-c-cs-type="DETAIL_PAGE_DYNAMIC" data-csa-c-id="6hcisa-34tjj-efp22h-j93db3" data-cel-widget="featurebullets_feature_div">
+<div id="feature-bullets" class="a-section a-spacing-medium a-spacing-top-small">
+<p><span class="a-list-item">With a wider weight range you can do heavy exercises such as shrugs and lunges, as well as lighter exercises such as curls and raises.</span></p>
+</div>
+</div>
+<div id="serviceCapabilities_feature_div" class="celwidget" data-feature-name="serviceCapabilities" data-csa-c-type="widget" data-csa-c-slot-id="ppd-center.47" data-csa-c-component="serviceCapabilities" data-csa-c-cs-type="DETAIL_PAGE_DYNAMIC" data-csa-c-id="46cft1-xjqzqe-nznfpg-cqt98m" data-cel-widget="serviceCapabilities_feature_div"></div>
+<ul>
+<li><span class="a-list-item">Control your Spotify app, download Pandora stations and add Deezer playlists</span></li>
+<li><span class="a-list-item">Works around the clock with 6 plus day battery life</span></li>
+<li><span class="a-list-item">Get a call, text, calendar and smartphone app notifications when your phone is nearby</span></li>
+</ul>Price : $190.00</td></tr></table>]]></description>
+			<category>16</category>
+			<pubDate>Mon, 28 Feb 2022 23:38:34 +0000</pubDate>
+		</item>
+	</channel>
+</rss>
