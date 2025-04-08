@@ -1,16 +1,29 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { StoreComponent } from "./store/store.component";
-import { ProductsComponent } from "./store/products/products.component";
-import { ProductDetailComponent } from "./store/product-detail/product-detail.component";
-import { HomeComponent } from "./home/home.component";
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
-import { UserprofileComponent } from './user/userprofile/userprofile.component';
+import { StoreComponent } from "./front-office/store/store.component";
+import { ProductsComponent } from "./front-office/store/products/products.component";
+import { ProductDetailComponent } from "./front-office/store/product-detail/product-detail.component";
+import { HomeComponent } from "./front-office/home/home.component";
+import { LoginComponent } from './front-office/auth/login/login.component';
+import { RegisterComponent } from './front-office/auth/register/register.component';
+import { ForgotPasswordComponent } from './front-office/auth/forgot-password/forgot-password.component';
+import { UserprofileComponent } from './front-office/userprofile/userprofile.component';
+import { AllTemplateFrontComponentComponent } from './front-office/all-template-front-component/all-template-front-component.component';
+import { AllTemplateBackComponentComponent } from './back-office/all-template-back-component/all-template-back-component.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent }, // Home route
+
+  { path: 'admin', component: AllTemplateBackComponentComponent, children: [ 
+    
+    // Admin route   
+]},
+
+
+
+
+
+
+  { path: '', component: AllTemplateFrontComponentComponent, children: [ // Home route
   { path: 'login', component: LoginComponent },
   { path: 'userprofile', component: UserprofileComponent },
 
@@ -25,7 +38,8 @@ const routes: Routes = [
       { path: 'products/:id', component: ProductDetailComponent } // Product details
 
     ]
-  }
+  },]
+}
 ];
 
 @NgModule({
