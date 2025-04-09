@@ -1,56 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { SportService } from '../services/pack.service';
-import { Sport } from '../models/sport';
+import { PackService } from '../services/pack.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-sports-list',
+  selector: 'app-packs-list',
   templateUrl: './list.component.html'
 })
 export class ListComponent implements OnInit {
-  sports: Sport[] = [];
+  packs: any[] = [];
   errorMessage: string = '';
   loading: boolean = false;
 
   constructor(
-    private sportService: SportService,
+    private packservice: PackService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadSports();
+    this.loadpacks();
   }
 
-  loadSports(): void {
+  loadpacks(): void {
     this.loading = true;
-    this.sportService.getSports().subscribe({
+    this.packservice.getpacks().subscribe({
       next: (data) => {
-        this.sports = data;
+        this.packs = data;
         this.loading = false;
       },
       error: (error) => {
-        this.errorMessage = 'Failed to load sports';
+        this.errorMessage = 'Failed to load packs';
         this.loading = false;
         console.error(error);
       }
     });
   }
 
-  deleteSport(id: number): void {
-    if (confirm('Are you sure you want to delete this sport?')) {
-      this.sportService.deleteSport(id).subscribe({
+  deletePack(id: number): void {
+    if (confirm('Are you sure you want to delete this pack?')) {
+      this.packservice.deletepack(id).subscribe({
         next: () => {
-          this.loadSports();
+          this.loadpacks();
         },
         error: (error) => {
-          this.errorMessage = 'Failed to delete sport';
+          this.errorMessage = 'Failed to delete pack';
           console.error(error);
         }
       });
     }
   }
 
-  editSport(id: number): void {
-    this.router.navigate(['/admin/sports-management', id, 'edit']);
+  editPack(id: number): void {
+    this.router.navigate(['/admin/packs-management', id, 'edit']);
   }
 }

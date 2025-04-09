@@ -1,55 +1,55 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SportService } from '../services/pack.service';
-import { Sport } from '../models/sport';
+import { PackService } from '../services/pack.service';
 
 @Component({
-  selector: 'app-sports-details',
+  selector: 'app-packs-details',
   templateUrl: './details.component.html'
 })
 export class DetailsComponent implements OnInit {
-  sportForm: FormGroup;
+  packForm: FormGroup;
   isEditing = false;
-  sportId: number | null = null;
+  packId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private sportService: SportService,
+    private packservice: PackService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.sportForm = this.fb.group({
+    this.packForm = this.fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.required]
+      duration: ['', Validators.required],
+      price: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.sportId = +this.route.snapshot.params['id'];
-    if (this.sportId) {
+    this.packId = +this.route.snapshot.params['id'];
+    if (this.packId) {
       this.isEditing = true;
-      this.loadSport(this.sportId);
+      this.loadPack(this.packId);
     }
   }
 
-  loadSport(id: number): void {
-    this.sportService.getSport(id).subscribe(sport => {
-      this.sportForm.patchValue(sport);
+  loadPack(id: number): void {
+    this.packservice.getpack(id).subscribe(pack => {
+      this.packForm.patchValue(pack);
     });
   }
 
   onSubmit(): void {
-    if (this.sportForm.valid) {
-      const sportData: Sport = this.sportForm.value;
+    if (this.packForm.valid) {
+      const packData: any = this.packForm.value;
       
-      if (this.isEditing && this.sportId) {
-        this.sportService.updateSport(sportData, this.sportId).subscribe(() => {
-          this.router.navigate(['/sports']);
+      if (this.isEditing && this.packId) {
+        this.packservice.updatepack(packData, this.packId).subscribe(() => {
+          this.router.navigate(['/admin/packs-management/']);
         });
       } else {
-        this.sportService.createSport(sportData).subscribe(() => {
-          this.router.navigate(['/sports']);
+        this.packservice.createPack(packData).subscribe(() => {
+          this.router.navigate(['/admin/packs-management/']);
         });
       }
     }

@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-import { Sport } from '../models/sport';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SportService {
-  private apiUrl = `http://localhost:8089/sports`;
+export class PackService {
+  private apiUrl = `http://localhost:8089/packs`;
   private cachedToken: string | null = null;
 
   clubaccount = {
@@ -40,7 +39,7 @@ export class SportService {
     }
 
     try {
-      this.cachedToken = await lastValueFrom(this.bypassadmin());
+      this.cachedToken = await lastValueFrom(this.bypassclub());
       return this.cachedToken;
     } catch (error) {
       console.error('Failed to get token:', error);
@@ -56,45 +55,58 @@ export class SportService {
     });
   }
 
-  getSports(): Observable<Sport[]> {
+  getpacks(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers => 
-        this.http.get<Sport[]>(`${this.apiUrl}/retrieve-all-sports`, { headers })
+        this.http.get<any[]>(`${this.apiUrl}/retrieve-all-packs`, { headers })
       )
     );
   }
 
-  getSport(id: number): Observable<Sport> {
+  getpack(id: number): Observable<any> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.get<Sport>(`${this.apiUrl}/retrieve-sport/${id}`, { headers })
+        this.http.get<any>(`${this.apiUrl}/retrieve-pack/${id}`, { headers })
       )
     );
   }
 
-  createSport(sport: Sport): Observable<Sport> {
+  createPack(pack: any): Observable<any> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.post<Sport>(`${this.apiUrl}/add-sport`, sport, { headers })
+        this.http.post<any>(`${this.apiUrl}/add-pack`, pack, { headers })
       )
     );
   }
 
-  updateSport(sport: Sport, id: number): Observable<Sport> {
+  updatepack(pack: any, id: number): Observable<any> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.put<Sport>(`${this.apiUrl}/update-sport/${id}`, sport, { headers })
+        this.http.put<any>(`${this.apiUrl}/update-pack/${id}`, pack, { headers })
       )
     );
   }
 
-  deleteSport(id: number): Observable<void> {
+  deletepack(id: number): Observable<void> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.delete<void>(`${this.apiUrl}/remove-sport/${id}`, { headers })
+        this.http.delete<void>(`${this.apiUrl}/remove-pack/${id}`, { headers })
       )
     );
   }
+
+
+  affecterPackToclub(id: number, idclub: number): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.put<any>(`${this.apiUrl}/affect-pack/${id}/to-club/${idclub}`, { headers })
+      )
+    );
+  }
+
+
+
+
 
   bypassclub(): Observable<string> {
     return this.http.post(`http://localhost:8089/auth/generateToken`,

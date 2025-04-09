@@ -1,62 +1,62 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SportService } from '../services/pack.service';
-import { Sport } from '../models/sport';
+import { PackService } from '../services/pack.service';
 
 @Component({
-  selector: 'app-sports-editadd',
+  selector: 'app-packs-editadd',
   templateUrl: './editadd.component.html'
 })
 export class EditaddComponent implements OnInit {
-  sportForm: FormGroup;
+  packForm: FormGroup;
   isEditing = false;
-  sportId: number | null = null;
+  packId: number | null = null;
   errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
-    private sportService: SportService,
+    private packService: PackService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.sportForm = this.fb.group({
+    this.packForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required, Validators.minLength(10)]]
+      duration: ['', [Validators.required, Validators.min(1)]],
+      price: ['', [Validators.required, Validators.min(0)]],
     });
   }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
     if (id) {
-      this.sportId = +id;
+      this.packId = +id;
       this.isEditing = true;
-      this.loadSport(this.sportId);
+      this.loadPack(this.packId);
     }
   }
 
-  private loadSport(id: number): void {
-    this.sportService.getSport(id).subscribe({
-      next: (sport) => this.sportForm.patchValue(sport),
+  private loadPack(id: number): void {
+    this.packService.getpack(id).subscribe({
+      next: (pack) => this.packForm.patchValue(pack),
       error: (error) => {
-        this.errorMessage = 'Failed to load sport details';
+        this.errorMessage = 'Failed to load pack details';
         console.error(error);
       }
     });
   }
 
   onSubmit(): void {
-    if (this.sportForm.valid) {
-      const sportData: Sport = this.sportForm.value;
+    if (this.packForm.valid) {
+      const packData: any = this.packForm.value;
       
       const action = this.isEditing ? 
-        this.sportService.updateSport(sportData, this.sportId!) :
-        this.sportService.createSport(sportData);
+        this.packService.updatepack(packData, this.packId!) :
+        this.packService.createPack(packData);
 
       action.subscribe({
-        next: () => this.router.navigate(['/admin/sports-management/']),
+        next: () => this.router.navigate(['/admin/packs-management/']),
         error: (error) => {
-          this.errorMessage = `Failed to ${this.isEditing ? 'update' : 'create'} sport`;
+          this.errorMessage = `Failed to ${this.isEditing ? 'update' : 'create'} pack`;
           console.error(error);
         }
       });
