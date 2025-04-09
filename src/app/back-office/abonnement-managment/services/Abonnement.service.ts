@@ -71,10 +71,10 @@ export class AbonnementService {
     );
   }
 
-  createAbonnement(abonnement: any): Observable<any> {
+  createAbonnement(packId: number): Observable<any> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.post<any>(`${this.apiUrl}/add-abonnement`, abonnement, { headers })
+        this.http.post<any>(`${this.apiUrl}/add-abonnement`, packId, { headers })
       )
     );
   }
