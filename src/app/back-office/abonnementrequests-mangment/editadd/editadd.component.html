@@ -1,51 +1,63 @@
 <div class="container mt-4">
-    <h2>{{isEditing ? 'Edit' : 'Add New'}} Sport</h2>
+    <h2>Add New Abonnement Request</h2>
     
     <div *ngIf="errorMessage" class="alert alert-danger">
         {{ errorMessage }}
     </div>
 
-    <form [formGroup]="sportForm" (ngSubmit)="onSubmit()" class="mt-3">
+    <form [formGroup]="abonnementForm" (ngSubmit)="onSubmit()" class="mt-3">
         <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" 
-                   id="name"
+            <label for="requestedDate" class="form-label">Requested Date</label>
+            <input type="date" 
+                   id="requestedDate"
                    class="form-control" 
-                   formControlName="name"
-                   [class.is-invalid]="sportForm.get('name')?.invalid && sportForm.get('name')?.touched">
-            <div class="invalid-feedback" *ngIf="sportForm.get('name')?.errors?.['required']">
-                Name is required
-            </div>
-            <div class="invalid-feedback" *ngIf="sportForm.get('name')?.errors?.['minlength']">
-                Name must be at least 3 characters
+                   formControlName="requestedDate"
+                   [class.is-invalid]="abonnementForm.get('requestedDate')?.invalid && abonnementForm.get('requestedDate')?.touched">
+            <div class="invalid-feedback" *ngIf="abonnementForm.get('requestedDate')?.invalid && abonnementForm.get('requestedDate')?.touched">
+                Requested date is required
             </div>
         </div>
-        
+
         <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea id="description"
-                      class="form-control" 
-                      formControlName="description" 
-                      rows="3"
-                      [class.is-invalid]="sportForm.get('description')?.invalid && sportForm.get('description')?.touched">
-            </textarea>
-            <div class="invalid-feedback" *ngIf="sportForm.get('description')?.errors?.['required']">
-                Description is required
+            <label for="packId" class="form-label">Pack</label>
+            <select id="packId"
+                    class="form-control"
+                    formControlName="packId"
+                    [class.is-invalid]="abonnementForm.get('packId')?.invalid && abonnementForm.get('packId')?.touched">
+                <option [ngValue]="null">Select a pack</option>
+                <option *ngFor="let pack of packs" [ngValue]="pack">
+                    {{pack.name}} - {{pack.price}} TND
+                </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="abonnementForm.get('packId')?.invalid && abonnementForm.get('packId')?.touched">
+                Pack selection is required
             </div>
-            <div class="invalid-feedback" *ngIf="sportForm.get('description')?.errors?.['minlength']">
-                Description must be at least 10 characters
+        </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select id="status"
+                    class="form-control"
+                    formControlName="status"
+                    [class.is-invalid]="abonnementForm.get('status')?.invalid && abonnementForm.get('status')?.touched">
+                <option value="PENDING">Pending</option>
+                <option value="APPROVED">Approved</option>
+                <option value="REJECTED">Rejected</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="abonnementForm.get('status')?.invalid && abonnementForm.get('status')?.touched">
+                Status is required
             </div>
         </div>
 
         <div class="mt-4">
             <button type="submit" 
                     class="btn btn-primary" 
-                    [disabled]="!sportForm.valid || sportForm.pristine">
-                {{isEditing ? 'Update' : 'Create'}}
+                    [disabled]="!abonnementForm.valid">
+                Create
             </button>
             <button type="button" 
                     class="btn btn-secondary ms-2" 
-                    routerLink="/admin/sports-management">
+                    routerLink="/admin/abonnementrequests-management">
                 Cancel
             </button>
         </div>

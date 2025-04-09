@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SportService } from '../services/sports.service';
-import { Sport } from '../models/sport';
+import { AbonnementrequestsService } from '../services/Abonnementrequests.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,49 +7,45 @@ import { Router } from '@angular/router';
   templateUrl: './list.component.html'
 })
 export class ListComponent implements OnInit {
-  sports: Sport[] = [];
+  requests: any[] = [];
   errorMessage: string = '';
   loading: boolean = false;
 
   constructor(
-    private sportService: SportService,
+    private abonnementreqsevice: AbonnementrequestsService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadSports();
+    this.loadRequests();
   }
 
-  loadSports(): void {
+  loadRequests(): void {
     this.loading = true;
-    this.sportService.getSports().subscribe({
+    this.abonnementreqsevice.getRequests().subscribe({
       next: (data) => {
-        this.sports = data;
+        this.requests = data;
         this.loading = false;
       },
       error: (error) => {
-        this.errorMessage = 'Failed to load sports';
+        this.errorMessage = 'Failed to load requests';
         this.loading = false;
         console.error(error);
       }
     });
   }
 
-  deleteSport(id: number): void {
-    if (confirm('Are you sure you want to delete this sport?')) {
-      this.sportService.deleteSport(id).subscribe({
-        next: () => {
-          this.loadSports();
-        },
-        error: (error) => {
-          this.errorMessage = 'Failed to delete sport';
-          console.error(error);
-        }
-      });
-    }
+  approveRequest(requestId: number): void {
+    this.abonnementreqsevice.approveRequest(requestId).subscribe({
+      next: () => {
+        this.loadRequests();
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to approve request';
+        console.error(error);
+      }
+    });
   }
 
-  editSport(id: number): void {
-    this.router.navigate(['/admin/sports-management', id, 'edit']);
-  }
+
 }

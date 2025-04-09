@@ -1,65 +1,68 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SportService } from '../services/sports.service';
-import { Sport } from '../models/sport';
+import { AbonnementrequestsService } from '../services/Abonnementrequests.service';
 
 @Component({
-  selector: 'app-sports-editadd',
+  selector: 'app-abonnements-editadd',
   templateUrl: './editadd.component.html'
 })
 export class EditaddComponent implements OnInit {
-  sportForm: FormGroup;
+  abonnementForm: FormGroup;
   isEditing = false;
-  sportId: number | null = null;
+  abonnmentId: number | null = null;
   errorMessage: string = '';
+  users: any[] = [];
+  packs: any[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private sportService: SportService,
+    private abonnementService: AbonnementrequestsService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.sportForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required, Validators.minLength(10)]]
+    this.abonnementForm = this.fb.group({
+      requestedDate: ['', Validators.required],
+      status: ['PENDING', [Validators.required]],
+      packId: [null, [Validators.required]], // Changed to null initial value
     });
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
-    if (id) {
-      this.sportId = +id;
-      this.isEditing = true;
-      this.loadSport(this.sportId);
-    }
+    this.loadPacks();
   }
 
-  private loadSport(id: number): void {
-    this.sportService.getSport(id).subscribe({
-      next: (sport) => this.sportForm.patchValue(sport),
+  private loadPacks(): void {
+    this.abonnementService.getpacks().subscribe({
+      next: (packs) => this.packs = packs,
       error: (error) => {
-        this.errorMessage = 'Failed to load sport details';
+        this.errorMessage = 'Failed to load packs';
         console.error(error);
       }
     });
   }
 
   onSubmit(): void {
-    if (this.sportForm.valid) {
-      const sportData: Sport = this.sportForm.value;
+    if (this.abonnementForm.valid) {
+      const formValue = this.abonnementForm.value;
+      const packId = formValue.packId?.id; // Get the pack id from the selected pack object
       
-      const action = this.isEditing ? 
-        this.sportService.updateSport(sportData, this.sportId!) :
-        this.sportService.createSport(sportData);
-
-      action.subscribe({
-        next: () => this.router.navigate(['/admin/sports-management/']),
+      if (!packId) {
+        this.errorMessage = 'Please select a valid pack';
+        return;
+      }
+       console.log('Form Value:', packId);
+      this.abonnementService.createRequest(packId).subscribe({
+        next: () => {
+          this.router.navigate(['/admin/abonnementrequests-management/']);
+        },
         error: (error) => {
-          this.errorMessage = `Failed to ${this.isEditing ? 'update' : 'create'} sport`;
+          this.errorMessage = 'Failed to create abonnement request';
           console.error(error);
         }
       });
+    } else {
+      this.errorMessage = 'Please fill all required fields';
     }
   }
 }
