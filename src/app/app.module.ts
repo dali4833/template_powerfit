@@ -37,7 +37,7 @@ import { FooterBackComponent } from './back-office/footer-back/footer-back.compo
     AllTemplateBackComponentComponent,
     NavbarComponent,
     SidebarComponent,
-    FooterBackComponent
+    FooterBackComponent,
   ],
   imports: [
     ReactiveFormsModule,

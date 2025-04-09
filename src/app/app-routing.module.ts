@@ -14,16 +14,16 @@ import { AllTemplateBackComponentComponent } from './back-office/all-template-ba
 const routes: Routes = [
 
   { path: 'admin', component: AllTemplateBackComponentComponent, children: [ 
+    { path: 'sports-management', loadChildren: () => import('./back-office/sports-managment/sports.module').then(m => m.SportsModule) },
     
-    // Admin route   
-]},
+    
+ 
+ 
+ 
+ 
+  ]},
 
-
-
-
-
-
-  { path: '', component: AllTemplateFrontComponentComponent, children: [ // Home route
+  { path: '', component: AllTemplateFrontComponentComponent, children: [ 
   { path: 'login', component: LoginComponent },
   { path: 'userprofile', component: UserprofileComponent },
 
@@ -38,7 +38,16 @@ const routes: Routes = [
       { path: 'products/:id', component: ProductDetailComponent } // Product details
 
     ]
-  },]
+  },
+
+ 
+
+
+
+
+
+
+]
 }
 ];
 
