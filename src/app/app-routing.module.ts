@@ -20,7 +20,7 @@ const routes: Routes = [
 
 
 
-
+// redirect to home if no path is wrong 
 
 
   { path: '', component: AllTemplateFrontComponentComponent, children: [ // Home route
@@ -39,7 +39,9 @@ const routes: Routes = [
 
     ]
   },]
-}
+},
+{ path: '**', redirectTo: '/' },
+
 ];
 
 @NgModule({
