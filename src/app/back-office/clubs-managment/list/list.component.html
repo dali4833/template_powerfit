@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Sports List</h2>
-        <button class="btn btn-primary" routerLink="/admin/sports-management/new">Add New Sport</button>
+        <h2>Clubs List</h2>
+        <button class="btn btn-primary" routerLink="/admin/clubs-management/new">Add New Club</button>
     </div>
 
     <div *ngIf="errorMessage" class="alert alert-danger">
@@ -14,29 +14,31 @@
         </div>
     </div>
 
-    <table class="table mt-3" *ngIf="!loading && sports.length > 0">
+    <table class="table mt-3" *ngIf="!loading && clubs.length > 0">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
+                <th>capacity</th>
                 <th>Description</th>
+                <th>name</th>
+                <th>status</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let sport of sports">
-                <td>{{sport.id}}</td>
-                <td>{{sport.name}}</td>
-                <td>{{sport.description}}</td>
+            <tr *ngFor="let club of clubs">
+                <td>{{club.capacity}}</td>
+                <td>{{club.name}}</td>
+                <td>{{club.description}}</td>
+                <td>{{club.status}}</td>
                 <td>
-                    <button class="btn btn-sm btn-primary me-2" (click)="editSport(sport.id!)">Edit</button>
-                    <button class="btn btn-sm btn-danger" (click)="sport.id && deleteSport(sport.id)">Delete</button>
+                    <button class="btn btn-sm btn-primary me-2" (click)="editClub(club.id!)">Edit</button>
+                    <button class="btn btn-sm btn-danger" (click)="club.id && deleteClub(club.id)">Delete</button>
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <div *ngIf="!loading && sports.length === 0" class="alert alert-info">
-        No sports found. Click "Add New Sport" to create one.
+    <div *ngIf="!loading && clubs.length === 0" class="alert alert-info">
+        No clubs found. Click "Add New club" to create one.
     </div>
 </div>

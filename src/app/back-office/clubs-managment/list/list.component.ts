@@ -1,56 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { SportService } from '../services/sports.service';
-import { Sport } from '../models/sport';
+import { ClubService } from '../services/club.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-sports-list',
+  selector: 'app-clubs-list',
   templateUrl: './list.component.html'
 })
 export class ListComponent implements OnInit {
-  sports: Sport[] = [];
+  clubs: any[] = [];
   errorMessage: string = '';
   loading: boolean = false;
 
   constructor(
-    private sportService: SportService,
+    private clubservice: ClubService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadSports();
+    this.loadClubs();
   }
 
-  loadSports(): void {
+  loadClubs(): void {
     this.loading = true;
-    this.sportService.getSports().subscribe({
+    this.clubservice.getClubs().subscribe({
       next: (data) => {
-        this.sports = data;
+        this.clubs = data;
         this.loading = false;
       },
       error: (error) => {
-        this.errorMessage = 'Failed to load sports';
+        this.errorMessage = 'Failed to load clubs';
         this.loading = false;
         console.error(error);
       }
     });
   }
 
-  deleteSport(id: number): void {
-    if (confirm('Are you sure you want to delete this sport?')) {
-      this.sportService.deleteSport(id).subscribe({
+  deleteClub(id: number): void {
+    if (confirm('Are you sure you want to delete this club?')) {
+      this.clubservice.deleteClub(id).subscribe({
         next: () => {
-          this.loadSports();
+          this.loadClubs();
         },
         error: (error) => {
-          this.errorMessage = 'Failed to delete sport';
+          this.errorMessage = 'Failed to delete club';
           console.error(error);
         }
       });
     }
   }
 
-  editSport(id: number): void {
-    this.router.navigate(['/admin/sports-management', id, 'edit']);
+  editClub(id: number): void {
+    this.router.navigate(['/admin/clubs-management', id, 'edit']);
   }
 }

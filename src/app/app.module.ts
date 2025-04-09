@@ -43,7 +43,7 @@ import { FooterBackComponent } from './back-office/footer-back/footer-back.compo
     ReactiveFormsModule,
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule  // This includes all router configuration
+    AppRoutingModule  
   ],
   providers: [],
   bootstrap: [AppComponent]

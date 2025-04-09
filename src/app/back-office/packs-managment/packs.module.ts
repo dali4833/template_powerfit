@@ -10,9 +10,12 @@ import { EditaddComponent } from './editadd/editadd.component';
   declarations: [
     ListComponent,
     DetailsComponent,
-    EditaddComponent
+    EditaddComponent,
   ],
   imports: [
+    DetailsComponent,
+    ListComponent,
+    EditaddComponent,
     CommonModule,
     PacksRoutingModule,
     ReactiveFormsModule,

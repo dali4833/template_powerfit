@@ -7,12 +7,13 @@ import { SportsRoutingModule } from './sports-routing.module';
 import { EditaddComponent } from './editadd/editadd.component';
 
 @NgModule({
-  declarations: [
-    ListComponent,
-    DetailsComponent,
-    EditaddComponent
-  ],
+  declarations: [ 
+    
+   ],
   imports: [
+    EditaddComponent,
+    DetailsComponent,
+    ListComponent,
     CommonModule,
     SportsRoutingModule,
     ReactiveFormsModule,

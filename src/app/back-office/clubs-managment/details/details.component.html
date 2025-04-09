@@ -1,7 +1,7 @@
 <div class="container">
-    <h2>{{isEditing ? 'Edit' : 'Add'}} Sport</h2>
+    <h2>{{isEditing ? 'Edit' : 'Add'}} Club</h2>
     
-    <form [formGroup]="sportForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="clubForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
             <label class="form-label">Name</label>
             <input type="text" class="form-control" formControlName="name">
@@ -12,10 +12,20 @@
             <textarea class="form-control" formControlName="description"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary" [disabled]="!sportForm.valid">
+    
+        <div class="mb-3">
+            <label class="form-label">capacity</label>
+            <textarea class="form-control" formControlName="capacity"></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">status</label>
+            <textarea class="form-control" formControlName="status"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="!clubForm.valid">
             {{isEditing ? 'Update' : 'Create'}}
         </button>
-        <button type="button" class="btn btn-secondary ms-2" routerLink="/sports">
+        <button type="button" class="btn btn-secondary ms-2" routerLink="/admin/clubs-management">
             Cancel
         </button>
     </form>

@@ -1,55 +1,56 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SportService } from '../services/sports.service';
-import { Sport } from '../models/sport';
+import { ClubService } from '../services/club.service';
 
 @Component({
-  selector: 'app-sports-details',
+  selector: 'app-clubs-details',
   templateUrl: './details.component.html'
 })
 export class DetailsComponent implements OnInit {
-  sportForm: FormGroup;
+  clubForm: FormGroup;
   isEditing = false;
-  sportId: number | null = null;
+  clubId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private sportService: SportService,
+    private clubservice: ClubService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.sportForm = this.fb.group({
+    this.clubForm = this.fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+       capacity: ['', Validators.required],
+      status: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
-    this.sportId = +this.route.snapshot.params['id'];
-    if (this.sportId) {
+    this.clubId = +this.route.snapshot.params['id'];
+    if (this.clubId) {
       this.isEditing = true;
-      this.loadSport(this.sportId);
+      this.loadClub(this.clubId);
     }
   }
 
-  loadSport(id: number): void {
-    this.sportService.getSport(id).subscribe(sport => {
-      this.sportForm.patchValue(sport);
+  loadClub(id: number): void {
+    this.clubservice.getClub(id).subscribe(club => {
+      this.clubForm.patchValue(club);
     });
   }
 
   onSubmit(): void {
-    if (this.sportForm.valid) {
-      const sportData: Sport = this.sportForm.value;
+    if (this.clubForm.valid) {
+      const clubdata: any = this.clubForm.value;
       
-      if (this.isEditing && this.sportId) {
-        this.sportService.updateSport(sportData, this.sportId).subscribe(() => {
-          this.router.navigate(['/sports']);
+      if (this.isEditing && this.clubId) {
+        this.clubservice.updateClub(clubdata, this.clubId).subscribe(() => {
+          this.router.navigate(['/admin/clubs-management']);
         });
       } else {
-        this.sportService.createSport(sportData).subscribe(() => {
-          this.router.navigate(['/sports']);
+        this.clubservice.createClub(clubdata).subscribe(() => {
+          this.router.navigate(['/admin/clubs-management']);
         });
       }
     }

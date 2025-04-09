@@ -1,62 +1,63 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SportService } from '../services/sports.service';
-import { Sport } from '../models/sport';
+import { ClubService } from '../services/club.service';
 
 @Component({
-  selector: 'app-sports-editadd',
+  selector: 'app-clubs-editadd',
   templateUrl: './editadd.component.html'
 })
 export class EditaddComponent implements OnInit {
-  sportForm: FormGroup;
+  clubform: FormGroup;
   isEditing = false;
-  sportId: number | null = null;
+  clubId: number | null = null;
   errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
-    private sportService: SportService,
+    private clubservice: ClubService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.sportForm = this.fb.group({
+    this.clubform = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required, Validators.minLength(10)]]
+      description: ['', [Validators.required, Validators.minLength(10)]],
+      capacity: ['', [Validators.required]],
+      status: ['', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
     if (id) {
-      this.sportId = +id;
+      this.clubId = +id;
       this.isEditing = true;
-      this.loadSport(this.sportId);
+      this.loadclub(this.clubId);
     }
   }
 
-  private loadSport(id: number): void {
-    this.sportService.getSport(id).subscribe({
-      next: (sport) => this.sportForm.patchValue(sport),
+  private loadclub(id: number): void {
+    this.clubservice.getClub(id).subscribe({
+      next: (club) => this.clubform.patchValue(club),
       error: (error) => {
-        this.errorMessage = 'Failed to load sport details';
+        this.errorMessage = 'Failed to load club details';
         console.error(error);
       }
     });
   }
 
   onSubmit(): void {
-    if (this.sportForm.valid) {
-      const sportData: Sport = this.sportForm.value;
+    if (this.clubform.valid) {
+      const clubData: any = this.clubform.value;
       
       const action = this.isEditing ? 
-        this.sportService.updateSport(sportData, this.sportId!) :
-        this.sportService.createSport(sportData);
+        this.clubservice.updateClub(clubData, this.clubId!) :
+        this.clubservice.createClub(clubData);
 
       action.subscribe({
-        next: () => this.router.navigate(['/admin/sports-management/']),
+        next: () => this.router.navigate(['/admin/clubs-management']),
         error: (error) => {
-          this.errorMessage = `Failed to ${this.isEditing ? 'update' : 'create'} sport`;
+          this.errorMessage = `Failed to ${this.isEditing ? 'update' : 'create'} club`;
           console.error(error);
         }
       });
