@@ -1,56 +1,66 @@
 import { Component, OnInit } from '@angular/core';
-import { SportService } from '../services/sports.service';
-import { Sport } from '../models/sport';
+import { ClubrequestsService } from '../services/Clubrequests.service';
+import { ClubService } from '../../clubs-managment/services/club.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-sports-list',
+  selector: 'app-club-request-list',
   templateUrl: './list.component.html'
 })
 export class ListComponent implements OnInit {
-  sports: Sport[] = [];
+  requests: any[] = [];
   errorMessage: string = '';
   loading: boolean = false;
 
   constructor(
-    private sportService: SportService,
+    private clubrequestService: ClubrequestsService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadSports();
+    this.loadrequests();
   }
 
-  loadSports(): void {
+  loadrequests(): void {
     this.loading = true;
-    this.sportService.getSports().subscribe({
+    this.clubrequestService.getPendingRequests().subscribe({
       next: (data) => {
-        this.sports = data;
+        this.requests = data;
         this.loading = false;
       },
       error: (error) => {
-        this.errorMessage = 'Failed to load sports';
+        this.errorMessage = 'Failed to load requests';
         this.loading = false;
         console.error(error);
       }
     });
   }
 
-  deleteSport(id: number): void {
-    if (confirm('Are you sure you want to delete this sport?')) {
-      this.sportService.deleteSport(id).subscribe({
+  rejectRequest(id: number): void {
+    if (confirm('Are you sure you want to reject this club request?')) {
+      this.clubrequestService.rejectClubCreationRequest(id).subscribe({
         next: () => {
-          this.loadSports();
+          this.loadrequests();
         },
         error: (error) => {
-          this.errorMessage = 'Failed to delete sport';
+          this.errorMessage = 'Failed to reject club request';
           console.error(error);
         }
       });
     }
   }
 
-  editSport(id: number): void {
-    this.router.navigate(['/admin/sports-management', id, 'edit']);
+  approveRequest(id: number): void {
+    if (confirm('Are you sure you want to approve this club request?')) {
+      this.clubrequestService.approveClubCreationRequest(id).subscribe({
+        next: () => {
+          this.loadrequests();
+        },
+        error: (error) => {
+          this.errorMessage = 'Failed to approve club request';
+          console.error(error);
+        }
+      });
+    }
   }
 }

@@ -96,7 +96,21 @@ export class ClubService {
   }
 
 
+  affecterSportToClub(clubId : any ,  sportId : any): Observable<any[]> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers => 
+        this.http.post<any[]>(`${this.apiUrl}/${clubId}/sports/${sportId}`, { headers })
+      )
+    );
+  }
 
+  submitClubCreationRequest(body: any): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.post<any>(`${this.apiUrl}/submit-creation-request`, body  ,  { headers })
+      )
+    );
+  }
 
 
 

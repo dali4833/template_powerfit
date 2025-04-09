@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-import { Sport } from '../models/sport';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SportService {
-  private apiUrl = `http://localhost:8089/sports`;
+export class ClubrequestsService {
+  private apiUrl = `http://localhost:8089/clubs`;
   private cachedToken: string | null = null;
 
   clubaccount = {
@@ -56,62 +55,59 @@ export class SportService {
     });
   }
 
-  getSports(): Observable<Sport[]> {
+
+
+  getPendingRequests(): Observable<any> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
-        this.http.get<Sport[]>(`${this.apiUrl}/retrieve-all-sports`, { headers })
+      switchMap(headers =>
+        this.http.get<any>(`${this.apiUrl}/admin/pending-requests`, { headers })
       )
     );
   }
 
-  getSport(id: number): Observable<Sport> {
+  approveClubCreationRequest(requestId: any): Observable<void> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.get<Sport>(`${this.apiUrl}/retrieve-sport/${id}`, { headers })
+        this.http.post<void>(`${this.apiUrl}/admin/approve/${requestId}`, {}, { headers })
       )
     );
   }
 
-  createSport(sport: Sport): Observable<Sport> {
+  rejectClubCreationRequest(requestId: any): Observable<void> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.post<Sport>(`${this.apiUrl}/add-sport`, sport, { headers })
+        this.http.post<void>(`${this.apiUrl}/admin/reject/${requestId}`, {}, { headers })
       )
     );
   }
 
-  updateSport(sport: Sport, id: number): Observable<Sport> {
-    return from(this.generateHeaders()).pipe(
-      switchMap(headers =>
-        this.http.put<Sport>(`${this.apiUrl}/update-sport/${id}`, sport, { headers })
-      )
-    );
-  }
 
-  deleteSport(id: number): Observable<void> {
-    return from(this.generateHeaders()).pipe(
-      switchMap(headers =>
-        this.http.delete<void>(`${this.apiUrl}/remove-sport/${id}`, { headers })
-      )
-    );
-  }
+
+
+
+
+
 
   bypassclub(): Observable<string> {
+    console.log("bypassclub called");
     return this.http.post(`http://localhost:8089/auth/generateToken`,
       this.clubaccount, { responseType: 'text' });
   }
 
   bypassadmin(): Observable<string> {
+    console.log("bypassadmin called");
     return this.http.post(`http://localhost:8089/auth/generateToken`,
       this.adminaccount, { responseType: 'text' });
   }
 
   bypassUser(): Observable<string> {
+    console.log("bypassUser called");
     return this.http.post(`http://localhost:8089/auth/generateToken`,
       this.useraccount, { responseType: 'text' });
   }
 
   bypasscoach(): Observable<string> {
+    console.log("bypasscoach called");
     return this.http.post(`http://localhost:8089/auth/generateToken`,
       this.coachaccount, { responseType: 'text' });
   }
