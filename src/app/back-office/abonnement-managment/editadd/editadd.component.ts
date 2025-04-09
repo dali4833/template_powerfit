@@ -1,43 +1,45 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SportService } from '../services/sports.service';
-import { Sport } from '../models/sport';
+import { AbonnementService } from '../services/Abonnement.service';
 
 @Component({
-  selector: 'app-sports-editadd',
+  selector: 'app-abonnements-editadd',
   templateUrl: './editadd.component.html'
 })
 export class EditaddComponent implements OnInit {
-  sportForm: FormGroup;
+  abonnementForm: FormGroup;
   isEditing = false;
-  sportId: number | null = null;
+  abonnmentId: number | null = null;
   errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
-    private sportService: SportService,
+    private abonnementService: AbonnementService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.sportForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required, Validators.minLength(10)]]
+    this.abonnementForm = this.fb.group({
+      endDate: ['', Validators.required],
+      StartDate: ['', Validators.required],
+      status: ['', [Validators.required]],
+      pack: ['', [Validators.required]],
+      user: ['', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
     if (id) {
-      this.sportId = +id;
+      this.abonnmentId = +id;
       this.isEditing = true;
-      this.loadSport(this.sportId);
+      this.loadAbonnement(this.abonnmentId);
     }
   }
 
-  private loadSport(id: number): void {
-    this.sportService.getSport(id).subscribe({
-      next: (sport) => this.sportForm.patchValue(sport),
+  private loadAbonnement(id: number): void {
+    this.abonnementService.getAbonnement(id).subscribe({
+      next: (abonnement) => this.abonnementForm.patchValue(abonnement),
       error: (error) => {
         this.errorMessage = 'Failed to load sport details';
         console.error(error);
@@ -46,17 +48,17 @@ export class EditaddComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.sportForm.valid) {
-      const sportData: Sport = this.sportForm.value;
+    if (this.abonnementForm.valid) {
+      const abonnementData: any = this.abonnementForm.value;
       
       const action = this.isEditing ? 
-        this.sportService.updateSport(sportData, this.sportId!) :
-        this.sportService.createSport(sportData);
+        this.abonnementService.updateAbonnement(abonnementData, this.abonnmentId!) :
+        this.abonnementService.createAbonnement(abonnementData);
 
       action.subscribe({
-        next: () => this.router.navigate(['/admin/sports-management/']),
+        next: () => this.router.navigate(['/admin/abonnement-management/']),
         error: (error) => {
-          this.errorMessage = `Failed to ${this.isEditing ? 'update' : 'create'} sport`;
+          this.errorMessage = `Failed to ${this.isEditing ? 'update' : 'create'} abonnement`;
           console.error(error);
         }
       });

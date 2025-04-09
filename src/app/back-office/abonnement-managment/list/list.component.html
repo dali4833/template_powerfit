@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Sports List</h2>
-        <button class="btn btn-primary" routerLink="/admin/sports-management/new">Add New Sport</button>
+        <h2>Abonnement List</h2>
+        <button class="btn btn-primary" routerLink="/admin/abonnement-management/new">Add New Abonnement</button>
     </div>
 
     <div *ngIf="errorMessage" class="alert alert-danger">
@@ -14,23 +14,28 @@
         </div>
     </div>
 
-    <table class="table mt-3" *ngIf="!loading && sports.length > 0">
+    <table class="table mt-3" *ngIf="!loading && abonnements.length > 0">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
+                <th>endDate</th>
+                <th>startDate</th>
+                <th>status</th>
+                <th>pack</th>
+                <th>user</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let sport of sports">
-                <td>{{sport.id}}</td>
-                <td>{{sport.name}}</td>
-                <td>{{sport.description}}</td>
+            <tr *ngFor="let abonnement of abonnements">
+                <td>{{abonnement.id}}</td>
+                <td>{{abonnement.name}}</td>
+                <td>{{abonnement.description}}</td>
                 <td>
-                    <button class="btn btn-sm btn-primary me-2" (click)="editSport(sport.id!)">Edit</button>
-                    <button class="btn btn-sm btn-danger" (click)="sport.id && deleteSport(sport.id)">Delete</button>
+                    <button class="btn btn-sm btn-primary me-2" (click)="editAbonnement(abonnement.id!)">Edit</button>
+                    <button class="btn btn-sm btn-danger me-2" (click)="abonnement.id && deleteAbonnement(abonnement.id)">Delete</button>
+                    <button class="btn btn-sm btn-success" (click)="abonnement.id && validateabonnement(abonnement.id)">Validate</button>
+                
                 </td>
             </tr>
         </tbody>
