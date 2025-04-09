@@ -23,8 +23,7 @@ export class EditaddComponent implements OnInit {
   ) {
     this.abonnementForm = this.fb.group({
       requestedDate: ['', Validators.required],
-      status: ['PENDING', [Validators.required]],
-      packId: [null, [Validators.required]], // Changed to null initial value
+      packId: [null, [Validators.required]],
     });
   }
 

@@ -97,12 +97,19 @@ export class AbonnementrequestsService {
 
 
   createRequest(id: any): Observable<any> {
-    // Clear any existing cached token to ensure we get a fresh user token
-    this.cachedToken = null;
+    this.cachedToken = null; // Clear existing token
     return from(this.generateHeadersForUser()).pipe(
       switchMap(headers =>
         this.http.post<any>(`${this.apiUrl}/request/${id}`, {}, { headers })
-      )
+      ),
+      // Clear token again after request completes
+      switchMap(response => {
+        this.cachedToken = null;
+        return new Observable<any>(observer => {
+          observer.next(response);
+          observer.complete();
+        });
+      })
     );
   }
 

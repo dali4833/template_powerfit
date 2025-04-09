@@ -19,8 +19,7 @@
             <tr>
                 <th>requestedDate</th>
                 <th>status</th>
-                <th>userId</th>
-                <th>packId</th>
+             
                 <th>Actions</th>
             </tr>
         </thead>
@@ -28,10 +27,9 @@
             <tr *ngFor="let req of requests">
                 <td>{{req.requestedDate}}</td>
                 <td>{{req.status}}</td>
-                <td>{{req.pack_id}}</td>
-                <td>{{req.user_id}}</td>
+             
                 <td>
-                    <button class="btn btn-sm btn-danger" (click)="req.id && approveRequest(req.id)">Delete</button>
+                    <button class="btn btn-sm btn-info" (click)="req.id && approveRequest(req.id)">approve</button>
                 </td>
             </tr>
         </tbody>
