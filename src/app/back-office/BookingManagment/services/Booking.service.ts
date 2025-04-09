@@ -48,25 +48,19 @@ export class BookingService {
   }
 
   private async getValidTokenforCOACH(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
+    // Always get a fresh token for coach operations
     try {
-      this.cachedToken = await lastValueFrom(this.bypasscoach());
-      return this.cachedToken;
+      const token = await lastValueFrom(this.bypasscoach());
+      return token;
     } catch (error) {
-      console.error('Failed to get token:', error);
+      console.error('Failed to get coach token:', error);
       throw error;
     }
   }
 
   private async getValidTokenforCoach(): Promise<HttpHeaders> {
     const token = await this.getValidTokenforCOACH();
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
   private async generateHeaders(): Promise<HttpHeaders> {
@@ -96,7 +90,11 @@ export class BookingService {
   approveBooking(sessionId: number, bookingId: number): Observable<any> {
     return from(this.getValidTokenforCoach()).pipe(
       switchMap(headers =>
-        this.http.patch<any>(`${this.apiUrl}/${sessionId}/bookings/${bookingId}/approve`, {}, { headers })
+        this.http.patch<any>(
+          `${this.apiUrl}/${sessionId}/bookings/${bookingId}/approve`,
+          null,
+          { headers }
+        )
       )
     );
   }
@@ -104,7 +102,11 @@ export class BookingService {
   rejectBooking(sessionId: number, bookingId: number): Observable<any> {
     return from(this.getValidTokenforCoach()).pipe(
       switchMap(headers =>
-        this.http.patch<any>(`${this.apiUrl}/${sessionId}/bookings/${bookingId}/reject`, {}, { headers })
+        this.http.patch<any>(
+          `${this.apiUrl}/${sessionId}/bookings/${bookingId}/reject`,
+          null,
+          { headers }
+        )
       )
     );
   }
