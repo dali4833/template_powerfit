@@ -23,7 +23,10 @@ const routes: Routes = [
 
     
  
- 
+     { path: 'TrainingSession-management', loadChildren: () => import('./back-office/TrainingSessionMangment/TrainingSession.module').then(m => m.TrainingSessionModule) },
+     { path: 'Review-management', loadChildren: () => import('./back-office/ReviewManagment/Review.module').then(m => m.ReviewModule) },
+     { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
+
  
  
   ]},
@@ -46,7 +49,6 @@ const routes: Routes = [
   },
 
  
-
 
 
 
