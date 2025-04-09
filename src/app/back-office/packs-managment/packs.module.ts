@@ -13,9 +13,7 @@ import { EditaddComponent } from './editadd/editadd.component';
     EditaddComponent,
   ],
   imports: [
-    DetailsComponent,
-    ListComponent,
-    EditaddComponent,
+  
     CommonModule,
     PacksRoutingModule,
     ReactiveFormsModule,

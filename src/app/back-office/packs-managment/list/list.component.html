@@ -17,18 +17,17 @@
     <table class="table mt-3" *ngIf="!loading && packs.length > 0">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
-                <th>Description</th>
+                <th>duration</th>
+                <th>Price</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let pack of packs">
-                <td>{{pack.duration}}</td>
                 <td>{{pack.name}}</td>
+                <td>{{pack.duration}}</td>
                 <td>{{pack.price}}</td>
-                <td>{{pack.club_id}}</td>
                 <td>
                     <button class="btn btn-sm btn-primary me-2" (click)="editPack(pack.id!)">Edit</button>
                     <button class="btn btn-sm btn-danger" (click)="pack.id && deletePack(pack.id)">Delete</button>
