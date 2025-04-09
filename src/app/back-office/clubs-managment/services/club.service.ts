@@ -95,11 +95,10 @@ export class ClubService {
     );
   }
 
-
-  affecterSportToClub(clubId : any ,  sportId : any): Observable<any[]> {
+  affecterSportToClub(clubId: any, sportId: any): Observable<void> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers => 
-        this.http.post<any[]>(`${this.apiUrl}/${clubId}/sports/${sportId}`, { headers })
+        this.http.post<void>(`${this.apiUrl}/${clubId}/sports/${sportId}`, null, { headers })
       )
     );
   }
@@ -111,16 +110,6 @@ export class ClubService {
       )
     );
   }
-
-
-
-
-
-
-
-
-
-
 
   bypassclub(): Observable<string> {
     return this.http.post(`http://localhost:8089/auth/generateToken`,

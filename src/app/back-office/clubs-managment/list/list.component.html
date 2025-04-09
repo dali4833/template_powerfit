@@ -31,6 +31,17 @@
                 <td>{{club.description}}</td>
                 <td>{{club.status}}</td>
                 <td>
+                    <div class="d-flex align-items-center">
+                        <select class="form-select me-2" [(ngModel)]="club.selectedSportId">
+                            <option [ngValue]="null">Select a sport</option>
+                            <option *ngFor="let sport of sports" [ngValue]="sport.id">{{sport.name}}</option>
+                        </select>
+                        <button class="btn btn-sm btn-success" 
+                                (click)="club.id && affecttosport(club.id, club.selectedSportId)"
+                                [disabled]="!club.selectedSportId">
+                            Affect To sport
+                        </button>
+                    </div>
                     <button class="btn btn-sm btn-primary me-2" (click)="editClub(club.id!)">Edit</button>
                     <button class="btn btn-sm btn-danger" (click)="club.id && deleteClub(club.id)">Delete</button>
                 </td>

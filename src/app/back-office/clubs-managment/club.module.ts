@@ -13,7 +13,6 @@ import { EditaddComponent } from './editadd/editadd.component';
     EditaddComponent
   ],
   imports: [
-    
     CommonModule,
     ClubRoutingModule,
     ReactiveFormsModule,
