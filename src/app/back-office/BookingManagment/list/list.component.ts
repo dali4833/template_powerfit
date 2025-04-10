@@ -10,7 +10,7 @@ export class ListComponent implements OnInit {
   bookings: any[] = [];
   loading = false;
   errorMessage = '';
-  sessionId = 6;
+  sessionId = 8;
 
   constructor(
     private bookingService: BookingService,
