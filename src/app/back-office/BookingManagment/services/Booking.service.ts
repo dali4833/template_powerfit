@@ -48,7 +48,6 @@ export class BookingService {
   }
 
   private async getValidTokenforCOACH(): Promise<string> {
-    // Always get a fresh token for coach operations
     try {
       const token = await lastValueFrom(this.bypasscoach());
       return token;
@@ -79,10 +78,10 @@ export class BookingService {
     );
   }
 
-  createBooking(sessionId: number, booking: Partial<any>): Observable<any> {
+  createBooking(sessionId: number): Observable<any> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.post<any>(`${this.apiUrl}/${sessionId}/bookings`, booking, { headers })
+        this.http.post<any>(`${this.apiUrl}/${sessionId}/bookings`, {}, { headers })
       )
     );
   }

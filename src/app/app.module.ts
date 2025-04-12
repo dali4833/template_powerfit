@@ -45,7 +45,7 @@ import { TrainingSessionComponent } from './front-office/pages/training-session/
     ReactiveFormsModule,
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule  
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

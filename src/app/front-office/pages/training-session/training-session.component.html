@@ -22,11 +22,35 @@
                             <dt><span uk-icon="clock"></span> Time: {{session.startTime}} - {{session.endTime}}</dt>
                             <dt><span uk-icon="users"></span> Max Participants: {{session.maxParticipants}} spots</dt>
                         </dl>
-                        <div class="uk-card-footer uk-padding-remove-horizontal">
-                            <button class="uk-button uk-button-primary uk-width-1-1 mb-1" (click)="CheckExercices(session.id)">Check Exercices</button>
-                            <button class="uk-button uk-button-primary uk-width-1-1 mb-1" (click)="bookSession(session.id)">Book Session</button>
-                            <button class="uk-button uk-button-primary uk-width-1-1" (click)="loadReviews(session.id)">Load Reviews</button>
-                        </div>
+                    </div>
+                    <div class="uk-card-footer uk-padding-remove-horizontal">
+                        <!-- Booking Button -->
+                        <button 
+                            *ngIf="!session.isBooked" 
+                            [disabled]="session.maxParticipants <= session.currentParticipants"
+                            class="uk-button uk-button-primary uk-width-1-1 mb-1" 
+                            (click)="bookSession(session.id)">
+                            {{ session.maxParticipants <= session.currentParticipants ? 'Session Full' : 'Book Session' }}
+                        </button>
+
+                        <button 
+                            *ngIf="session.isBooked" 
+                            class="uk-button uk-button-danger uk-width-1-1 mb-1" 
+                            (click)="session.bookingId !== undefined && cancelBooking(session.id, session.bookingId)">
+                            Cancel Booking
+                        </button>
+
+                        <!-- Other Buttons -->
+                        <button class="uk-button uk-button-secondary uk-width-1-1 mb-1" 
+                            (click)="checkExercises(session.id)">
+                            Check Exercises
+                        </button>
+                        <button class="uk-button uk-button-default uk-width-1-1" 
+                            (click)="loadReviews(session.id)">
+                            Reviews
+                        </button>
+
+                      
                     </div>
                 </div>
             </div>

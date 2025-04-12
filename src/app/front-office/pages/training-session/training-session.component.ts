@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TrainingSessionService } from '../../../back-office/TrainingSessionMangment/services/TrainingSession.service';
+import { BookingService } from 'src/app/back-office/BookingManagment/services/Booking.service';
+import { ReviewService } from 'src/app/back-office/ReviewManagment/services/Review.service';
 
 interface TrainingSession {
   id: number;
@@ -8,9 +10,10 @@ interface TrainingSession {
   startTime: string;
   endTime: string;
   maxParticipants: number;
-  coachName: string;
+  currentParticipants: number;
   sport: string;
-  image: string;
+  isBooked: boolean;
+  bookingId?: number;
 }
 
 @Component({
@@ -20,34 +23,88 @@ interface TrainingSession {
 })
 export class TrainingSessionComponent implements OnInit {
   trainingSessions: TrainingSession[] = [];
+  loading = false;
 
-  constructor(private trainingSessionService: TrainingSessionService) {}
+  constructor(
+    private trainingSessionService: TrainingSessionService,
+    private bookingService: BookingService,
+    private reviewService: ReviewService,
+  ) { }
 
   ngOnInit(): void {
     this.loadTrainingSessions();
   }
 
   loadTrainingSessions(): void {
-    this.trainingSessionService.getTrainingSessions()
-      .subscribe({
-        next: (data) => {this.trainingSessions = data
-          console.log('Training sessions loaded:', this.trainingSessions);
+    this.loading = true;
+    this.trainingSessionService.getTrainingSessions().subscribe({
+      next: (sessions) => {
+        this.trainingSessions = sessions.map(session => ({
+          ...session,
+          isBooked: false,
+          currentParticipants: 0
+        }));
+        this.loadBookingsForSessions();
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => this.loading = false
+    });
+  }
+
+  private loadBookingsForSessions(): void {
+    this.trainingSessions.forEach(session => {
+      this.bookingService.getBookings(session.id).subscribe({
+        next: (bookings) => {
+          const userBooking = bookings.find((b: any) => b.trainingSession.id === session.id);
+          if (userBooking) {
+            session.isBooked = true;
+            session.bookingId = userBooking.id;
+          }
         },
-        error: (error) => console.error('Error loading training sessions:', error)
+        error: (error) => console.error('Error loading bookings:', error)
       });
+    });
   }
 
   bookSession(sessionId: number): void {
-    console.log('Booking session:', sessionId);
+    this.loading = true;
+    this.bookingService.createBooking(sessionId).subscribe({
+      next: () => {
+        this.loadTrainingSessions();
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => this.loading = false
+    });
+  }
+
+  cancelBooking(sessionId: number, bookingId: number): void {
+    this.loading = true;
+    this.bookingService.cancelBooking(sessionId, bookingId).subscribe({
+      next: () => {
+        this.loadTrainingSessions();
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => this.loading = false
+    });
+  }
+
+  checkExercises(sessionId: number): void {
+    // Implement exercise check logic
   }
 
   loadReviews(sessionId: number): void {
-    console.log('Loading reviews for session:', sessionId);
+    // Implement review loading logic
   }
 
-  CheckExercices(sessionId: number): void {
-    console.log('Checking exercises for session:', sessionId);
-  }
+
+
+
 }
 
 

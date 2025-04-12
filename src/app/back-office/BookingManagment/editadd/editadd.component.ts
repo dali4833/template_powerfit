@@ -51,7 +51,7 @@ export class EditaddComponent implements OnInit {
       status: 'PENDING'
     };
 
-    this.bookingService.createBooking(sessionId, bookingData).subscribe({
+    this.bookingService.createBooking(sessionId).subscribe({
       next: () => {
         this.router.navigate(['/admin/Booking-management']);
       },

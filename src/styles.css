@@ -1,0 +1,40 @@
+.uk-notification-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  min-width: 250px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.uk-notification-message-success {
+  background: #32d296;
+  color: white;
+}
+
+.uk-notification-message-error {
+  background: #f0506e;
+  color: white;
+}
+
+.uk-animation-slide-top {
+  animation: slide-top 0.3s ease-out;
+}
+
+.uk-animation-slide-top-out {
+  animation: slide-top-out 0.3s ease-in;
+}
+
+@keyframes slide-top {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slide-top-out {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-100%); opacity: 0; }
+}
