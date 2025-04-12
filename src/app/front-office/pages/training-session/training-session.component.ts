@@ -2,6 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { TrainingSessionService } from '../../../back-office/TrainingSessionMangment/services/TrainingSession.service';
 import { BookingService } from 'src/app/back-office/BookingManagment/services/Booking.service';
 import { ReviewService } from 'src/app/back-office/ReviewManagment/services/Review.service';
+declare var bootstrap: any;
+
+interface Review {
+  id: number;
+  rating: number;
+  description: string;
+  createdAt: Date;
+  user: {
+    name: string;
+    email: string;
+  };
+}
 
 interface TrainingSession {
   id: number;
@@ -14,6 +26,9 @@ interface TrainingSession {
   sport: string;
   isBooked: boolean;
   bookingId?: number;
+  isElapsed?: boolean;
+  reviews?: Review[];
+  selectedReviews?: Review[];
 }
 
 @Component({
@@ -24,6 +39,7 @@ interface TrainingSession {
 export class TrainingSessionComponent implements OnInit {
   trainingSessions: TrainingSession[] = [];
   loading = false;
+  selectedSession: TrainingSession | null = null;
 
   constructor(
     private trainingSessionService: TrainingSessionService,
@@ -45,6 +61,7 @@ export class TrainingSessionComponent implements OnInit {
           currentParticipants: 0
         }));
         this.loadBookingsForSessions();
+        this.loadReviewsForSessions();
       },
       error: (error) => {
         console.error(error);
@@ -55,6 +72,11 @@ export class TrainingSessionComponent implements OnInit {
 
   private loadBookingsForSessions(): void {
     this.trainingSessions.forEach(session => {
+      const sessionDate = new Date(session.date);
+      const [hours, minutes] = session.endTime.split(':');
+      sessionDate.setHours(parseInt(hours), parseInt(minutes));
+      session.isElapsed = new Date() > sessionDate;
+
       this.bookingService.getBookings(session.id).subscribe({
         next: (bookings) => {
           const userBooking = bookings.find((b: any) => b.trainingSession.id === session.id);
@@ -64,6 +86,17 @@ export class TrainingSessionComponent implements OnInit {
           }
         },
         error: (error) => console.error('Error loading bookings:', error)
+      });
+    });
+  }
+
+  private loadReviewsForSessions(): void {
+    this.trainingSessions.forEach(session => {
+      this.reviewService.getReviews(session.id).subscribe({
+        next: (reviews) => {
+          session.reviews = reviews;
+          console.log(session)
+        }
       });
     });
   }
@@ -99,12 +132,24 @@ export class TrainingSessionComponent implements OnInit {
   }
 
   loadReviews(sessionId: number): void {
-    // Implement review loading logic
+    const session = this.trainingSessions.find(s => s.id === sessionId);
+    if (session) {
+      this.selectedSession = session;
+    }
   }
 
+  getStarsArray(rating: number): number[] {
+    return Array(rating).fill(0);
+  }
 
-
-
+  closeModal(): void {
+    this.selectedSession = null;
+    const modalElement = document.getElementById('reviewsModal');
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    if (modal) {
+      modal.hide();
+    }
+  }
 }
 
 

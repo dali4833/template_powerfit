@@ -25,34 +25,69 @@
                     </div>
                     <div class="uk-card-footer uk-padding-remove-horizontal">
                         <!-- Booking Button -->
-                        <button 
-                            *ngIf="!session.isBooked" 
+                        <button *ngIf="!session.isBooked && !session.isElapsed"
                             [disabled]="session.maxParticipants <= session.currentParticipants"
-                            class="uk-button uk-button-primary uk-width-1-1 mb-1" 
-                            (click)="bookSession(session.id)">
-                            {{ session.maxParticipants <= session.currentParticipants ? 'Session Full' : 'Book Session' }}
-                        </button>
+                            class="uk-button uk-button-primary uk-width-1-1 mb-1" (click)="bookSession(session.id)">
+                            {{ session.maxParticipants <= session.currentParticipants ? 'Session Full' : 'Book Session'
+                                }} </button>
 
-                        <button 
-                            *ngIf="session.isBooked" 
-                            class="uk-button uk-button-danger uk-width-1-1 mb-1" 
-                            (click)="session.bookingId !== undefined && cancelBooking(session.id, session.bookingId)">
-                            Cancel Booking
-                        </button>
+                                <button *ngIf="session.isBooked && !session.isElapsed"
+                                    class="uk-button uk-button-danger uk-width-1-1 mb-1"
+                                    (click)="session.bookingId !== undefined && cancelBooking(session.id, session.bookingId)">
+                                    Cancel Booking
+                                </button>
 
-                        <!-- Other Buttons -->
-                        <button class="uk-button uk-button-secondary uk-width-1-1 mb-1" 
-                            (click)="checkExercises(session.id)">
-                            Check Exercises
-                        </button>
-                        <button class="uk-button uk-button-default uk-width-1-1" 
-                            (click)="loadReviews(session.id)">
-                            Reviews
-                        </button>
-
-                      
+                                <!-- Other Buttons -->
+                                <button class="uk-button uk-button-secondary uk-width-1-1 mb-1"
+                                    (click)="checkExercises(session.id)">
+                                    Check Exercises
+                                </button>
+                                <button class="uk-button uk-button-default uk-width-1-1"
+                                    (click)="loadReviews(session.id)" data-bs-toggle="modal"
+                                    data-bs-target="#reviewsModal">
+                                    Reviews
+                                </button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Reviews Modal -->
+<div class="modal fade" id="reviewsModal" tabindex="-1" aria-labelledby="reviewsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" *ngIf="selectedSession">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewsModalLabel">Reviews for {{selectedSession.description}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container" *ngIf="selectedSession.reviews && selectedSession.reviews.length > 0">
+                    <div class="card mb-3" *ngFor="let review of selectedSession.reviews">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 >{{review.user.name }} </h6>
+                                  
+                                    <small  style="color: white;margin-left:3px;"> {{review.createdAt | date:'medium'}}</small>
+                                </div>
+                                <div class="text-warning">
+                                    <i class="bi bi-star-fill" *ngFor="let star of getStarsArray(review.rating)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{review.description}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center" *ngIf="!selectedSession.reviews || selectedSession.reviews.length === 0">
+                    <p>No reviews available for this session.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
