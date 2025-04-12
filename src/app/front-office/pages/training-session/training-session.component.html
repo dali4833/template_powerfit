@@ -10,7 +10,10 @@
             <div class="uk-width-1-3@m" *ngFor="let session of trainingSessions">
                 <div class="uk-card uk-card-default">
                     <div class="uk-card-media-top">
-                        <img src="assets/images/com_hikashop/upload/thumbnails/450x450f/2.jpg" alt="Training Session">
+                        <img 
+                        style="height: 250px; object-fit: cover;"
+                        class="uk-width-1-1 uk-height-small" 
+                        src="assets/images/samuel-girven-vj2s0c20qco-unsplash.jpg" alt="Training Session">
                     </div>
                     <div class="uk-card-body">
                         <h3 class="uk-card-title">{{session.description}}</h3>
