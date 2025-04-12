@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 interface TokenResponse {
   token: string;
@@ -12,7 +13,7 @@ interface TokenResponse {
 export class AuthService {
   private apiUrl = 'http://localhost:8089/auth';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private router: Router) {}
 
 // src/app/services/auth.service.ts
 login(user: any): Observable<any> {
@@ -32,6 +33,20 @@ login(user: any): Observable<any> {
       responseType: 'text' as 'json' // 👈 tell Angular to treat response as plain text
     });
   }
+
+
+  logout() {
+    localStorage.removeItem('token'); // or sessionStorage
+    //navigate to login page 
+     this.router.navigate(['/login']);
+  
+
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
 
 
   getUserProfile(): Observable<string> {

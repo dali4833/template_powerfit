@@ -31,7 +31,11 @@ const routes: Routes = [
  
   ]},
 
-  { path: '', component: AllTemplateFrontComponentComponent, children: [ 
+
+// redirect to home if no path is wrong 
+
+
+  { path: '', component: AllTemplateFrontComponentComponent, children: [ // Home route
   { path: 'login', component: LoginComponent },
   { path: 'userprofile', component: UserprofileComponent },
 
@@ -46,16 +50,10 @@ const routes: Routes = [
       { path: 'products/:id', component: ProductDetailComponent } // Product details
 
     ]
-  },
+  },]
+},
+{ path: '**', redirectTo: '/' },
 
- 
-
-
-
-
-
-]
-}
 ];
 
 @NgModule({
