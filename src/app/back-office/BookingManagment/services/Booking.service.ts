@@ -79,10 +79,12 @@ export class BookingService {
   }
 
   createBooking(sessionId: number): Observable<any> {
+
     return from(this.generateHeaders()).pipe(
-      switchMap(headers =>
-        this.http.post<any>(`${this.apiUrl}/${sessionId}/bookings`, {}, { headers })
-      )
+      switchMap(headers => {
+        console.log(headers);
+        return this.http.post<any>(`${this.apiUrl}/${sessionId}/bookings`, {}, { headers });
+      })
     );
   }
 

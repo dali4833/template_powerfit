@@ -128,7 +128,6 @@ export class TrainingSessionComponent implements OnInit {
   }
 
   checkExercises(sessionId: number): void {
-    // Implement exercise check logic
   }
 
   loadReviews(sessionId: number): void {
