@@ -19,6 +19,7 @@ import { AllTemplateBackComponentComponent } from './back-office/all-template-ba
 import { NavbarComponent } from './back-office/navbar/navbar.component';
 import { SidebarComponent } from './back-office/sidebar/sidebar.component';
 import { FooterBackComponent } from './back-office/footer-back/footer-back.component';
+import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { FooterBackComponent } from './back-office/footer-back/footer-back.compo
     NavbarComponent,
     SidebarComponent,
     FooterBackComponent,
+    TrainingSessionComponent,
   ],
   imports: [
     ReactiveFormsModule,

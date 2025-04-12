@@ -10,6 +10,7 @@ import { ForgotPasswordComponent } from './front-office/auth/forgot-password/for
 import { UserprofileComponent } from './front-office/userprofile/userprofile.component';
 import { AllTemplateFrontComponentComponent } from './front-office/all-template-front-component/all-template-front-component.component';
 import { AllTemplateBackComponentComponent } from './back-office/all-template-back-component/all-template-back-component.component';
+import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
 
 const routes: Routes = [
 
@@ -32,7 +33,6 @@ const routes: Routes = [
   ]},
 
 
-// redirect to home if no path is wrong 
 
 
   { path: '', component: AllTemplateFrontComponentComponent, children: [ // Home route
@@ -50,7 +50,20 @@ const routes: Routes = [
       { path: 'products/:id', component: ProductDetailComponent } // Product details
 
     ]
-  },]
+  },
+ 
+  { path: 'trainingSession', component: TrainingSessionComponent },
+
+
+
+
+
+
+
+
+
+
+]
 },
 { path: '**', redirectTo: '/' },
 
