@@ -4,73 +4,28 @@
     </div>
 </div>
 
-
 <div class="uk-section">
     <div class="uk-container">
         <div class="uk-grid uk-grid-match uk-grid-medium uk-child-width-1-3@m" uk-grid>
-            <!-- First Card -->
-            <div class="uk-width-1-3@m">
+            <div class="uk-width-1-3@m" *ngFor="let session of trainingSessions">
                 <div class="uk-card uk-card-default">
                     <div class="uk-card-media-top">
                         <img src="assets/images/com_hikashop/upload/thumbnails/450x450f/2.jpg" alt="Training Session">
                     </div>
                     <div class="uk-card-body">
-                        <h3 class="uk-card-title">High-intensity interval training focused on building strength and
-                            endurance through boxing techniques.</h3>
+                        <h3 class="uk-card-title">{{session.description}}</h3>
                         <div class="uk-margin-small">
-                            <span class="uk-label uk-label-primary">Boxing</span>
+                            <span class="uk-label uk-label-primary">{{session.sport}}</span>
                         </div>
                         <dl class="uk-description-list">
-                            <dt><span uk-icon="calendar"></span> Date: March 15, 2024</dt>
-
-
-                            <dt><span uk-icon="clock"></span> Time: 09:00 AM - 10:30 AM</dt>
-
-
-                            <dt><span uk-icon="users"></span> Max Participants: 15 spots</dt>
-
-
-                            <dt><span uk-icon="user"></span> Coach : John Smith</dt>
-
+                            <dt><span uk-icon="calendar"></span> Date: {{session.date | date}}</dt>
+                            <dt><span uk-icon="clock"></span> Time: {{session.startTime}} - {{session.endTime}}</dt>
+                            <dt><span uk-icon="users"></span> Max Participants: {{session.maxParticipants}} spots</dt>
                         </dl>
-                        <div class="uk-card-footer uk-padding-remove-horizontal   ">
-                            <button class="uk-button uk-button-primary uk-width-1-1 mb-1 ">Book Session</button>
-                            <button class="uk-button uk-button-primary uk-width-1-1 ">Load Reviews</button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Second Card -->
-            <div class="uk-width-1-3@m">
-                <div class="uk-card uk-card-default">
-                    <div class="uk-card-media-top">
-                        <img src="assets/images/com_hikashop/upload/thumbnails/450x450f/2.jpg" alt="Training Session">
-                    </div>
-                    <div class="uk-card-body">
-                        <h3 class="uk-card-title">High-intensity interval training focused on building strength and
-                            endurance through boxing techniques.</h3>
-                        <div class="uk-margin-small">
-                            <span class="uk-label uk-label-primary">Boxing</span>
-                        </div>
-                        <dl class="uk-description-list">
-                            <dt><span uk-icon="calendar"></span> Date: March 15, 2024</dt>
-
-
-                            <dt><span uk-icon="clock"></span> Time: 09:00 AM - 10:30 AM</dt>
-
-
-                            <dt><span uk-icon="users"></span> Max Participants: 15 spots</dt>
-
-
-                            <dt><span uk-icon="user"></span> Coach : John Smith</dt>
-
-                        </dl>
-                        <div class="uk-card-footer uk-padding-remove-horizontal   ">
-                            <button class="uk-button uk-button-primary uk-width-1-1 mb-1 ">Book Session</button>
-                            <button class="uk-button uk-button-primary uk-width-1-1 ">Load Reviews</button>
-
+                        <div class="uk-card-footer uk-padding-remove-horizontal">
+                            <button class="uk-button uk-button-primary uk-width-1-1 mb-1" (click)="CheckExercices(session.id)">Check Exercices</button>
+                            <button class="uk-button uk-button-primary uk-width-1-1 mb-1" (click)="bookSession(session.id)">Book Session</button>
+                            <button class="uk-button uk-button-primary uk-width-1-1" (click)="loadReviews(session.id)">Load Reviews</button>
                         </div>
                     </div>
                 </div>
