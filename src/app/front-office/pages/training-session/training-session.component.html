@@ -88,6 +88,40 @@
                 <div class="text-center" *ngIf="!selectedSession.reviews || selectedSession.reviews.length === 0">
                     <p>No reviews available for this session.</p>
                 </div>
+
+                <!-- Add Review Form -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Write a Review</h6>
+                        <div class="rating-container mb-3">
+                            <div class="stars d-flex gap-2">
+                                <i *ngFor="let star of [1,2,3,4,5]" 
+                                   class="bi" 
+                                   [class.bi-star]="!isRatingSelected(star)"
+                                   [class.bi-star-fill]="isRatingSelected(star)"
+                                   (click)="setRating(star)"
+                                   style="cursor: pointer; font-size: 1.5rem; color: #ffc107;"
+                                   [style.transform]="'scale(' + (isRatingSelected(star) ? '1.1' : '1') + ')'"
+                                   [style.transition]="'transform 0.2s'">
+                                </i>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" 
+                                    placeholder="Share your experience..." 
+                                    id="reviewText"
+                                    style="height: 100px"
+                                    [(ngModel)]="reviewText"
+                                    ></textarea>
+                            <label for="reviewText">Share your experience...</label>
+                        </div>
+                        <button class="btn btn-primary w-100" 
+                                [disabled]="selectedRating === 0 || !reviewText.trim()"
+                                (click)="submitReview()">
+                            Submit Review
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

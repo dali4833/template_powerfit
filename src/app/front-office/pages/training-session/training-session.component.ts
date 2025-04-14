@@ -3,6 +3,7 @@ import { TrainingSessionService } from '../../../back-office/TrainingSessionMang
 import { BookingService } from 'src/app/back-office/BookingManagment/services/Booking.service';
 import { ReviewService } from 'src/app/back-office/ReviewManagment/services/Review.service';
 declare var bootstrap: any;
+import { CommonModule } from '@angular/common';
 
 interface Review {
   id: number;
@@ -40,6 +41,8 @@ export class TrainingSessionComponent implements OnInit {
   trainingSessions: TrainingSession[] = [];
   loading = false;
   selectedSession: TrainingSession | null = null;
+  selectedRating = 0;
+  reviewText = '';
 
   constructor(
     private trainingSessionService: TrainingSessionService,
@@ -141,8 +144,42 @@ export class TrainingSessionComponent implements OnInit {
     return Array(rating).fill(0);
   }
 
+  setRating(rating: number): void {
+    this.selectedRating = rating;
+  }
+
+  isRatingSelected(rating: number): boolean {
+    return rating <= this.selectedRating;
+  }
+
+  submitReview(): void {
+    if (!this.selectedSession || this.selectedRating === 0 || !this.reviewText.trim()) {
+      return;
+    }
+
+    const review = {
+      rating: this.selectedRating,
+      description: this.reviewText.trim()
+    };
+
+    this.reviewService.createReview(this.selectedSession.id, review).subscribe({
+      next: () => {
+     
+        this.selectedRating = 0;
+        this.reviewText = '';
+        this.loadTrainingSessions();
+        this.loadReviews(this.selectedSession!.id);
+      },
+      error: (error) => {
+        console.error('Error submitting review:', error);
+      }
+    });
+  }
+
   closeModal(): void {
     this.selectedSession = null;
+    this.selectedRating = 0;
+    this.reviewText = '';
     const modalElement = document.getElementById('reviewsModal');
     const modal = bootstrap.Modal.getInstance(modalElement);
     if (modal) {
