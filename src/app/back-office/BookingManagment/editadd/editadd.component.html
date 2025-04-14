@@ -1,0 +1,46 @@
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Create New Booking</h2>
+        <button class="btn btn-secondary" routerLink="/admin/booking-management">Back to List</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+
+    <div *ngIf="loading" class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="row g-3" *ngIf="!loading">
+        <div class="col-md-12">
+            <label for="trainingSessionId" class="form-label">Training Session</label>
+            <select class="form-select" id="trainingSessionId" formControlName="trainingSessionId">
+                <option value="">Select a training session</option>
+                <option *ngFor="let session of trainingSessions" [value]="session.id">
+                    {{ session.name }} - {{ session.date | date:'medium' }}
+                </option>
+            </select>
+            <div *ngIf="bookingForm.get('trainingSessionId')?.invalid && bookingForm.get('trainingSessionId')?.touched" 
+                 class="text-danger">
+                Training session is required
+            </div>
+        </div>
+
+        <div class="col-12 mt-4">
+            <button type="submit" 
+                    class="btn btn-primary me-2" 
+                    [disabled]="bookingForm.invalid || loading">
+                Create Booking
+            </button>
+            <button type="button" 
+                    class="btn btn-secondary" 
+                    routerLink="/admin/Booking-management" 
+                    [disabled]="loading">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

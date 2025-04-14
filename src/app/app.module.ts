@@ -19,6 +19,8 @@ import { AllTemplateBackComponentComponent } from './back-office/all-template-ba
 import { NavbarComponent } from './back-office/navbar/navbar.component';
 import { SidebarComponent } from './back-office/sidebar/sidebar.component';
 import { FooterBackComponent } from './back-office/footer-back/footer-back.component';
+import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -38,12 +40,15 @@ import { FooterBackComponent } from './back-office/footer-back/footer-back.compo
     NavbarComponent,
     SidebarComponent,
     FooterBackComponent,
+    TrainingSessionComponent,
   ],
   imports: [
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule  
+    AppRoutingModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

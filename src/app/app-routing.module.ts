@@ -10,6 +10,7 @@ import { ForgotPasswordComponent } from './front-office/auth/forgot-password/for
 import { UserprofileComponent } from './front-office/userprofile/userprofile.component';
 import { AllTemplateFrontComponentComponent } from './front-office/all-template-front-component/all-template-front-component.component';
 import { AllTemplateBackComponentComponent } from './back-office/all-template-back-component/all-template-back-component.component';
+import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
 
 const routes: Routes = [
 
@@ -23,12 +24,18 @@ const routes: Routes = [
 
     
  
- 
+     { path: 'TrainingSession-management', loadChildren: () => import('./back-office/TrainingSessionMangment/TrainingSession.module').then(m => m.TrainingSessionModule) },
+     { path: 'Review-management', loadChildren: () => import('./back-office/ReviewManagment/Review.module').then(m => m.ReviewModule) },
+     { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
+
  
  
   ]},
 
-  { path: '', component: AllTemplateFrontComponentComponent, children: [ 
+
+
+
+  { path: '', component: AllTemplateFrontComponentComponent, children: [ // Home route
   { path: 'login', component: LoginComponent },
   { path: 'userprofile', component: UserprofileComponent },
 
@@ -44,8 +51,12 @@ const routes: Routes = [
 
     ]
   },
-
  
+  { path: 'trainingSession', component: TrainingSessionComponent },
+
+
+
+
 
 
 
@@ -53,7 +64,9 @@ const routes: Routes = [
 
 
 ]
-}
+},
+{ path: '**', redirectTo: '/' },
+
 ];
 
 @NgModule({

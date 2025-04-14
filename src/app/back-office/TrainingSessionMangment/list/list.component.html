@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between mb-4">
+    <h2>Training Sessions</h2>
+    <button class="btn btn-primary" routerLink="new">Add New Session</button>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Sport</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let session of trainingSessions">
+        <td>{{ session.description }}</td>
+        <td>{{ session.date }}</td>
+        <td>{{ session.startTime }}</td>
+        <td>{{ session.endTime }}</td>
+        <td>{{ session.sport }}</td>
+        <td>
+          <button class="btn btn-sm btn-info me-2" [routerLink]="[session.id, 'edit']">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteSession(session.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
