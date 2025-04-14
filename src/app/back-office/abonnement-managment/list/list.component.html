@@ -18,23 +18,24 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>endDate</th>
                 <th>startDate</th>
+                <th>endDate</th>
                 <th>status</th>
-                <th>pack</th>
-                <th>user</th>
+            
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let abonnement of abonnements">
                 <td>{{abonnement.id}}</td>
-                <td>{{abonnement.name}}</td>
-                <td>{{abonnement.description}}</td>
+                <td>{{abonnement.startDate}}</td>
+                <td>{{abonnement.endDate}}</td>
+                <td>{{abonnement.status}}</td>
+          
                 <td>
                     <button class="btn btn-sm btn-primary me-2" (click)="editAbonnement(abonnement.id!)">Edit</button>
                     <button class="btn btn-sm btn-danger me-2" (click)="abonnement.id && deleteAbonnement(abonnement.id)">Delete</button>
-                    <button class="btn btn-sm btn-success" (click)="abonnement.id && validateabonnement(abonnement.id)">Validate</button>
+                    <!-- <button class="btn btn-sm btn-success" (click)="abonnement.id && validateabonnement(abonnement.id)">Validate</button> -->
                 
                 </td>
             </tr>

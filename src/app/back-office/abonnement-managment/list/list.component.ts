@@ -26,6 +26,7 @@ export class ListComponent implements OnInit {
       next: (data) => {
         this.abonnements = data;
         this.loading = false;
+        console.log(data);
       },
       error: (error) => {
         this.errorMessage = 'Failed to load abonnements';
