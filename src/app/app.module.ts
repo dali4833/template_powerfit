@@ -21,6 +21,7 @@ import { SidebarComponent } from './back-office/sidebar/sidebar.component';
 import { FooterBackComponent } from './back-office/footer-back/footer-back.component';
 import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
 import { FormsModule } from '@angular/forms';
+import { ClubsPacksComponent } from './front-office/pages/clubs-packs/clubs-packs.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { FormsModule } from '@angular/forms';
     SidebarComponent,
     FooterBackComponent,
     TrainingSessionComponent,
+    ClubsPacksComponent,
   ],
   imports: [
     FormsModule,

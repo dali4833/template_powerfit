@@ -1,0 +1,55 @@
+.modal-dialog.modal-xl {
+    max-width: 1140px;
+}
+
+.uk-card-hover {
+    transition: transform 0.2s ease-in-out;
+}
+
+.uk-card-hover:hover {
+    transform: translateY(-3px);
+}
+
+.uk-card-header .uk-text-lead {
+    font-size: 2rem;
+    color: #1e87f0;
+}
+
+.uk-button-large {
+    padding: 0 40px;
+    line-height: 53px;
+    font-size: 1.1rem;
+}
+
+.uk-card-small .uk-card-title {
+    font-size: 1.1rem;
+    line-height: 1.2;
+}
+
+.price-tag {
+    font-size: 1.5rem;
+    color: #1e87f0;
+    line-height: 1;
+}
+
+.uk-icon-small {
+    width: 16px;
+    height: 16px;
+}
+
+.uk-list-collapse > li {
+    padding: 4px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.uk-list-collapse > li:last-child {
+    border-bottom: none;
+}
+
+.uk-text-small {
+    font-size: 0.875rem;
+}
+
+.uk-card-small .uk-card-body {
+    padding: 10px;
+}
