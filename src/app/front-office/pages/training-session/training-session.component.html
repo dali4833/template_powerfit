@@ -10,9 +10,9 @@
             <div class="uk-width-1-3@m" *ngFor="let session of trainingSessions">
                 <div class="uk-card uk-card-default">
                     <div class="uk-card-media-top">
-                        <img 
+                        <img
                         style="height: 250px; object-fit: cover;"
-                        class="uk-width-1-1 uk-height-small" 
+                        class="uk-width-1-1 uk-height-small"
                         src="assets/images/samuel-girven-vj2s0c20qco-unsplash.jpg" alt="Training Session">
                     </div>
                     <div class="uk-card-body">
@@ -27,6 +27,17 @@
                         </dl>
                     </div>
                     <div class="uk-card-footer uk-padding-remove-horizontal">
+                      <div class="uk-margin-small">
+                        <span *ngIf="session.isBooked"
+                              [ngClass]="{
+                                  'uk-label-warning': session.status === 'PENDING',
+                                  'uk-label-success': session.status === 'APPROVED',
+                                  'uk-label-danger': session.status === 'REJECTED'
+                              }"
+                              class="uk-label">
+                            {{ session.status }}
+                        </span>
+                    </div>
                         <button *ngIf="!session.isBooked && !session.isElapsed"
                             [disabled]="session.maxParticipants <= session.currentParticipants"
                             class="uk-button uk-button-primary uk-width-1-1 mb-1" (click)="bookSession(session.id)">
@@ -38,6 +49,16 @@
                                     (click)="session.bookingId !== undefined && cancelBooking(session.id, session.bookingId)">
                                     Cancel Booking
                                 </button>
+                                <button *ngIf="!session.isBooked"
+        [disabled]="session.isElapsed || session.maxParticipants <= session.currentParticipants"
+        class="uk-button uk-button-primary uk-width-1-1 mb-1"
+        (click)="bookSession(session.id)">
+    {{ session.isElapsed ? 'Session Ended' : (session.maxParticipants <= session.currentParticipants ? 'Session Full' : 'Book Session') }}
+</button>
+
+<div *ngIf="session.isElapsed" class="text-danger mt-2 text-center">
+    You cannot book this session as it has already ended.
+</div>
 
                                 <!-- Other Buttons -->
                                 <button class="uk-button uk-button-secondary uk-width-1-1 mb-1"
@@ -70,7 +91,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
                                     <h6 >{{review.user.name }} </h6>
-                                  
+
                                     <small  style="color: white;margin-left:3px;"> {{review.createdAt | date:'medium'}}</small>
                                 </div>
                                 <div class="text-warning">
@@ -92,8 +113,8 @@
                         <h6 class="card-title mb-3">Write a Review</h6>
                         <div class="rating-container mb-3">
                             <div class="stars d-flex gap-2">
-                                <i *ngFor="let star of [1,2,3,4,5]" 
-                                   class="bi" 
+                                <i *ngFor="let star of [1,2,3,4,5]"
+                                   class="bi"
                                    [class.bi-star]="!isRatingSelected(star)"
                                    [class.bi-star-fill]="isRatingSelected(star)"
                                    (click)="setRating(star)"
@@ -104,19 +125,23 @@
                             </div>
                         </div>
                         <div class="form-floating mb-3">
-                            <textarea class="form-control" 
-                                    placeholder="Share your experience..." 
+                            <textarea class="form-control"
+                                    placeholder="Share your experience..."
                                     id="reviewText"
                                     style="height: 100px"
                                     [(ngModel)]="reviewText"
                                     ></textarea>
                             <label for="reviewText">Share your experience...</label>
                         </div>
-                        <button class="btn btn-primary w-100" 
-                                [disabled]="selectedRating === 0 || !reviewText.trim()"
-                                (click)="submitReview()">
-                            Submit Review
-                        </button>
+                        <button class="btn btn-primary w-100"
+                        [disabled]="selectedRating === 0 || !reviewText.trim() || selectedSession?.isElapsed"
+                        (click)="submitReview()">
+                    Submit Review
+                </button>
+
+                <div *ngIf="selectedSession?.isElapsed" class="text-danger mt-2 text-center">
+                    You cannot submit a review for a session that has already ended.
+                </div>
                     </div>
                 </div>
             </div>

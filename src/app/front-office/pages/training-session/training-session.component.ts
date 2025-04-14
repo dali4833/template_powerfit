@@ -15,6 +15,20 @@ interface Review {
     email: string;
   };
 }
+interface Booking {
+  id: number;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED'; // Match the enum from the backend
+  user: {
+    name: string;
+    email: string;
+  };
+  trainingSession: {
+    id: number;
+  };
+  bookedAt: Date;
+  resolvedAt?: Date;
+}
+
 
 interface TrainingSession {
   id: number;
@@ -28,6 +42,9 @@ interface TrainingSession {
   isBooked: boolean;
   bookingId?: number;
   isElapsed?: boolean;
+  bookings?: any[]; // Add bookings property to store session bookings
+  status?: 'PENDING' | 'APPROVED' | 'REJECTED'; // Add status property to match Booking status
+
   reviews?: Review[];
   selectedReviews?: Review[];
 }
@@ -81,11 +98,13 @@ export class TrainingSessionComponent implements OnInit {
       session.isElapsed = new Date() > sessionDate;
 
       this.bookingService.getBookings(session.id).subscribe({
-        next: (bookings) => {
-          const userBooking = bookings.find((b: any) => b.trainingSession.id === session.id);
+        next: (bookings: Booking[]) => {
+          session.bookings = bookings; // Store bookings and their statuses
+          const userBooking = bookings.find((b: Booking) => b.trainingSession.id === session.id);
           if (userBooking) {
             session.isBooked = true;
             session.bookingId = userBooking.id;
+            session.status = userBooking.status; // Assign the status to the session
           }
         },
         error: (error) => console.error('Error loading bookings:', error)
@@ -166,7 +185,7 @@ export class TrainingSessionComponent implements OnInit {
       next: () => {
         this.selectedRating = 0;
         this.reviewText = '';
-        
+
         this.reviewService.getReviews(this.selectedSession!.id).subscribe({
           next: (reviews) => {
             if (this.selectedSession) {
