@@ -164,11 +164,20 @@ export class TrainingSessionComponent implements OnInit {
 
     this.reviewService.createReview(this.selectedSession.id, review).subscribe({
       next: () => {
-     
         this.selectedRating = 0;
         this.reviewText = '';
-        this.loadTrainingSessions();
-        this.loadReviews(this.selectedSession!.id);
+        
+        this.reviewService.getReviews(this.selectedSession!.id).subscribe({
+          next: (reviews) => {
+            if (this.selectedSession) {
+              this.selectedSession.reviews = reviews;
+              const sessionIndex = this.trainingSessions.findIndex(s => s.id === this.selectedSession!.id);
+              if (sessionIndex !== -1) {
+                this.trainingSessions[sessionIndex].reviews = reviews;
+              }
+            }
+          }
+        });
       },
       error: (error) => {
         console.error('Error submitting review:', error);

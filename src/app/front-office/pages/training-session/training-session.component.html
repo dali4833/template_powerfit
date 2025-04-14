@@ -27,7 +27,6 @@
                         </dl>
                     </div>
                     <div class="uk-card-footer uk-padding-remove-horizontal">
-                        <!-- Booking Button -->
                         <button *ngIf="!session.isBooked && !session.isElapsed"
                             [disabled]="session.maxParticipants <= session.currentParticipants"
                             class="uk-button uk-button-primary uk-width-1-1 mb-1" (click)="bookSession(session.id)">
@@ -57,7 +56,6 @@
     </div>
 </div>
 
-<!-- Bootstrap Reviews Modal -->
 <div class="modal fade" id="reviewsModal" tabindex="-1" aria-labelledby="reviewsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" *ngIf="selectedSession">
@@ -89,7 +87,6 @@
                     <p>No reviews available for this session.</p>
                 </div>
 
-                <!-- Add Review Form -->
                 <div class="card mt-4">
                     <div class="card-body">
                         <h6 class="card-title mb-3">Write a Review</h6>
