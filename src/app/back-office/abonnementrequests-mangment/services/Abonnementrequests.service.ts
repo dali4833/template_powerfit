@@ -1,163 +1,93 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
+import { Observable, from, switchMap } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AbonnementrequestsService {
-  private apiUrl = `http://localhost:8089/abonnement-requests`;
+  private apiUrl = 'http://localhost:8089/abonnement-requests';
   private cachedToken: string | null = null;
 
-  clubaccount = {
-    username: 'CLUB@email.com',
-    password: 'a',
-  };
-
-  adminaccount = {
-    username: 'ADMIN@email.com',
-    password: 'a',
-  };
-
-  useraccount = {
+  private useraccount = {
     username: 'user1@email.com',
     password: 'a',
   };
 
-  coachaccount = {
-    username: 'COACH@email.com',
+  private clubaccount = {
+    username: 'CLUB@email.com',
     password: 'a',
   };
 
-  constructor(
-    private http: HttpClient,
-  ) { }
+  constructor(private http: HttpClient) { }
 
-  private async getValidToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
+  private async getValidToken(account: any): Promise<string> {
+    if (this.cachedToken) return this.cachedToken;
 
     try {
-      this.cachedToken = await lastValueFrom(this.bypassclub());
-      return this.cachedToken;
+      const token = await lastValueFrom(this.http.post<string>(
+        'http://localhost:8089/auth/generateToken',
+        account,
+        { responseType: 'text' as 'json' }
+      ));
+      this.cachedToken = token;
+      return token;
     } catch (error) {
-      console.error('Failed to get token:', error);
+      console.error('Token retrieval failed:', error);
       throw error;
     }
   }
 
-
-
-  private async getValidTokenForUser(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypassUser());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
-
-
-
-
-
-  private async generateHeaders(): Promise<HttpHeaders> {
-    const token = await this.getValidToken();
+  private async generateHeaders(account: any): Promise<HttpHeaders> {
+    const token = await this.getValidToken(account);
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
   }
 
-  private async generateHeadersForUser(): Promise<HttpHeaders> {
-    const token = await this.getValidTokenForUser();
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
+  // Pour USER
+  createRequest(packId: number): Observable<any> {
+    this.cachedToken = null;
+    return from(this.generateHeaders(this.useraccount)).pipe(
+      switchMap(headers =>
+        this.http.post<any>(`${this.apiUrl}/request/${packId}`, {}, { headers })
+      )
+    );
   }
 
+  createRequestWithDates(packId: number, startDate: string, endDate: string): Observable<any> {
+    const params = { packId: packId.toString(), startDate, endDate };
+    return from(this.generateHeaders(this.useraccount)).pipe(
+      switchMap(headers =>
+        this.http.post<any>(`${this.apiUrl}/abonnement-request`, {}, { headers, params })
+      )
+    );
+  }
 
-
-
+  // Pour CLUB OWNER
   getRequests(): Observable<any[]> {
-    return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+    return from(this.generateHeaders(this.clubaccount)).pipe(
+      switchMap(headers =>
         this.http.get<any[]>(`${this.apiUrl}/club-owner/requests`, { headers })
       )
     );
   }
-
-
-
-  createRequest(id: any): Observable<any> {
-    this.cachedToken = null; // Clear existing token
-    return from(this.generateHeadersForUser()).pipe(
+  getpacks(): Observable<any[]> {
+    return from(this.generateHeaders(this.useraccount)).pipe(
       switchMap(headers =>
-        this.http.post<any>(`${this.apiUrl}/request/${id}`, {}, { headers })
-      ),
-      // Clear token again after request completes
-      switchMap(response => {
-        this.cachedToken = null;
-        return new Observable<any>(observer => {
-          observer.next(response);
-          observer.complete();
-        });
-      })
+        this.http.get<any[]>('http://localhost:8089/packs', { headers }) // ⚠️ adapte l'URL si besoin
+      )
     );
   }
 
-  approveRequest( requestId: number): Observable<any> {
-    return from(this.generateHeaders()).pipe(
+
+  approveRequest(requestId: number): Observable<any> {
+    return from(this.generateHeaders(this.clubaccount)).pipe(
       switchMap(headers =>
         this.http.put<any>(`${this.apiUrl}/approve/${requestId}`, {}, { headers })
       )
     );
-  }
-
-
-  getUsers(): Observable<any[]> {
-    return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
-        this.http.get<any[]>(`http://localhost:8089/auth/users`, { headers })
-      )
-    );
-  }
-
-
-  getpacks(): Observable<any[]> {
-    return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
-        this.http.get<any[]>(`http://localhost:8089/packs/retrieve-all-packs`, { headers })
-      )
-    );
-  }
-
-
-
-  bypassclub(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.clubaccount, { responseType: 'text' });
-  }
-
-  bypassadmin(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.adminaccount, { responseType: 'text' });
-  }
-
-  bypassUser(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.useraccount, { responseType: 'text' });
-  }
-
-  bypasscoach(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.coachaccount, { responseType: 'text' });
   }
 }

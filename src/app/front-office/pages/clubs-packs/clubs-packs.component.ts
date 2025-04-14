@@ -12,6 +12,8 @@ interface Pack{
   duration :  number;
   abonnements : any[] ;
   abonnementsrequests : any[] ;
+  userIsSubscribed?: boolean;
+  userHasRequested?: boolean;
 }
 
 
@@ -42,49 +44,24 @@ export class ClubsPacksComponent implements OnInit {
     this.loading = true;
     this.ClubService.getClubs().subscribe({
       next: (clubs) => {
-        this.clubs = clubs.filter(club => club.status == "APPROVED").map(club => ({ 
-          ...club,
-        }));
+        this.clubs = clubs
+          .filter(club => club.status === "APPROVED")
+          .map(club => {
+            if (club.packs) {
+              // Marquer les packs liés à l'utilisateur sans les filtrer
+              club.packs.forEach((pack: Pack) => {
+                const abonnements = pack.abonnements || [];
+                const demandes = pack.abonnementsrequests || [];
 
-
-        this.clubs = this.clubs.map(club => {
-          console.log(club.packs)
-          if(club.packs) {
-            club.packs.forEach((pack: Pack) => {
-              pack.abonnements = pack.abonnements.filter((abonnement: any) => abonnement.user.email === this.currentUserEmail);
-              pack.abonnementsrequests = pack.abonnementsrequests.filter((abonnement: any) => abonnement.user.email === this.currentUserEmail);
-              pack.abonnements = pack.abonnements.map((abonnement: any) => {
-                return {
-                  ...abonnement,
-                  user: {
-                    ...abonnement.user,
-                    abonnements: undefined
-                  }
-                }
+                pack.userIsSubscribed = abonnements.some((a: any) => a.user?.email === this.currentUserEmail);
+                pack.userHasRequested = demandes.some((r: any) => r.user?.email === this.currentUserEmail);
               });
-              pack.abonnementsrequests = pack.abonnementsrequests.map((abonnement: any) => {
-                return {
-                  ...abonnement,
-                  user: {
-                    ...abonnement.user,
-                    abonnementsrequests: undefined
-                  }
-                }
-              }
-              );
-              return pack;
-            })
 
-            return {
-              ...club,
-              packs: club.packs.filter((pack: Pack) => pack.abonnements.length > 0 || pack.abonnementsrequests.length > 0)
+              // Retourner le club avec tous ses packs
+              return { ...club, packs: club.packs };
             }
-          }
-        });
 
-
-
-
+          });
 
         console.log(this.clubs);
       },

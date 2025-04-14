@@ -1,90 +1,129 @@
+<!-- Section principale -->
 <div class="uk-section uk-section-primary uk-light">
-    <div class="uk-container">
-        <h1 class="uk-heading-medium">Our Clubs</h1>
-    </div>
+  <div class="uk-container">
+    <h1 class="uk-heading-medium">Our Clubs</h1>
+  </div>
 </div>
 
+<!-- Liste des clubs -->
 <div class="uk-section">
-    <div class="uk-container">
-        <div class="uk-grid uk-grid-match uk-grid-medium uk-child-width-1-3@m" uk-grid>
-            <div class="uk-width-1-3@m" *ngFor="let club of clubs">
-                <div class="uk-card uk-card-default">
-                    <div class="uk-card-media-top">
-                        <img 
-                        style="height: 150px; object-fit: cover;"
-                        class="uk-width-1-1 uk-height-small" 
-                        src="assets/images/samuel-girven-vj2s0c20qco-unsplash.jpg" alt="Training Session">
-                    </div>
-                    <div class="uk-card-body">
-                        <h3 class="uk-card-title">{{club.name}}</h3>
-                        <div class="uk-margin-small">
-                            <span class="uk-label uk-label-primary">{{club["sports"][0]["name"]}}</span>
-                        </div>
-                        <dl class="uk-description-list">
-                            <dt><span uk-icon="users"></span> Max Participants: {{club.capacity}} spots</dt>
-                            <dt><span uk-icon="clock"></span> Duration: {{club.description}}</dt>
-                        </dl>
-                    </div>
-                    <div class="uk-card-footer uk-padding-remove-horizontal">
-                        <button class="uk-button uk-button-secondary uk-width-1-1 mb-1" 
-                                (click)="loadClubPacks(club.id)"
-                                data-bs-toggle="modal"
-                                data-bs-target="#PackModal">
-                            Check Packs
-                        </button>
-                    </div>
-                </div>
+  <div class="uk-container">
+    <div class="uk-grid uk-grid-match uk-grid-medium uk-child-width-1-3@m" uk-grid>
+      <div class="uk-width-1-3@m" *ngFor="let club of clubs">
+        <div class="uk-card uk-card-default">
+          <div class="uk-card-media-top">
+            <img
+              style="height: 150px; object-fit: cover;"
+              class="uk-width-1-1 uk-height-small"
+              src="assets/images/samuel-girven-vj2s0c20qco-unsplash.jpg"
+              alt="Training Session">
+          </div>
+          <div class="uk-card-body">
+            <h3 class="uk-card-title">{{ club.name }}</h3>
+            <div class="uk-margin-small">
+              <span class="uk-label uk-label-primary uk-margin-small-right" *ngFor="let sport of club.sports">
+                {{ sport.name }}
+              </span>
             </div>
+            <dl class="uk-description-list">
+              <dt><span uk-icon="users"></span> Max Participants: {{ club.capacity }} spots</dt>
+              <dt><span uk-icon="clock"></span> Duration: {{ club.description }}</dt>
+            </dl>
+          </div>
+          <div class="uk-card-footer uk-padding-remove-horizontal">
+            <button
+              class="uk-button uk-button-secondary uk-width-1-1 mb-1"
+              (click)="loadClubPacks(club.id)"
+              data-bs-toggle="modal"
+              data-bs-target="#PackModal">
+              Check Packs
+            </button>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
+<!-- Modal -->
 <div class="modal fade" id="PackModal" tabindex="-1" aria-labelledby="packsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content" *ngIf="selectedClub">
-            <div class="modal-header uk-background-primary uk-light">
-                <h3 class="modal-title uk-heading-small" id="packsModalLabel">
-                    <span uk-icon="icon: future; ratio: 1.2"></span>
-                    Membership Packs - {{selectedClub.name}}
-                </h3>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body uk-padding">
-                <div class="uk-grid uk-grid-small uk-child-width-1-3@m" uk-grid>
-                    <div *ngFor="let pack of selectedClub.packs">
-                        <div class="uk-card uk-card-small uk-card-default uk-card-hover uk-box-shadow-small">
-                            <div class="uk-card-header uk-text-center uk-background-muted uk-padding-small">
-                                <h4 class="uk-card-title uk-margin-remove">{{pack.name}}</h4>
-                                <div class="price-tag uk-margin-small-top">
-                                    <span class="uk-text-bold">{{pack.price}} TND</span>
-                                </div> 
-                            </div>
-                            <div class="uk-card-body uk-padding-small">
-                                <ul class="uk-list uk-list-collapse uk-margin-remove">
-                                    <li class="uk-flex uk-flex-middle">
-                                        <span uk-icon="clock" class="uk-margin-small-right uk-icon-small"></span>
-                                        <span class="uk-text-small">{{pack.duration}} days membership</span>
-                                    </li>
-                                    <li class="uk-flex uk-flex-middle">
-                                        <span uk-icon="check" class="uk-margin-small-right uk-icon-small"></span>
-                                        <span class="uk-text-small">{{pack.description}}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="uk-card-footer uk-text-center uk-padding-small">
-                                <button
-                                (click)="subscribeToPack(pack.id)"
-                                class="uk-button uk-button-primary uk-button-small uk-width-1-1">
-                                    Subscribe
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content" *ngIf="selectedClub">
+
+      <!-- Modal header -->
+      <div class="modal-header uk-background-primary uk-light">
+        <h3 class="modal-title uk-heading-small" id="packsModalLabel">
+          <span uk-icon="icon: future; ratio: 1.2"></span>
+          Membership Packs - {{ selectedClub.name }}
+        </h3>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body uk-padding">
+        <h3 class="uk-heading-line uk-text-center">
+          <span>{{ selectedClub.name }}'s Packs</span>
+        </h3>
+
+        <div class="uk-overflow-auto">
+          <div class="uk-flex uk-flex-nowrap uk-flex-left">
+            <div
+              class="uk-card uk-card-small uk-card-default uk-card-hover uk-box-shadow-small uk-margin-right"
+              style="min-width: 250px; max-width: 300px;"
+              *ngFor="let pack of selectedClub.packs">
+
+              <div class="uk-card-header uk-text-center uk-background-muted uk-padding-small">
+                <h4 class="uk-card-title uk-margin-remove">{{ pack.name }}</h4>
+                <div class="price-tag uk-margin-small-top">
+                  <span class="uk-text-bold">{{ pack.price }} TND</span>
                 </div>
+              </div>
+
+              <div class="uk-card-body uk-padding-small">
+                <ul class="uk-list uk-list-collapse uk-margin-remove">
+                  <li class="uk-flex uk-flex-middle">
+                    <span uk-icon="clock" class="uk-margin-small-right uk-icon-small"></span>
+                    <span class="uk-text-small">{{ pack.duration }} days membership</span>
+                  </li>
+                  <li class="uk-flex uk-flex-middle">
+                    <span uk-icon="check" class="uk-margin-small-right uk-icon-small"></span>
+                    <span class="uk-text-small">{{ pack.description }}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="uk-card-footer uk-text-center uk-padding-small">
+                <ng-container *ngIf="!pack.userIsSubscribed && !pack.userHasRequested">
+                  <button
+                    (click)="subscribeToPack(pack.id)"
+                    class="uk-button uk-button-primary uk-button-small uk-width-1-1">
+                    Subscribe
+                  </button>
+                </ng-container>
+
+                <ng-container *ngIf="pack.userIsSubscribed">
+                  <button class="uk-button uk-button-success uk-button-small uk-width-1-1" disabled>
+                    Already Subscribed
+                  </button>
+                </ng-container>
+
+                <ng-container *ngIf="!pack.userIsSubscribed && pack.userHasRequested">
+                  <button class="uk-button uk-button-warning uk-button-small uk-width-1-1" disabled>
+                    Request Pending
+                  </button>
+                </ng-container>
+              </div>
+
             </div>
-            <div class="modal-footer uk-background-muted">
-                <button type="button" class="uk-button uk-button-default" data-bs-dismiss="modal">Close</button>
-            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer uk-background-muted">
+        <button type="button" class="uk-button uk-button-default" data-bs-dismiss="modal">Close</button>
+      </div>
+
     </div>
+  </div>
 </div>
