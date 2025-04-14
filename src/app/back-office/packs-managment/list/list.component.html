@@ -30,11 +30,37 @@
                 <td>{{pack.price}}</td>
                 <td>
                     <button class="btn btn-sm btn-primary me-2" (click)="editPack(pack.id!)">Edit</button>
-                    <button class="btn btn-sm btn-danger" (click)="pack.id && deletePack(pack.id)">Delete</button>
+                    <button class="btn btn-sm btn-danger me-2" (click)="pack.id && deletePack(pack.id)">Delete</button>
+                    <button class="btn btn-sm btn-info" (click)="$event.preventDefault(); openAffectModal(pack)">
+                        Affect to Club
+                    </button>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <!-- Modal -->
+    <div class="modal" id="affectModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Affect Pack to Club</h5>
+                    <button type="button" class="btn-close" (click)="closeModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <select class="form-select" [(ngModel)]="selectedClubId">
+                        <option value="">Select a club</option>
+                        <option *ngFor="let club of clubs" [value]="club.id">{{club.name}}</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="confirmAffectToClub()" 
+                            [disabled]="!selectedClubId">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div *ngIf="!loading && packs.length === 0" class="alert alert-info">
         No packs found. Click "Add New Pack" to create one.

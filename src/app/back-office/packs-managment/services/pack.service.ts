@@ -95,18 +95,13 @@ export class PackService {
     );
   }
 
-
   affecterPackToclub(id: number, idclub: number): Observable<any> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.put<any>(`${this.apiUrl}/affect-pack/${id}/to-club/${idclub}`, { headers })
+        this.http.put<any>(`${this.apiUrl}/affect-pack/${id}/to-club/${idclub}`, {}, { headers })
       )
     );
   }
-
-
-
-
 
   bypassclub(): Observable<string> {
     return this.http.post(`http://localhost:8089/auth/generateToken`,
