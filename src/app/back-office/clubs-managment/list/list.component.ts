@@ -37,6 +37,7 @@ export class ListComponent implements OnInit {
     this.loading = true;
     this.clubservice.getClubs().subscribe({
       next: (data) => {
+        console.log(data);
         this.clubs = data.map(club => ({...club, selectedSportId: null}));
         this.loading = false;
       },
