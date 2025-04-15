@@ -6,17 +6,32 @@ import { ProductDetailComponent } from "./front-office/store/product-detail/prod
 import { HomeComponent } from "./front-office/home/home.component";
 import { LoginComponent } from './front-office/auth/login/login.component';
 import { RegisterComponent } from './front-office/auth/register/register.component';
-import { ForgotPasswordComponent } from './front-office/auth/forgot-password/forgot-password.component';
 import { UserprofileComponent } from './front-office/userprofile/userprofile.component';
 import { AllTemplateFrontComponentComponent } from './front-office/all-template-front-component/all-template-front-component.component';
 import { AllTemplateBackComponentComponent } from './back-office/all-template-back-component/all-template-back-component.component';
+import { ResetPasswordComponent } from './front-office/auth/reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './front-office/auth/forgot-password/forgot-password.component';
+import { RegisterOwnerComponent } from './front-office/auth/register-owner/register-owner.component';
+import { AuthComponent } from './back-office/auth/auth.component';
+import { UsersComponent } from './back-office/users/users.component';
 
 const routes: Routes = [
 
-  { path: 'admin', component: AllTemplateBackComponentComponent, children: [ 
-    
-    // Admin route   
+
+  { path: 'admin/auth', component: AuthComponent }, // Display StoreComponent when /store
+
+  { path: 'dashboard', component: AllTemplateBackComponentComponent, children: [ 
+
+
+      {path: 'users', component: UsersComponent}, // Users listing
 ]},
+
+
+
+
+
+
+
 
 
 
@@ -28,7 +43,11 @@ const routes: Routes = [
   { path: 'userprofile', component: UserprofileComponent },
 
   { path: 'register', component: RegisterComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'register-club', component: RegisterOwnerComponent },
+
+  { path: 'reset-password', component: ResetPasswordComponent },
+  {path: 'forgot-password', component: ForgotPasswordComponent},
+
   {
     path: 'store',
     component: StoreComponent,
