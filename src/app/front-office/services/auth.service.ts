@@ -3,9 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
-interface TokenResponse {
-  token: string;
-}
+
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +55,24 @@ login(user: any): Observable<any> {
       headers: {
         Authorization: `Bearer ${token}`
       }
+    });
+  }
+  
+
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email }, {
+      responseType: 'text'
+    });
+  }
+  
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post(`${this.apiUrl}/reset-password`, {
+      token,
+      newPassword
+    }, {
+      responseType: 'text'
     });
   }
   
