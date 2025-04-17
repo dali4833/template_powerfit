@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/front-office/services/auth.service';
-
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html'
+  selector: 'app-register-owner',
+  templateUrl: './register-owner.component.html',
+  styleUrls: ['./register-owner.component.css']
 })
-export class RegisterComponent {
+export class RegisterOwnerComponent {
   registerForm: FormGroup;
 
   constructor(
@@ -43,8 +43,8 @@ export class RegisterComponent {
       name,
       email,
       password,
-      roles: 'ROLE_USER',
-      user_type: 'UserInfo'
+      roles: 'ROLE_OWNER',
+      user_type: 'ClubOwner'
     };
     this.authService.register(user).subscribe({
       next: (response: any) => {
@@ -60,6 +60,9 @@ export class RegisterComponent {
     
     
   }
-  
+
+
+
+
 
 }
