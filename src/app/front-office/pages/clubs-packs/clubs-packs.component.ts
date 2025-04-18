@@ -43,11 +43,13 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   startDate: string = '';
   endDate: string = '';
   selectedPackId: number | null = null;
-  private dateModal: any;
   newEndDate: string = '';
   selectedAbonnementId: number | null = null;
-  private renewModal: any;
   private lastFocusedElement: HTMLElement | null = null;
+
+  modalMode: 'subscribe' | 'renew' = 'subscribe';
+  modalTitle: string = '';
+  private actionModal: any;
 
   constructor(
     private ClubService: ClubService,
@@ -64,9 +66,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.dateModal) {
-      this.dateModal.dispose();
-    }
+    this.closeModals();
     if (this.lastFocusedElement) {
       this.lastFocusedElement.focus();
       this.lastFocusedElement = null;
@@ -99,13 +99,13 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
                 return {
                   ...pack,
                   userIsSubscribed: abonnements.some((a: any) => a.user?.email === this.currentUserEmail),
-                  userHasRequested: demandes.some((r: any) => r.user?.email === this.currentUserEmail)
+                  userHasRequested: demandes.some((r: any) => r.user?.email === this.currentUserEmail),
+                  subscriptionCount: abonnements.length
                 };
-              });
+              }).sort((a: Pack, b: Pack) => (b.subscriptionCount || 0) - (a.subscriptionCount || 0)); // Sort by subscription count
             }
             return mappedClub;
           });
-        console.log(this.clubs);
       },
       error: (error) => {
         console.error(error);
@@ -127,18 +127,68 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
     }
   }
 
-  subscribeToPack(packId: number) {
-    this.lastFocusedElement = document.activeElement as HTMLElement;
-    this.selectedPackId = packId;
-    
-    // Dispose existing modal if any
-    if (this.dateModal) {
-      this.dateModal.dispose();
+  public openActionModal(mode: 'subscribe' | 'renew', pack: any) {
+    // Close pack modal first
+    const packModal = bootstrap.Modal.getInstance(document.getElementById('PackModal'));
+    if (packModal) {
+        packModal.hide();
+        // Remove any leftover backdrops
+        const backdrops = document.getElementsByClassName('modal-backdrop');
+        while(backdrops.length > 0) {
+            backdrops[0].remove();
+        }
+    }
+
+    // Wait for pack modal to close completely
+    setTimeout(() => {
+        this.modalMode = mode;
+        this.modalTitle = mode === 'subscribe' ? 'Select Subscription Dates' : 'Renew Subscription';
+        
+        if (mode === 'subscribe') {
+            this.selectedPackId = pack.id;
+            const today = new Date();
+            this.startDate = today.toISOString().split('T')[0];
+            this.endDate = today.toISOString().split('T')[0];
+        } else {
+            const abonnement = pack.abonnements.find((a: any) => a.user?.email === this.currentUserEmail);
+            if (!abonnement) return;
+            this.selectedAbonnementId = abonnement.id;
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            this.newEndDate = tomorrow.toISOString().split('T')[0];
+        }
+
+        if (this.actionModal) {
+            this.actionModal.dispose();
+        }
+        this.actionModal = new bootstrap.Modal(document.getElementById('ActionModal'));
+        this.actionModal.show();
+    }, 300); // Wait for animation to complete
+  }
+
+  private closeModals() {
+    // Close action modal if open
+    if (this.actionModal) {
+        this.actionModal.hide();
+        this.actionModal = null;
     }
     
-    // Create new modal instance
-    this.dateModal = new bootstrap.Modal(document.getElementById('DateSelectionModal'));
-    this.dateModal.show();
+    // Remove any leftover backdrops
+    const backdrops = document.getElementsByClassName('modal-backdrop');
+    while(backdrops.length > 0) {
+        backdrops[0].remove();
+    }
+    
+    // Re-enable scrolling
+    document.body.classList.remove('modal-open');
+  }
+
+  handleModalAction() {
+    if (this.modalMode === 'subscribe') {
+      this.confirmSubscription();
+    } else {
+      this.confirmRenewal();
+    }
   }
 
   confirmSubscription() {
@@ -156,9 +206,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
       next: (response) => {
         console.log('Subscription request created:', response);
         this.loadClubs();
-        if (this.dateModal) {
-          this.dateModal.hide();
-        }
+        this.closeModals();
         // Reset the form
         this.selectedPackId = null;
         const today = new Date();
@@ -175,32 +223,6 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
     });
   }
 
-  isEligibleForRenewal(pack: any): boolean {
-    const abonnement = pack.abonnements.find((a: any) => a.user?.email === this.currentUserEmail);
-    if (!abonnement) return false;
-    
-    const endDate = new Date(abonnement.endDate);
-    const today = new Date();
-    return endDate < today;
-  }
-
-  openRenewModal(pack: any) {
-    this.lastFocusedElement = document.activeElement as HTMLElement;
-    const abonnement = pack.abonnements.find((a: any) => a.user?.email === this.currentUserEmail);
-    if (!abonnement) return;
-
-    this.selectedAbonnementId = abonnement.id;
-    
-    // Initialize with tomorrow's date
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    this.newEndDate = tomorrow.toISOString().split('T')[0];
-    
-    // Create new modal instance
-    this.renewModal = new bootstrap.Modal(document.getElementById('RenewModal'));
-    this.renewModal.show();
-  }
-
   confirmRenewal() {
     if (!this.selectedAbonnementId || !this.newEndDate) {
       console.error('Missing required data');
@@ -211,9 +233,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
       next: (response) => {
         console.log('Subscription renewed:', response);
         this.loadClubs();
-        if (this.renewModal) {
-          this.renewModal.hide();
-        }
+        this.closeModals();
         // Reset the form
         this.selectedAbonnementId = null;
         this.newEndDate = '';
@@ -226,6 +246,15 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
         console.error('Error renewing subscription:', error);
       }
     });
+  }
+
+  isEligibleForRenewal(pack: any): boolean {
+    const abonnement = pack.abonnements.find((a: any) => a.user?.email === this.currentUserEmail);
+    if (!abonnement) return false;
+    
+    const endDate = new Date(abonnement.endDate);
+    const today = new Date();
+    return endDate < today;
   }
 }
 

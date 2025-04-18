@@ -77,3 +77,22 @@
     line-height: 28px;
     font-size: 0.875rem;
 }
+
+/* Modal stacking fixes */
+.modal {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-open .modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Ensure proper z-index stacking */
+.modal:nth-of-type(even) {
+    z-index: 1052 !important;
+}
+
+.modal-backdrop.show:nth-of-type(even) {
+    z-index: 1051 !important;
+}
