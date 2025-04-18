@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap } from 'rxjs';
 import { lastValueFrom } from 'rxjs';
-
+import { useraccount , clubaccount } from '../../sports-managment/services/bypass';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,15 +10,6 @@ export class AbonnementrequestsService {
   private apiUrl = 'http://localhost:8089/abonnement-requests';
   private cachedToken: string | null = null;
 
-  private useraccount = {
-    username: 'user1@email.com',
-    password: 'a',
-  };
-
-  private clubaccount = {
-    username: 'CLUB@email.com',
-    password: 'a',
-  };
 
   constructor(private http: HttpClient) { }
 
@@ -50,7 +41,7 @@ export class AbonnementrequestsService {
   // Pour USER
   createRequest(packId: number): Observable<any> {
     this.cachedToken = null;
-    return from(this.generateHeaders(this.useraccount)).pipe(
+    return from(this.generateHeaders(useraccount)).pipe(
       switchMap(headers =>
         this.http.post<any>(`${this.apiUrl}/request/${packId}`, {}, { headers })
       )
@@ -59,7 +50,7 @@ export class AbonnementrequestsService {
 
   createRequestWithDates(packId: number, startDate: string, endDate: string): Observable<any> {
     const params = { packId: packId.toString(), startDate, endDate };
-    return from(this.generateHeaders(this.useraccount)).pipe(
+    return from(this.generateHeaders(useraccount)).pipe(
       switchMap(headers =>
         this.http.post<any>(`${this.apiUrl}/abonnement-request`, {}, { headers, params })
       )
@@ -68,14 +59,14 @@ export class AbonnementrequestsService {
 
   // Pour CLUB OWNER
   getRequests(): Observable<any[]> {
-    return from(this.generateHeaders(this.clubaccount)).pipe(
+    return from(this.generateHeaders(clubaccount)).pipe(
       switchMap(headers =>
         this.http.get<any[]>(`${this.apiUrl}/club-owner/requests`, { headers })
       )
     );
   }
   getpacks(): Observable<any[]> {
-    return from(this.generateHeaders(this.useraccount)).pipe(
+    return from(this.generateHeaders(useraccount)).pipe(
       switchMap(headers =>
         this.http.get<any[]>('http://localhost:8089/packs', { headers }) // ⚠️ adapte l'URL si besoin
       )
@@ -84,7 +75,7 @@ export class AbonnementrequestsService {
 
 
   approveRequest(requestId: number): Observable<any> {
-    return from(this.generateHeaders(this.clubaccount)).pipe(
+    return from(this.generateHeaders(clubaccount)).pipe(
       switchMap(headers =>
         this.http.put<any>(`${this.apiUrl}/approve/${requestId}`, {}, { headers })
       )

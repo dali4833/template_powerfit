@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-
+import { adminaccount } from '../../sports-managment/services/bypass';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,25 +9,10 @@ export class ClubrequestsService {
   private apiUrl = `http://localhost:8089/clubs`;
   private cachedToken: string | null = null;
 
-  clubaccount = {
-    username: 'CLUB@email.com',
-    password: 'a',
-  };
+ 
 
-  adminaccount = {
-    username: 'ADMIN@email.com',
-    password: 'a',
-  };
 
-  useraccount = {
-    username: 'user1@email.com',
-    password: 'a',
-  };
-
-  coachaccount = {
-    username: 'COACH@email.com',
-    password: 'a',
-  };
+ 
 
   constructor(
     private http: HttpClient,
@@ -88,27 +73,13 @@ export class ClubrequestsService {
 
 
 
-  bypassclub(): Observable<string> {
-    console.log("bypassclub called");
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.clubaccount, { responseType: 'text' });
-  }
+ 
 
   bypassadmin(): Observable<string> {
     console.log("bypassadmin called");
     return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.adminaccount, { responseType: 'text' });
+      adminaccount, { responseType: 'text' });
   }
 
-  bypassUser(): Observable<string> {
-    console.log("bypassUser called");
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.useraccount, { responseType: 'text' });
-  }
-
-  bypasscoach(): Observable<string> {
-    console.log("bypasscoach called");
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.coachaccount, { responseType: 'text' });
-  }
+  
 }
