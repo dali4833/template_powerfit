@@ -3,6 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap } from 'rxjs';
 import { lastValueFrom } from 'rxjs';
 import { useraccount , clubaccount } from '../../sports-managment/services/bypass';
+interface request {
+  startDate: string;
+  endDate: string;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -38,12 +44,25 @@ export class AbonnementrequestsService {
     });
   }
 
+
   // Pour USER
-  createRequest(packId: number): Observable<any> {
+  createRequest(object: request, packId: number): Observable<any> {
     this.cachedToken = null;
+    const params = {
+      startDate: object.startDate,
+      endDate: object.endDate
+    };
+    
     return from(this.generateHeaders(useraccount)).pipe(
       switchMap(headers =>
-        this.http.post<any>(`${this.apiUrl}/request/${packId}`, {}, { headers })
+        this.http.post<any>(
+          `${this.apiUrl}/request/${packId}`, 
+          null, 
+          { 
+            headers,
+            params
+          }
+        )
       )
     );
   }

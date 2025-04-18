@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AbonnementrequestsService } from 'src/app/back-office/abonnementrequests-mangment/services/Abonnementrequests.service';
 import { ClubService } from 'src/app/back-office/clubs-managment/services/club.service';
 import { PackService } from 'src/app/back-office/packs-managment/services/pack.service';
@@ -23,13 +23,17 @@ interface Pack{
   templateUrl: './clubs-packs.component.html',
   styleUrls: ['./clubs-packs.component.css']
 })
-export class ClubsPacksComponent implements OnInit {
+export class ClubsPacksComponent implements OnInit, OnDestroy {
 
   clubs: any[] = [];
   loading = false;
   selectedClub: any | null = null;
 
   currentUserEmail = "test@hotmail.fr";
+  startDate: string = '';
+  endDate: string = '';
+  selectedPackId: number | null = null;
+  private dateModal: any;
 
   constructor(
     private ClubService: ClubService,
@@ -38,6 +42,16 @@ export class ClubsPacksComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadClubs();
+    // Initialize the date inputs with today's date
+    const today = new Date();
+    this.startDate = today.toISOString().split('T')[0];
+    this.endDate = today.toISOString().split('T')[0];
+  }
+
+  ngOnDestroy(): void {
+    if (this.dateModal) {
+      this.dateModal.dispose();
+    }
   }
 
   loadClubs(): void {
@@ -47,22 +61,21 @@ export class ClubsPacksComponent implements OnInit {
         this.clubs = clubs
           .filter(club => club.status === "APPROVED")
           .map(club => {
-            if (club.packs) {
-              // Marquer les packs liés à l'utilisateur sans les filtrer
-              club.packs.forEach((pack: Pack) => {
+            const mappedClub = { ...club };
+            if (mappedClub.packs) {
+              mappedClub.packs = mappedClub.packs.map((pack: Pack) => {
                 const abonnements = pack.abonnements || [];
                 const demandes = pack.abonnementsrequests || [];
-
-                pack.userIsSubscribed = abonnements.some((a: any) => a.user?.email === this.currentUserEmail);
-                pack.userHasRequested = demandes.some((r: any) => r.user?.email === this.currentUserEmail);
+                
+                return {
+                  ...pack,
+                  userIsSubscribed: abonnements.some((a: any) => a.user?.email === this.currentUserEmail),
+                  userHasRequested: demandes.some((r: any) => r.user?.email === this.currentUserEmail)
+                };
               });
-
-              // Retourner le club avec tous ses packs
-              return { ...club, packs: club.packs };
             }
-
+            return mappedClub;
           });
-
         console.log(this.clubs);
       },
       error: (error) => {
@@ -85,23 +98,47 @@ export class ClubsPacksComponent implements OnInit {
     }
   }
 
+  subscribeToPack(packId: number) {
+    this.selectedPackId = packId;
+    
+    // Dispose existing modal if any
+    if (this.dateModal) {
+      this.dateModal.dispose();
+    }
+    
+    // Create new modal instance
+    this.dateModal = new bootstrap.Modal(document.getElementById('DateSelectionModal'));
+    this.dateModal.show();
+  }
 
+  confirmSubscription() {
+    if (!this.selectedPackId || !this.startDate || !this.endDate) {
+      console.error('Missing required data');
+      return;
+    }
 
+    const abonnementrequest: any = {
+      startDate: this.startDate,
+      endDate: this.endDate
+    };
 
-
-
-  subscribeToPack(packid : number){
-
-    this.AbonnementRequest.createRequest(packid).subscribe({
+    this.AbonnementRequest.createRequest(abonnementrequest, this.selectedPackId).subscribe({
       next: (response) => {
-        console.log(response);
+        console.log('Subscription request created:', response);
         this.loadClubs();
-      }, error : (error) => {
-        console.error(error);
+        if (this.dateModal) {
+          this.dateModal.hide();
+        }
+        // Reset the form
+        this.selectedPackId = null;
+        const today = new Date();
+        this.startDate = today.toISOString().split('T')[0];
+        this.endDate = today.toISOString().split('T')[0];
+      },
+      error: (error) => {
+        console.error('Error creating subscription request:', error);
       }
     });
-
-
   }
 }
 

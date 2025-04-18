@@ -53,7 +53,12 @@ export class EditaddComponent implements OnInit {
         return;
       }
        console.log('Form Value:', packId);
-      this.abonnementService.createRequest(packId).subscribe({
+       const abonnementrequest: any = {
+        startDate: new Date(),
+        endDate: new Date(formValue.requestedDate),
+     
+       }
+      this.abonnementService.createRequest(abonnementrequest,packId).subscribe({
         next: () => {
           this.router.navigate(['/admin/abonnementrequests-management/']);
         },
