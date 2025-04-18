@@ -114,6 +114,35 @@ export class AbonnementService {
   }
 
 
+  renewAbonnement(id: number , newEndDate : string): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.put<any>(`${this.apiUrl}/renew-abonnement/${id}`, { 
+          newEndDate: newEndDate,
+          headers })
+      )
+    );
+  }
+
+
+  calculateRenewalRateForClub(id: number): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any>(`${this.apiUrl}/calculateRenewalRateForClub/${id}`, { headers })
+      )
+    );
+  }
+
+  analyzeClubPerformance(id: number): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any>(`${this.apiUrl}/analyzeClubPerformance/${id}`, { headers })
+      )
+    );
+  }
+
+  
+
   
 
 }
