@@ -1,128 +1,148 @@
+
 <div class="uk-section uk-section-primary uk-light">
-    <div class="uk-container">
-        <h1 class="uk-heading-medium">Training Sessions</h1>
-    </div>
+  <div class="uk-container">
+      <h1 class="uk-heading-medium">Training Sessions</h1>
+  </div>
 </div>
 
 <div class="uk-section">
-    <div class="uk-container">
-        <div class="uk-grid uk-grid-match uk-grid-medium uk-child-width-1-3@m" uk-grid>
-            <div class="uk-width-1-3@m" *ngFor="let session of trainingSessions">
-                <div class="uk-card uk-card-default">
-                    <div class="uk-card-media-top">
-                        <img 
-                        style="height: 250px; object-fit: cover;"
-                        class="uk-width-1-1 uk-height-small" 
-                        src="assets/images/samuel-girven-vj2s0c20qco-unsplash.jpg" alt="Training Session">
+  <div class="uk-container">
+      <div class="uk-grid uk-grid-match uk-grid-medium uk-child-width-1-3@m" uk-grid>
+          <div class="uk-width-1-3@m" *ngFor="let session of trainingSessions">
+              <div class="uk-card uk-card-default">
+                  <div class="uk-card-media-top">
+                      <img
+                      style="height: 250px; object-fit: cover;"
+                      class="uk-width-1-1 uk-height-small"
+                      src="assets/images/samuel-girven-vj2s0c20qco-unsplash.jpg" alt="Training Session">
+                  </div>
+                  <div class="uk-card-body">
+                      <h3 class="uk-card-title">{{session.description}}</h3>
+                      <div class="uk-margin-small">
+                          <span class="uk-label uk-label-primary">{{session.sport}}</span>
+                      </div>
+                      <dl class="uk-description-list">
+                          <dt><span uk-icon="calendar"></span> Date: {{session.date | date}}</dt>
+                          <dt><span uk-icon="clock"></span> Time: {{session.startTime}} - {{session.endTime}}</dt>
+                          <dt><span uk-icon="users"></span> Max Participants: {{session.maxParticipants}} spots</dt>
+                      </dl>
+                  </div>
+                  <div class="uk-card-footer uk-padding-remove-horizontal">
+                    <div class="uk-margin-small">
+                      <span *ngIf="session.isBooked"
+                            [ngClass]="{
+                                'uk-label-warning': session.status === 'PENDING',
+                                'uk-label-success': session.status === 'APPROVED',
+                                'uk-label-danger': session.status === 'REJECTED'
+                            }"
+                            class="uk-label">
+                          {{ session.status }}
+                      </span>
                     </div>
-                    <div class="uk-card-body">
-                        <h3 class="uk-card-title">{{session.description}}</h3>
-                        <div class="uk-margin-small">
-                            <span class="uk-label uk-label-primary">{{session.sport}}</span>
-                        </div>
-                        <dl class="uk-description-list">
-                            <dt><span uk-icon="calendar"></span> Date: {{session.date | date}}</dt>
-                            <dt><span uk-icon="clock"></span> Time: {{session.startTime}} - {{session.endTime}}</dt>
-                            <dt><span uk-icon="users"></span> Max Participants: {{session.maxParticipants}} spots</dt>
-                        </dl>
-                    </div>
-                    <div class="uk-card-footer uk-padding-remove-horizontal">
-                        <button *ngIf="!session.isBooked && !session.isElapsed"
-                            [disabled]="session.maxParticipants <= session.currentParticipants"
-                            class="uk-button uk-button-primary uk-width-1-1 mb-1" (click)="bookSession(session.id)">
-                            {{ session.maxParticipants <= session.currentParticipants ? 'Session Full' : 'Book Session'
-                                }} </button>
 
-                                <button *ngIf="session.isBooked && !session.isElapsed"
-                                    class="uk-button uk-button-danger uk-width-1-1 mb-1"
-                                    (click)="session.bookingId !== undefined && cancelBooking(session.id, session.bookingId)">
-                                    Cancel Booking
-                                </button>
+                    <!-- Consolidated Book/Cancel Button -->
+                    <button *ngIf="session.isBooked && !session.isElapsed"
+                            class="uk-button uk-button-danger uk-width-1-1 mb-1"
+                            (click)="session.bookingId !== undefined && cancelBooking(session.id, session.bookingId)">
+                        Cancel Booking
+                    </button>
 
-                                <!-- Other Buttons -->
-                                <button class="uk-button uk-button-secondary uk-width-1-1 mb-1"
-                                    (click)="checkExercises(session.id)">
-                                    Check Exercises
-                                </button>
-                                <button class="uk-button uk-button-default uk-width-1-1"
-                                    (click)="loadReviews(session.id)" data-bs-toggle="modal"
-                                    data-bs-target="#reviewsModal">
-                                    Reviews
-                                </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <button *ngIf="!session.isBooked"
+                            [disabled]="session.isElapsed || session.maxParticipants <= session.currentParticipants"
+                            class="uk-button uk-button-primary uk-width-1-1 mb-1"
+                            (click)="bookSession(session.id)">
+                        {{ session.isElapsed ? 'Session Ended' : (session.maxParticipants <= session.currentParticipants ? 'Session Full' : 'Book Session') }}
+                    </button>
+
+                    <!-- Other Buttons -->
+                    <button class="uk-button uk-button-secondary uk-width-1-1 mb-1"
+                            (click)="checkExercises(session.id)">
+                        Check Exercises
+                    </button>
+                    <button class="uk-button uk-button-default uk-width-1-1"
+                            (click)="loadReviews(session.id)"
+                            data-bs-toggle="modal"
+                            data-bs-target="#reviewsModal">
+                        Reviews
+                    </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 </div>
 
 <div class="modal fade" id="reviewsModal" tabindex="-1" aria-labelledby="reviewsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content" *ngIf="selectedSession">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reviewsModalLabel">Reviews for {{selectedSession.description}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container" *ngIf="selectedSession.reviews && selectedSession.reviews.length > 0">
-                    <div class="card mb-3" *ngFor="let review of selectedSession.reviews">
-                        <div class="card-header">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <h6 >{{review.user.name }} </h6>
-                                  
-                                    <small  style="color: white;margin-left:3px;"> {{review.createdAt | date:'medium'}}</small>
-                                </div>
-                                <div class="text-warning">
-                                    <i class="bi bi-star-fill" *ngFor="let star of getStarsArray(review.rating)"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">{{review.description}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center" *ngIf="!selectedSession.reviews || selectedSession.reviews.length === 0">
-                    <p>No reviews available for this session.</p>
-                </div>
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content" *ngIf="selectedSession">
+          <div class="modal-header">
+              <h5 class="modal-title" id="reviewsModalLabel">Reviews for {{selectedSession.description}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="container" *ngIf="selectedSession.reviews && selectedSession.reviews.length > 0">
+                  <div class="card mb-3" *ngFor="let review of selectedSession.reviews">
+                      <div class="card-header">
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div class="d-flex align-items-center">
+                                  <h6 >{{review.user.name }} </h6>
 
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h6 class="card-title mb-3">Write a Review</h6>
-                        <div class="rating-container mb-3">
-                            <div class="stars d-flex gap-2">
-                                <i *ngFor="let star of [1,2,3,4,5]" 
-                                   class="bi" 
-                                   [class.bi-star]="!isRatingSelected(star)"
-                                   [class.bi-star-fill]="isRatingSelected(star)"
-                                   (click)="setRating(star)"
-                                   style="cursor: pointer; font-size: 1.5rem; color: #ffc107;"
-                                   [style.transform]="'scale(' + (isRatingSelected(star) ? '1.1' : '1') + ')'"
-                                   [style.transition]="'transform 0.2s'">
-                                </i>
-                            </div>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <textarea class="form-control" 
-                                    placeholder="Share your experience..." 
-                                    id="reviewText"
-                                    style="height: 100px"
-                                    [(ngModel)]="reviewText"
-                                    ></textarea>
-                            <label for="reviewText">Share your experience...</label>
-                        </div>
-                        <button class="btn btn-primary w-100" 
-                                [disabled]="selectedRating === 0 || !reviewText.trim()"
-                                (click)="submitReview()">
-                            Submit Review
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
+                                  <small  style="color: white;margin-left:3px;"> {{review.createdAt | date:'medium'}}</small>
+                              </div>
+                              <div class="text-warning">
+                                  <i class="bi bi-star-fill" *ngFor="let star of getStarsArray(review.rating)"></i>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="card-body">
+                          <p class="card-text">{{review.description}}</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="text-center" *ngIf="!selectedSession.reviews || selectedSession.reviews.length === 0">
+                  <p>No reviews available for this session.</p>
+              </div>
+
+              <div class="card mt-4">
+                  <div class="card-body">
+                      <h6 class="card-title mb-3">Write a Review</h6>
+                      <div class="rating-container mb-3">
+                          <div class="stars d-flex gap-2">
+                              <i *ngFor="let star of [1,2,3,4,5]"
+                                 class="bi"
+                                 [class.bi-star]="!isRatingSelected(star)"
+                                 [class.bi-star-fill]="isRatingSelected(star)"
+                                 (click)="setRating(star)"
+                                 style="cursor: pointer; font-size: 1.5rem; color: #ffc107;"
+                                 [style.transform]="'scale(' + (isRatingSelected(star) ? '1.1' : '1') + ')'"
+                                 [style.transition]="'transform 0.2s'">
+                              </i>
+                          </div>
+                      </div>
+                      <div class="form-floating mb-3">
+                          <textarea class="form-control"
+                                  placeholder="Share your experience..."
+                                  id="reviewText"
+                                  style="height: 100px"
+                                  [(ngModel)]="reviewText"
+                                  ></textarea>
+                          <label for="reviewText">Share your experience...</label>
+                      </div>
+                      <button class="btn btn-primary w-100"
+                      [disabled]="selectedRating === 0 || !reviewText.trim() || selectedSession?.isElapsed"
+                      (click)="submitReview()">
+                  Submit Review
+              </button>
+
+              <div *ngIf="selectedSession?.isElapsed" class="text-danger mt-2 text-center">
+                  You cannot submit a review for a session that has already ended.
+              </div>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
 </div>

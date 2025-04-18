@@ -18,7 +18,6 @@
         <table class="table table-striped" *ngIf="!loading && bookings.length > 0">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Status</th>
                     <th>Booked At</th>
                     <th>Resolved At</th>
@@ -27,7 +26,6 @@
             </thead>
             <tbody>
                 <tr *ngFor="let booking of bookings">
-                    <td>{{ booking.id }}</td>
                     <td>
                         <span class="badge" [ngClass]="{
                             'bg-warning': booking.status === 'PENDING',
@@ -41,17 +39,17 @@
                     <td>{{ booking.resolvedAt | date:'medium' }}</td>
                     <td>
                         <button *ngIf="booking.status === 'PENDING'"
-                                class="btn btn-sm btn-success me-2" 
+                                class="btn btn-sm btn-success me-2"
                                 (click)="approveBooking(booking.id!)">
                             Approve
                         </button>
                         <button *ngIf="booking.status === 'PENDING'"
-                                class="btn btn-sm btn-danger me-2" 
+                                class="btn btn-sm btn-danger me-2"
                                 (click)="rejectBooking(booking.id!)">
                             Reject
                         </button>
                         <button *ngIf="booking.status === 'PENDING'"
-                                class="btn btn-sm btn-warning" 
+                                class="btn btn-sm btn-warning"
                                 (click)="cancelBooking(booking.id!)">
                             Cancel
                         </button>
