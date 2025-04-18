@@ -29,7 +29,7 @@ export class ClubsPacksComponent implements OnInit {
   loading = false;
   selectedClub: any | null = null;
 
-  currentUserEmail = "user1@email.com";
+  currentUserEmail = "test@hotmail.fr";
 
   constructor(
     private ClubService: ClubService,

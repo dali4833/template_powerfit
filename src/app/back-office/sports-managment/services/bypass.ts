@@ -4,7 +4,7 @@ export const adminaccount = {
 };
 
 export const clubaccount = {
-    username: 'a@example.com',
+    username: 'club@hotmail.fr',
     password: 'a',
 };
 
