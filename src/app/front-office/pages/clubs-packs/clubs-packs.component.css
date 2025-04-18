@@ -67,3 +67,13 @@
 .uk-label-danger {
     background-color: #f0506e;
 }
+
+.uk-margin-small-bottom {
+    margin-bottom: 10px !important;
+}
+
+.uk-button-small {
+    padding: 0 15px;
+    line-height: 28px;
+    font-size: 0.875rem;
+}

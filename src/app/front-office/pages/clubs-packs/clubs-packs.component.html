@@ -115,8 +115,16 @@
                 </ng-container>
 
                 <ng-container *ngIf="pack.userIsSubscribed">
-                  <button class="uk-button uk-button-success uk-button-small uk-width-1-1" disabled>
+                  <button class="uk-button uk-button-success uk-button-small uk-width-1-1 uk-margin-small-bottom" disabled>
                     Already Subscribed
+                  </button>
+                  <button
+                    *ngIf="isEligibleForRenewal(pack)"
+                    class="uk-button uk-button-primary uk-button-small uk-width-1-1"
+                    (click)="openRenewModal(pack)"
+                    data-bs-toggle="modal"
+                    data-bs-target="#RenewModal">
+                    Renew Subscription
                   </button>
                 </ng-container>
 
@@ -162,6 +170,28 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary" (click)="confirmSubscription()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Renew Modal -->
+<div class="modal fade" id="RenewModal" tabindex="-1" aria-labelledby="renewModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="renewModalLabel">Renew Subscription</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="newEndDate" class="form-label">New End Date</label>
+          <input type="date" class="form-control" id="newEndDate" [(ngModel)]="newEndDate">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="confirmRenewal()">Renew</button>
       </div>
     </div>
   </div>

@@ -44,6 +44,9 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   endDate: string = '';
   selectedPackId: number | null = null;
   private dateModal: any;
+  newEndDate: string = '';
+  selectedAbonnementId: number | null = null;
+  private renewModal: any;
 
   constructor(
     private ClubService: ClubService,
@@ -158,6 +161,54 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error creating subscription request:', error);
+      }
+    });
+  }
+
+  isEligibleForRenewal(pack: any): boolean {
+    const abonnement = pack.abonnements.find((a: any) => a.user?.email === this.currentUserEmail);
+    if (!abonnement) return false;
+    
+    const endDate = new Date(abonnement.endDate);
+    const today = new Date();
+    return endDate < today;
+  }
+
+  openRenewModal(pack: any) {
+    const abonnement = pack.abonnements.find((a: any) => a.user?.email === this.currentUserEmail);
+    if (!abonnement) return;
+
+    this.selectedAbonnementId = abonnement.id;
+    
+    // Initialize with tomorrow's date
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.newEndDate = tomorrow.toISOString().split('T')[0];
+    
+    // Create new modal instance
+    this.renewModal = new bootstrap.Modal(document.getElementById('RenewModal'));
+    this.renewModal.show();
+  }
+
+  confirmRenewal() {
+    if (!this.selectedAbonnementId || !this.newEndDate) {
+      console.error('Missing required data');
+      return;
+    }
+
+    this.AbonnementService.renewAbonnement(this.selectedAbonnementId, this.newEndDate).subscribe({
+      next: (response) => {
+        console.log('Subscription renewed:', response);
+        this.loadClubs();
+        if (this.renewModal) {
+          this.renewModal.hide();
+        }
+        // Reset the form
+        this.selectedAbonnementId = null;
+        this.newEndDate = '';
+      },
+      error: (error) => {
+        console.error('Error renewing subscription:', error);
       }
     });
   }
