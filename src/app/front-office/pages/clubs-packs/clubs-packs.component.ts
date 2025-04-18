@@ -47,6 +47,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   newEndDate: string = '';
   selectedAbonnementId: number | null = null;
   private renewModal: any;
+  private lastFocusedElement: HTMLElement | null = null;
 
   constructor(
     private ClubService: ClubService,
@@ -65,6 +66,10 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.dateModal) {
       this.dateModal.dispose();
+    }
+    if (this.lastFocusedElement) {
+      this.lastFocusedElement.focus();
+      this.lastFocusedElement = null;
     }
   }
 
@@ -123,6 +128,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   }
 
   subscribeToPack(packId: number) {
+    this.lastFocusedElement = document.activeElement as HTMLElement;
     this.selectedPackId = packId;
     
     // Dispose existing modal if any
@@ -158,6 +164,10 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
         const today = new Date();
         this.startDate = today.toISOString().split('T')[0];
         this.endDate = today.toISOString().split('T')[0];
+        if (this.lastFocusedElement) {
+          this.lastFocusedElement.focus();
+          this.lastFocusedElement = null;
+        }
       },
       error: (error) => {
         console.error('Error creating subscription request:', error);
@@ -175,6 +185,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   }
 
   openRenewModal(pack: any) {
+    this.lastFocusedElement = document.activeElement as HTMLElement;
     const abonnement = pack.abonnements.find((a: any) => a.user?.email === this.currentUserEmail);
     if (!abonnement) return;
 
@@ -206,6 +217,10 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
         // Reset the form
         this.selectedAbonnementId = null;
         this.newEndDate = '';
+        if (this.lastFocusedElement) {
+          this.lastFocusedElement.focus();
+          this.lastFocusedElement = null;
+        }
       },
       error: (error) => {
         console.error('Error renewing subscription:', error);

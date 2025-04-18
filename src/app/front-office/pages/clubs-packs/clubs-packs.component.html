@@ -59,8 +59,12 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="PackModal" tabindex="-1" aria-labelledby="packsModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+<div class="modal fade" 
+     id="PackModal" 
+     tabindex="-1" 
+     role="dialog"
+     aria-labelledby="packsModalLabel">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content" *ngIf="selectedClub">
 
       <!-- Modal header -->
@@ -150,12 +154,20 @@
 </div>
 
 <!-- Date Selection Modal -->
-<div class="modal fade" id="DateSelectionModal" tabindex="-1" aria-labelledby="dateSelectionModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" 
+     id="DateSelectionModal" 
+     tabindex="-1" 
+     role="dialog"
+     aria-labelledby="dateSelectionModalLabel">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="dateSelectionModalLabel">Select Subscription Dates</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="modal" 
+                aria-label="Close">
+        </button>
       </div>
       <div class="modal-body">
         <div class="mb-3">
@@ -176,12 +188,20 @@
 </div>
 
 <!-- Renew Modal -->
-<div class="modal fade" id="RenewModal" tabindex="-1" aria-labelledby="renewModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" 
+     id="RenewModal" 
+     tabindex="-1" 
+     role="dialog"
+     aria-labelledby="renewModalLabel">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="renewModalLabel">Renew Subscription</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="modal" 
+                aria-label="Close">
+        </button>
       </div>
       <div class="modal-body">
         <div class="mb-3">

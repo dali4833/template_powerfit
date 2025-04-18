@@ -114,12 +114,13 @@ export class AbonnementService {
   }
 
 
-  renewAbonnement(id: number , newEndDate : string): Observable<any> {
+  renewAbonnement(id: number, newEndDate: string): Observable<any> {
+    console.log(id)
+    const params ={ newEndDate: newEndDate.split('T')[0]}
+    
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.put<any>(`${this.apiUrl}/renew-abonnement/${id}`, { 
-          newEndDate: newEndDate,
-          headers })
+        this.http.put<any>(`${this.apiUrl}/renew-abonnement/${id}`, null, { params, headers })
       )
     );
   }
