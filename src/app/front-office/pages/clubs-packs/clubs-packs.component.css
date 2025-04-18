@@ -48,8 +48,22 @@
 
 .uk-text-small {
     font-size: 0.875rem;
+    margin: 5px 0;
+    color: #666;
 }
 
 .uk-card-small .uk-card-body {
     padding: 10px;
+}
+
+.uk-label-success {
+    background-color: #32d296;
+}
+
+.uk-label-warning {
+    background-color: #faa05a;
+}
+
+.uk-label-danger {
+    background-color: #f0506e;
 }

@@ -20,6 +20,19 @@
           </div>
           <div class="uk-card-body">
             <h3 class="uk-card-title">{{ club.name }}</h3>
+            <!-- Add performance metrics -->
+            <div class="uk-margin-small" *ngIf="club.renewalRate !== undefined">
+              <span class="uk-label" [ngClass]="{
+                'uk-label-success': club.renewalRate > 70,
+                'uk-label-warning': club.renewalRate > 30 && club.renewalRate <= 70,
+                'uk-label-danger': club.renewalRate <= 30
+              }">
+                Renewal Rate: {{ club.renewalRate }}%
+              </span>
+            </div>
+            <div class="uk-margin-small" *ngIf="club.performance">
+              <p class="uk-text-small">{{ club.performance.interpretation }}</p>
+            </div>
             <div class="uk-margin-small">
               <span class="uk-label uk-label-primary uk-margin-small-right" *ngFor="let sport of club.sports">
                 {{ sport.name }}

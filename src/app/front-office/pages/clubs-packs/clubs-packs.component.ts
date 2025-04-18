@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AbonnementService } from 'src/app/back-office/abonnement-managment/services/Abonnement.service';
 import { AbonnementrequestsService } from 'src/app/back-office/abonnementrequests-mangment/services/Abonnementrequests.service';
 import { ClubService } from 'src/app/back-office/clubs-managment/services/club.service';
 import { PackService } from 'src/app/back-office/packs-managment/services/pack.service';
@@ -14,9 +15,18 @@ interface Pack{
   abonnementsrequests : any[] ;
   userIsSubscribed?: boolean;
   userHasRequested?: boolean;
+  subscriptionCount?: number;
 }
 
-
+interface ClubPerformance {
+  interpretation: string;
+  packPerformance: Array<{
+    subscriptionCount: number;
+    packName: string;
+  }>;
+  renewalRate: number;
+  message: string;
+}
 
 @Component({
   selector: 'app-clubs-packs',
@@ -37,7 +47,8 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
 
   constructor(
     private ClubService: ClubService,
-    private AbonnementRequest : AbonnementrequestsService
+    private AbonnementRequest : AbonnementrequestsService,
+    private AbonnementService : AbonnementService
   ) { }
 
   ngOnInit(): void {
@@ -62,6 +73,16 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
           .filter(club => club.status === "APPROVED")
           .map(club => {
             const mappedClub = { ...club };
+            
+            // Load renewal rate and performance data
+            this.AbonnementService.calculateRenewalRateForClub(club.id).subscribe(rate => {
+              mappedClub.renewalRate = rate;
+            });
+            
+            this.AbonnementService.analyzeClubPerformance(club.id).subscribe(performance => {
+              mappedClub.performance = performance;
+            });
+
             if (mappedClub.packs) {
               mappedClub.packs = mappedClub.packs.map((pack: Pack) => {
                 const abonnements = pack.abonnements || [];
