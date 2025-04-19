@@ -69,4 +69,11 @@ export class TrophiesComponent implements OnInit {
   getPointsNeeded(requiredPoints: number): number {
     return Math.max(0, requiredPoints - this.userPoints);
   }
+
+  get filteredTrophies(): any[] {
+    if (this.showMyTrophies) {
+      return this.trophies.filter(trophy => this.isTrophyClaimed(trophy.id));
+    }
+    return this.trophies;
+  }
 }

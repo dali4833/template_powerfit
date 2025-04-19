@@ -22,7 +22,7 @@
   </div>
 
   <div class="trophies-grid" *ngIf="!loading">
-    <div class="trophy-card" *ngFor="let trophy of trophies">
+    <div class="trophy-card" *ngFor="let trophy of filteredTrophies">
       <div class="trophy-icon" [class.claimed]="isTrophyClaimed(trophy.id)">
         <i class="fas fa-trophy"></i>
       </div>
