@@ -8,9 +8,9 @@ import { EditaddComponent } from './editadd/editadd.component';
 
 @NgModule({
   declarations: [ 
-    EditaddComponent,
     DetailsComponent,
     ListComponent,
+    EditaddComponent,
    
    ],
   imports: [
