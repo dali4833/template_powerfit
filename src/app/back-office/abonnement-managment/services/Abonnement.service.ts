@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-import { clubaccount } from '../../sports-managment/services/bypass';
+import { clubaccount , useraccount } from '../../sports-managment/services/bypass';
 @Injectable({
   providedIn: 'root'
 })
@@ -139,6 +139,40 @@ export class AbonnementService {
       switchMap(headers =>
         this.http.get<any>(`${this.apiUrl}/analyzeClubPerformance/${id}`, { headers })
       )
+    );
+  }
+
+
+  getvalidusertoken(): Observable<string> {
+    return this.http.post(`http://localhost:8089/auth/generateToken`,
+      useraccount, { responseType: 'text' });
+  }
+  private async getValidUserToken(): Promise<string> {
+    if (this.cachedToken) {
+      return this.cachedToken;
+    }
+
+    try {
+      this.cachedToken = await lastValueFrom(this.getvalidusertoken());
+      return this.cachedToken;
+    } catch (error) {
+      console.error('Failed to get token:', error);
+      throw error;
+    }
+  }
+
+
+
+
+
+  getUserAbonnementsHistory(): Observable<any> {
+    return from(this.getValidUserToken()).pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+        return this.http.get<any>(`${this.apiUrl}/user-history`, { headers });
+      })
     );
   }
 

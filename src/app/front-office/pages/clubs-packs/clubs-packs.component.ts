@@ -6,27 +6,19 @@ import { PackService } from 'src/app/back-office/packs-managment/services/pack.s
 declare var bootstrap: any;
 
 
-interface Pack{
-  price : number;
-  id : number;
-  name : string;
-  duration :  number;
-  abonnements : any[] ;
-  abonnementsrequests : any[] ;
+interface Pack {
+  price: number;
+  id: number;
+  name: string;
+  duration: number;
+  abonnements: any[];
+  abonnementsrequests: any[];
   userIsSubscribed?: boolean;
   userHasRequested?: boolean;
   subscriptionCount?: number;
 }
 
-interface ClubPerformance {
-  interpretation: string;
-  packPerformance: Array<{
-    subscriptionCount: number;
-    packName: string;
-  }>;
-  renewalRate: number;
-  message: string;
-}
+
 
 @Component({
   selector: 'app-clubs-packs',
@@ -51,14 +43,17 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   modalTitle: string = '';
   private actionModal: any;
 
+  recommendedClubs: any[] = [];
+
   constructor(
     private ClubService: ClubService,
-    private AbonnementRequest : AbonnementrequestsService,
-    private AbonnementService : AbonnementService
+    private AbonnementRequest: AbonnementrequestsService,
+    private AbonnementService: AbonnementService
   ) { }
 
   ngOnInit(): void {
     this.loadClubs();
+    this.loadRecommendations();
     // Initialize the date inputs with today's date
     const today = new Date();
     this.startDate = today.toISOString().split('T')[0];
@@ -81,12 +76,12 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
           .filter(club => club.status === "APPROVED")
           .map(club => {
             const mappedClub = { ...club };
-            
+
             // Load renewal rate and performance data
             this.AbonnementService.calculateRenewalRateForClub(club.id).subscribe(rate => {
               mappedClub.renewalRate = rate;
             });
-            
+
             this.AbonnementService.analyzeClubPerformance(club.id).subscribe(performance => {
               mappedClub.performance = performance;
             });
@@ -95,7 +90,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
               mappedClub.packs = mappedClub.packs.map((pack: Pack) => {
                 const abonnements = pack.abonnements || [];
                 const demandes = pack.abonnementsrequests || [];
-                
+
                 return {
                   ...pack,
                   userIsSubscribed: abonnements.some((a: any) => a.user?.email === this.currentUserEmail),
@@ -111,6 +106,25 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
         console.error(error);
       },
       complete: () => this.loading = false
+    });
+  }
+
+  loadRecommendations(): void {
+    // Get all user's previous subscriptions
+    this.AbonnementService.getUserAbonnementsHistory().subscribe(abonnements => {
+      console.log(abonnements);
+      // Extract unique sports from user's history
+      const userSports = new Set(abonnements.flatMap((a: any) => 
+        a.pack.club.sports.map((s: any) => s.name)
+      ));
+     console.log(userSports);
+      // Filter clubs that have matching sports
+      this.recommendedClubs = this.clubs.filter(club => 
+        club.sports.some((sport: any) => userSports.has(sport.name)) &&
+        !club.packs.some((pack: any) => 
+          pack.abonnements?.some((a: any) => a.user?.email === this.currentUserEmail)
+        )
+      ).slice(0, 3); // Get top 3 recommendations
     });
   }
 
@@ -131,54 +145,54 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
     // Close pack modal first
     const packModal = bootstrap.Modal.getInstance(document.getElementById('PackModal'));
     if (packModal) {
-        packModal.hide();
-        // Remove any leftover backdrops
-        const backdrops = document.getElementsByClassName('modal-backdrop');
-        while(backdrops.length > 0) {
-            backdrops[0].remove();
-        }
+      packModal.hide();
+      // Remove any leftover backdrops
+      const backdrops = document.getElementsByClassName('modal-backdrop');
+      while (backdrops.length > 0) {
+        backdrops[0].remove();
+      }
     }
 
     // Wait for pack modal to close completely
     setTimeout(() => {
-        this.modalMode = mode;
-        this.modalTitle = mode === 'subscribe' ? 'Select Subscription Dates' : 'Renew Subscription';
-        
-        if (mode === 'subscribe') {
-            this.selectedPackId = pack.id;
-            const today = new Date();
-            this.startDate = today.toISOString().split('T')[0];
-            this.endDate = today.toISOString().split('T')[0];
-        } else {
-            const abonnement = pack.abonnements.find((a: any) => a.user?.email === this.currentUserEmail);
-            if (!abonnement) return;
-            this.selectedAbonnementId = abonnement.id;
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            this.newEndDate = tomorrow.toISOString().split('T')[0];
-        }
+      this.modalMode = mode;
+      this.modalTitle = mode === 'subscribe' ? 'Select Subscription Dates' : 'Renew Subscription';
 
-        if (this.actionModal) {
-            this.actionModal.dispose();
-        }
-        this.actionModal = new bootstrap.Modal(document.getElementById('ActionModal'));
-        this.actionModal.show();
+      if (mode === 'subscribe') {
+        this.selectedPackId = pack.id;
+        const today = new Date();
+        this.startDate = today.toISOString().split('T')[0];
+        this.endDate = today.toISOString().split('T')[0];
+      } else {
+        const abonnement = pack.abonnements.find((a: any) => a.user?.email === this.currentUserEmail);
+        if (!abonnement) return;
+        this.selectedAbonnementId = abonnement.id;
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        this.newEndDate = tomorrow.toISOString().split('T')[0];
+      }
+
+      if (this.actionModal) {
+        this.actionModal.dispose();
+      }
+      this.actionModal = new bootstrap.Modal(document.getElementById('ActionModal'));
+      this.actionModal.show();
     }, 300); // Wait for animation to complete
   }
 
   private closeModals() {
     // Close action modal if open
     if (this.actionModal) {
-        this.actionModal.hide();
-        this.actionModal = null;
+      this.actionModal.hide();
+      this.actionModal = null;
     }
-    
+
     // Remove any leftover backdrops
     const backdrops = document.getElementsByClassName('modal-backdrop');
-    while(backdrops.length > 0) {
-        backdrops[0].remove();
+    while (backdrops.length > 0) {
+      backdrops[0].remove();
     }
-    
+
     // Re-enable scrolling
     document.body.classList.remove('modal-open');
   }
@@ -251,7 +265,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   isEligibleForRenewal(pack: any): boolean {
     const abonnement = pack.abonnements.find((a: any) => a.user?.email === this.currentUserEmail);
     if (!abonnement) return false;
-    
+
     const endDate = new Date(abonnement.endDate);
     const today = new Date();
     return endDate < today;

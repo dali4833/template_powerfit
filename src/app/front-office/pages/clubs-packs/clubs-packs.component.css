@@ -96,3 +96,40 @@
 .modal-backdrop.show:nth-of-type(even) {
     z-index: 1051 !important;
 }
+
+/* Recommendation styles */
+.recommendation-card {
+    position: relative;
+    transition: transform 0.3s ease;
+    margin: 10px;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.uk-card-badge {
+    background: #f0506e;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.uk-slider-container {
+    padding: 20px 0;
+}
+
+.uk-position-small {
+    margin: 0 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+    .recommendation-card {
+        margin: 5px;
+    }
+}
