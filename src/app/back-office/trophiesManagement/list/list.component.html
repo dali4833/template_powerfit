@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Sports List</h2>
-        <button class="btn btn-primary" routerLink="/admin/sports-management/new">Add New Sport</button>
+        <h2>trophies List</h2>
+        <button class="btn btn-primary" routerLink="/admin/sports-management/new">Add New trophy</button>
     </div>
 
     <div *ngIf="errorMessage" class="alert alert-danger">
@@ -28,10 +28,7 @@
                 <td>{{sport.id}}</td>
                 <td>{{sport.name}}</td>
                 <td>{{sport.description}}</td>
-                <td>
-                    <button class="btn btn-sm btn-primary me-2" (click)="editSport(sport.id!)">Edit</button>
-                    <button class="btn btn-sm btn-danger" (click)="sport.id && deleteSport(sport.id)">Delete</button>
-                </td>
+               
             </tr>
         </tbody>
     </table>

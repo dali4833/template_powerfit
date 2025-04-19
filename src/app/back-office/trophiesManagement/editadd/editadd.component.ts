@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SportService } from '../services/sports.service';
+import { TrophyService } from '../services/Trophy.service';
 
 @Component({
   selector: 'app-sports-editadd',
@@ -15,7 +15,8 @@ export class EditaddComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private sportService: SportService,
+       private trophyService: TrophyService,
+   
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -26,39 +27,8 @@ export class EditaddComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
-    if (id) {
-      this.sportId = +id;
-      this.isEditing = true;
-      this.loadSport(this.sportId);
-    }
+   
   }
 
-  private loadSport(id: number): void {
-    this.sportService.getSport(id).subscribe({
-      next: (sport) => this.sportForm.patchValue(sport),
-      error: (error) => {
-        this.errorMessage = 'Failed to load sport details';
-        console.error(error);
-      }
-    });
-  }
 
-  onSubmit(): void {
-    if (this.sportForm.valid) {
-      const sportData: any = this.sportForm.value;
-      
-      const action = this.isEditing ? 
-        this.sportService.updateSport(sportData, this.sportId!) :
-        this.sportService.createSport(sportData);
-
-      action.subscribe({
-        next: () => this.router.navigate(['/admin/sports-management/']),
-        error: (error) => {
-          this.errorMessage = `Failed to ${this.isEditing ? 'update' : 'create'} sport`;
-          console.error(error);
-        }
-      });
-    }
-  }
 }

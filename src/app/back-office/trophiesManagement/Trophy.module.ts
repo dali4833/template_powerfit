@@ -2,28 +2,25 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ListComponent } from './list/list.component';
-import { DetailsComponent } from './details/details.component';
-import { SportsRoutingModule } from './Trophy-routing.module';
+import { TrophiesRoutingModule } from './Trophy-routing.module';
 import { EditaddComponent } from './editadd/editadd.component';
 
 @NgModule({
   declarations: [ 
     EditaddComponent,
-    DetailsComponent,
     ListComponent,
    ],
   imports: [
    
     CommonModule,
-    SportsRoutingModule,
+    TrophiesRoutingModule,
     ReactiveFormsModule,
     FormsModule,
   ],
   exports: [
-    DetailsComponent,
     ListComponent,
     EditaddComponent,
-    SportsRoutingModule,
+    TrophiesRoutingModule,
   ]
 })
 export class TrophyModule { }
