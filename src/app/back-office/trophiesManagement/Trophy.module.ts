@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ListComponent } from './list/list.component';
 import { DetailsComponent } from './details/details.component';
-import { SportsRoutingModule } from './sports-routing.module';
+import { SportsRoutingModule } from './Trophy-routing.module';
 import { EditaddComponent } from './editadd/editadd.component';
 
 @NgModule({
@@ -11,9 +11,9 @@ import { EditaddComponent } from './editadd/editadd.component';
     EditaddComponent,
     DetailsComponent,
     ListComponent,
-   
    ],
   imports: [
+   
     CommonModule,
     SportsRoutingModule,
     ReactiveFormsModule,
@@ -23,8 +23,7 @@ import { EditaddComponent } from './editadd/editadd.component';
     DetailsComponent,
     ListComponent,
     EditaddComponent,
-
     SportsRoutingModule,
   ]
 })
-export class SportsModule { }
+export class TrophyModule { }
