@@ -110,21 +110,14 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   }
 
   loadRecommendations(): void {
-    // Get all user's previous subscriptions
-    this.AbonnementService.getUserAbonnementsHistory().subscribe(abonnements => {
-      console.log(abonnements);
-      // Extract unique sports from user's history
-      const userSports = new Set(abonnements.flatMap((a: any) => 
-        a.pack.club.sports.map((s: any) => s.name)
-      ));
-     console.log(userSports);
-      // Filter clubs that have matching sports
-      this.recommendedClubs = this.clubs.filter(club => 
-        club.sports.some((sport: any) => userSports.has(sport.name)) &&
-        !club.packs.some((pack: any) => 
-          pack.abonnements?.some((a: any) => a.user?.email === this.currentUserEmail)
-        )
-      ).slice(0, 3); // Get top 3 recommendations
+
+    this.ClubService.getrecommandations().subscribe({
+      next: (clubs) => {
+        this.recommendedClubs = clubs.filter((club: any) => club.status === "APPROVED");
+      },
+      error: (error) => {
+        console.error(error);
+      }
     });
   }
 

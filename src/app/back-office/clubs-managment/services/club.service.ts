@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-import { clubaccount } from '../../sports-managment/services/bypass';
+import { clubaccount , useraccount} from '../../sports-managment/services/bypass';
 @Injectable({
   providedIn: 'root'
 })
@@ -101,5 +101,45 @@ export class ClubService {
       clubaccount, { responseType: 'text' });
   }
 
+
+
+  private async getValidUserToken(): Promise<string> {
+    if (this.cachedToken) {
+      return this.cachedToken;
+    }
+
+    try {
+      this.cachedToken = await lastValueFrom(this.bypassuser());
+      return this.cachedToken;
+    } catch (error) {
+      console.error('Failed to get token:', error);
+      throw error;
+    }
+  }
+
+
+
+  private async generateUserHeaders(): Promise<HttpHeaders> {
+    const token = await this.getValidUserToken();
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
+
+
+  getrecommandations(): Observable<any[]> {
+    return from(this.generateUserHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/recommended-ids`, { headers })
+      )
+    );
+  }
+ 
+ bypassuser(): Observable<string> {
+    return this.http.post(`http://localhost:8089/auth/generateToken`,
+      useraccount, { responseType: 'text' });
+  }
  
 }
