@@ -9,11 +9,11 @@ import { TrophyService } from '../services/Trophy.service';
   styleUrls: ['./editadd.component.css']
 })
 export class EditaddComponent implements OnInit {
-  trophyForm: FormGroup;
+  trophyForm!: FormGroup;
   isEditing = false;
-  trophyId: number | null = null;
-  errorMessage: string = '';
   loading = false;
+  errorMessage = '';
+  trophyId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -21,10 +21,14 @@ export class EditaddComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    this.initForm();
+  }
+
+  private initForm(): void {
     this.trophyForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
-      requiredPoints: ['', [Validators.required, Validators.min(0)]]
+      requiredPoints: [0, [Validators.required, Validators.min(0)]]
     });
   }
 
@@ -37,7 +41,7 @@ export class EditaddComponent implements OnInit {
     }
   }
 
-  loadTrophy(id: number): void {
+  private loadTrophy(id: number): void {
     this.loading = true;
     this.trophyService.getTrophy(id).subscribe({
       next: (trophy) => {

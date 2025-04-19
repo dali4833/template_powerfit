@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <div class="form-container">
         <div class="form-header">
-            <h2>{{isEditing ? 'Edit' : 'Add New'}} Trophy</h2>
+            <h2><i class="fas fa-trophy"></i> {{isEditing ? 'Edit' : 'Create New'}} Trophy</h2>
             <button class="btn btn-back" routerLink="/admin/Trophy-management">
                 <i class="fas fa-arrow-left"></i> Back to List
             </button>
@@ -12,49 +12,66 @@
         </div>
 
         <form [formGroup]="trophyForm" (ngSubmit)="onSubmit()" class="trophy-form">
-            <div class="form-group">
-                <label for="name">Trophy Name</label>
+            <div class="mb-3">
+                <label for="name" class="form-label">Trophy Name</label>
                 <input type="text" 
+                       class="form-control" 
                        id="name"
                        formControlName="name"
-                       class="form-control"
+                       placeholder="Enter trophy name"
                        [class.is-invalid]="trophyForm.get('name')?.invalid && trophyForm.get('name')?.touched">
                 <div class="invalid-feedback" *ngIf="trophyForm.get('name')?.errors?.['required']">
                     Name is required
                 </div>
+                <div class="invalid-feedback" *ngIf="trophyForm.get('name')?.errors?.['minlength']">
+                    Name must be at least 3 characters
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description"
+            <div class="mb-3">
+                <label for="description" class="form-label">Trophy Description</label>
+                <textarea class="form-control" 
+                          id="description"
                           formControlName="description"
-                          class="form-control"
-                          rows="3"
+                          placeholder="Enter trophy description"
+                          style="height: 100px"
                           [class.is-invalid]="trophyForm.get('description')?.invalid && trophyForm.get('description')?.touched">
                 </textarea>
                 <div class="invalid-feedback" *ngIf="trophyForm.get('description')?.errors?.['required']">
                     Description is required
                 </div>
+                <div class="invalid-feedback" *ngIf="trophyForm.get('description')?.errors?.['minlength']">
+                    Description must be at least 10 characters
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="requiredPoints">Required Points</label>
+            <div class="mb-3">
+                <label for="requiredPoints" class="form-label">Points Required</label>
                 <input type="number" 
+                       class="form-control" 
                        id="requiredPoints"
                        formControlName="requiredPoints"
-                       class="form-control"
+                       placeholder="Enter required points"
                        [class.is-invalid]="trophyForm.get('requiredPoints')?.invalid && trophyForm.get('requiredPoints')?.touched">
                 <div class="invalid-feedback" *ngIf="trophyForm.get('requiredPoints')?.errors?.['required']">
                     Required points is required
                 </div>
+                <div class="invalid-feedback" *ngIf="trophyForm.get('requiredPoints')?.errors?.['min']">
+                    Required points must be positive
+                </div>
             </div>
 
             <div class="form-actions">
+                <button type="button" 
+                        class="btn btn-secondary me-2" 
+                        routerLink="/admin/Trophy-management">
+                    Cancel
+                </button>
                 <button type="submit" 
-                        class="btn btn-submit" 
+                        class="btn btn-primary"
                         [disabled]="trophyForm.invalid || loading">
                     <i class="fas" [ngClass]="loading ? 'fa-spinner fa-spin' : 'fa-save'"></i>
-                    {{loading ? 'Saving...' : 'Save Trophy'}}
+                    {{loading ? 'Saving...' : (isEditing ? 'Update Trophy' : 'Create Trophy')}}
                 </button>
             </div>
         </form>

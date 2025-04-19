@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div class="trophy-actions">
-                    <button class="btn btn-edit" [routerLink]="['/admin/Trophy-management/edit', trophy.id]">
+                    <button class="btn btn-edit" [routerLink]="['/admin/Trophy-management', trophy.id, 'edit']">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-delete" (click)="deleteTrophy(trophy.id)">
