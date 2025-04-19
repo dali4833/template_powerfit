@@ -1,0 +1,89 @@
+.trophy-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.btn-create {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-create:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.trophy-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.trophy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.trophy-icon {
+    color: #f1c40f;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.trophy-content h3 {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.trophy-content p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.points-badge {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.trophy-actions {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 8px;
+}
+
+.btn-edit, .btn-delete {
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-edit {
+    background-color: #f39c12;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-edit:hover, .btn-delete:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}

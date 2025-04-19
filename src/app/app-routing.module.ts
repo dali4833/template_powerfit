@@ -27,6 +27,7 @@ const routes: Routes = [
       { path: 'clubrequests-management', loadChildren: () => import('./back-office/clubrequests-managment/clubreq.module').then(m => m.clubreqModule) },
       { path: 'abonnementrequests-management', loadChildren: () => import('./back-office/abonnementrequests-mangment/abonnReq.module').then(m => m.AbonnReqModule) },
       { path: 'abonnement-management', loadChildren: () => import('./back-office/abonnement-managment/Abonn.module').then(m => m.AbonnModule) },
+      { path: 'Trophy-management', loadChildren: () => import('./back-office/trophiesManagement/Trophy.module').then(m => m.TrophyModule) },
 
 
 
