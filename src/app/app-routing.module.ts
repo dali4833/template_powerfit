@@ -16,6 +16,7 @@ import { AllTemplateFrontComponentComponent } from './front-office/all-template-
 import { AllTemplateBackComponentComponent } from './back-office/all-template-back-component/all-template-back-component.component';
 import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
 import { ClubsPacksComponent } from './front-office/pages/clubs-packs/clubs-packs.component';
+import { TrophiesComponent } from './front-office/pages/trophies/trophies.component';
 
 const routes: Routes = [
 
@@ -75,6 +76,9 @@ const routes: Routes = [
 
       { path: 'trainingSession', component: TrainingSessionComponent },
       { path: 'Clubs', component: ClubsPacksComponent },
+
+      { path: 'Trophies', component: TrophiesComponent },
+
 
 
 

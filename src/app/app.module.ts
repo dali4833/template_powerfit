@@ -26,6 +26,7 @@ import { ForgotPasswordComponent } from './front-office/auth/forgot-password/for
 import { RegisterOwnerComponent } from './front-office/auth/register-owner/register-owner.component';
 import { AuthComponent } from './back-office/auth/auth.component';
 import { UsersComponent } from './back-office/users/users.component';
+import { TrophiesComponent } from './front-office/pages/trophies/trophies.component';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { UsersComponent } from './back-office/users/users.component';
     RegisterOwnerComponent,
     AuthComponent,
     UsersComponent,
+    TrophiesComponent,
   ],
   imports: [
     FormsModule,
