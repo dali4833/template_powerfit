@@ -10,6 +10,7 @@ interface Club {
   description?: string;
   status?: string;
   selectedSportId?: number | null;
+  sports?: any[]; // Assuming sports is an array of objects
 }
 
 @Component({

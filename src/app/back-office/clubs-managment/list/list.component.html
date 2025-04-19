@@ -20,6 +20,7 @@
                 <th>capacity</th>
                 <th>Description</th>
                 <th>name</th>
+                <th>Sport</th>
                 <th>status</th>
                 <th>Actions</th>
             </tr>
@@ -27,8 +28,10 @@
         <tbody>
             <tr *ngFor="let club of clubs">
                 <td>{{club.capacity}}</td>
-                <td>{{club.name}}</td>
                 <td>{{club.description}}</td>
+
+                <td>{{club.name}}</td>
+                <td>{{club.sports?.[0]?.name || 'N/A'}}</td>
                 <td>{{club.status}}</td>
                 <td>
                     <div class="d-flex align-items-center">
