@@ -277,13 +277,166 @@
 
 /* Modal Content */
 .modal-content {
-    border-radius: 16px;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     overflow: hidden;
 }
 
 .modal-header {
-    background: var(--primary-color);
+    background: linear-gradient(45deg, #f39c12 0%, #e67e22 100%);
+    padding: 1.5rem 2rem;
+    border: none;
+}
+
+.modal-header .modal-title {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-header .btn-close {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 12px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.modal-header .btn-close:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.uk-heading-line {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--secondary);
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+/* Pack Cards in Modal */
+.uk-card {
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.uk-card-header {
+    background: linear-gradient(45deg, #3498db 0%, #2980b9 100%);
     padding: 1.5rem;
+    border-radius: 16px 16px 0 0;
+}
+
+.uk-card-title {
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.price-tag {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: white;
+    font-size: 1.2rem;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+.uk-card-body {
+    padding: 1.5rem;
+}
+
+.uk-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.uk-list li:last-child {
+    border: none;
+}
+
+.uk-icon-small {
+    color: #3498db;
+}
+
+.uk-card-footer {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border: none;
+}
+
+/* Action Modal */
+#ActionModal .modal-content {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+#ActionModal .modal-header {
+    background: linear-gradient(45deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.form-label {
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 12px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+}
+
+.btn-secondary {
+    background: #e9ecef;
+    border: none;
+    color: var(--secondary);
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #dee2e6;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #2ecc71 0%, #27ae60 100%);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #27ae60 0%, #219a52 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.25);
 }
 
 /* Button Primary */
@@ -310,6 +463,54 @@
 .uk-button-primary:hover {
     background-color: #ce032c;
     transform: translateY(-2px);
+}
+
+/* Pack Modal Button Styles */
+.uk-button-primary {
+  background: linear-gradient(45deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.25);
+  transition: all 0.3s ease;
+}
+
+.uk-button-success {
+  background: linear-gradient(45deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.25);
+}
+
+.uk-button-warning {
+  background: linear-gradient(45deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.25);
+}
+
+.uk-button-primary:hover:not(:disabled) {
+  background: linear-gradient(45deg, #2980b9 0%, #2472a4 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(52, 152, 219, 0.3);
+}
+
+.uk-button-success:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.uk-button-warning:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 /* Performance Stats */
