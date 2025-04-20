@@ -12,21 +12,28 @@
         <th>Start Time</th>
         <th>End Time</th>
         <th>Sport</th>
+        <th>Meet Link</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let session of trainingSessions">
-        <td>{{ session.description }}</td>
-        <td>{{ session.date }}</td>
-        <td>{{ session.startTime }}</td>
-        <td>{{ session.endTime }}</td>
-        <td>{{ session.sport }}</td>
-        <td>
-          <button class="btn btn-sm btn-info me-2" [routerLink]="[session.id, 'edit']">Edit</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteSession(session.id)">Delete</button>
-        </td>
-      </tr>
+    <tr *ngFor="let session of trainingSessions">
+      <td>{{ session.description }}</td>
+      <td>{{ session.date }}</td>
+      <td>{{ session.startTime }}</td>
+      <td>{{ session.endTime }}</td>
+      <td>{{ session.sport }}</td>
+      <td>
+        <a href="{{ session.meetLink }}" target="_blank" *ngIf="session.meetLink; else noLink">
+          {{ session.meetLink }}
+        </a>
+        <ng-template #noLink>No link</ng-template>
+      </td>
+      <td>
+        <button class="btn btn-sm btn-info me-2" [routerLink]="[session.id, 'edit']">Edit</button>
+        <button class="btn btn-sm btn-danger" (click)="deleteSession(session.id)">Delete</button>
+      </td>
+    </tr>
     </tbody>
   </table>
 </div>

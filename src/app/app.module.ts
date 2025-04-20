@@ -24,6 +24,7 @@ import { ForgotPasswordComponent } from './front-office/auth/forgot-password/for
 import { RegisterOwnerComponent } from './front-office/auth/register-owner/register-owner.component';
 import { AuthComponent } from './back-office/auth/auth.component';
 import { UsersComponent } from './back-office/users/users.component';
+import {TrainingSessionComponent} from "./front-office/pages/training-session/training-session.component";
 
 
 @NgModule({
@@ -48,13 +49,14 @@ import { UsersComponent } from './back-office/users/users.component';
     RegisterOwnerComponent,
     AuthComponent,
     UsersComponent,
+    TrainingSessionComponent,
   ],
   imports: [
     ReactiveFormsModule,
     HttpClientModule,
     BrowserModule,
     AppRoutingModule ,
-    FormsModule, 
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

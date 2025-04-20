@@ -25,7 +25,7 @@ export class ListComponent implements OnInit {
 
   deleteSession(id: number | undefined): void {
     if (!id) return;
-    
+
     if (confirm('Are you sure you want to delete this session?')) {
       this.trainingSessionService.deleteTrainingSession(id)
         .subscribe({

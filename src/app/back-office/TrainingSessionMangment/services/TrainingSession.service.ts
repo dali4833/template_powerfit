@@ -20,8 +20,8 @@ export class TrainingSessionService {
   };
 
   useraccount = {
-    username: 'user1@email.com',
-    password: 'a',
+    username: 'melekmessaoudi20@gmail.com',
+    password: 'melek',
   };
 
   coachaccount = {
@@ -57,8 +57,15 @@ export class TrainingSessionService {
 
   getTrainingSessions(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.get<any[]>(`${this.apiUrl}/retrieve-all-TrainingSessions`, { headers })
+      )
+    );
+  }
+  getRecommendedCoaches(): Observable<any[]> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/recommended`, { headers })
       )
     );
   }
