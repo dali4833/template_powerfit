@@ -9,10 +9,10 @@ export class ClubrequestsService {
   private apiUrl = `http://localhost:8089/clubs`;
   private cachedToken: string | null = null;
 
- 
 
 
- 
+
+
 
   constructor(
     private http: HttpClient,
@@ -49,6 +49,17 @@ export class ClubrequestsService {
       )
     );
   }
+  getRequestDocument(requestId: number): Observable<Blob> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get(`${this.apiUrl}/admin/document/${requestId}`, {
+          headers,
+          responseType: 'blob' // très important pour recevoir des fichiers
+        })
+      )
+    );
+  }
+
 
   approveClubCreationRequest(requestId: any): Observable<void> {
     return from(this.generateHeaders()).pipe(
@@ -73,7 +84,8 @@ export class ClubrequestsService {
 
 
 
- 
+
+
 
   bypassadmin(): Observable<string> {
     console.log("bypassadmin called");
@@ -81,5 +93,5 @@ export class ClubrequestsService {
       adminaccount, { responseType: 'text' });
   }
 
-  
+
 }

@@ -16,7 +16,7 @@ export class TrophiesComponent implements OnInit {
 
   constructor(
     private trophyService: TrophyService,
-    
+
   ) {}
 
   ngOnInit(): void {
@@ -76,4 +76,17 @@ export class TrophiesComponent implements OnInit {
     }
     return this.trophies;
   }
-}
+  onUpdateUserPoints(userId: number, points: number): void {
+    this.trophyService.updateUserPoints(userId, points).subscribe({
+      next: (response) => {
+        console.log('Points updated successfully:', response);
+        this.userPoints = points; // Mettez à jour l'affichage des points utilisateur si nécessaire.
+      },
+      error: (error) => {
+        console.error('Error updating points:', error);
+      },
+    });
+  }
+
+
+  }

@@ -63,4 +63,16 @@ export class ListComponent implements OnInit {
       });
     }
   }
+  viewDocument(requestId: number): void {
+    this.clubrequestService.getRequestDocument(requestId).subscribe({
+      next: (blob) => {
+        const fileURL = URL.createObjectURL(blob);
+        window.open(fileURL, '_blank');
+      },
+      error: (error) => {
+        console.error('Error fetching document:', error);
+      }
+    });
+  }
+
 }
