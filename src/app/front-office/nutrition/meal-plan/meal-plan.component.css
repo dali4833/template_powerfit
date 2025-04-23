@@ -1,0 +1,9 @@
+.card {
+    border-radius: 12px;
+  }
+  
+  .card-footer {
+    background-color: transparent;
+    border-top: none;
+  }
+  

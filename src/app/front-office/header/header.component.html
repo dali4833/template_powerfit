@@ -84,12 +84,48 @@
    <span class="nav-title">
                                           Blog List                              </span>
           </a>
-          <!--menu link ends--></li></ul></div></li><li data-position="right" class="nav-item nav-item-id-152 nav-item-level-1 nav-item-deeper nav-item-parent has-megamenu nav-item-dropdown no-dropdown-icon"><!--menu link starts-->
+          <!--menu link ends--></li></ul></div></li>
+          <li class="nav-item dropdown">
+            <!-- Lien principal avec routerLink -->
+            <a routerLink="/nutrition" 
+               class="nav-link dropdown-toggle" 
+               data-toggle="dropdown"
+               routerLinkActive="active">
+              Nutrition
+            </a>
+            
+            <!-- Sous-menu -->
+            <div class="dropdown-menu-custom">
+              <!-- Diet Program -->
+              <a routerLink="/nutrition/diet-program" 
+                 class="dropdown-item"
+                 routerLinkActive="active">
+                Diet Program
+              </a>
+              
+              <!-- Meal Plan (route par défaut) -->
+              <a routerLink="/nutrition/meal-plan" 
+                 class="dropdown-item"
+                 routerLinkActive="active">
+                Meal Plan
+              </a>
+              
+              <!-- Recipe -->
+              <a routerLink="/nutrition/recipe" 
+                 class="dropdown-item"
+                 routerLinkActive="active">
+                Recipe
+              </a>
+            </div>
+          </li>
+          
+          <li data-position="right" class="nav-item nav-item-id-152 nav-item-level-1 nav-item-deeper nav-item-parent has-megamenu nav-item-dropdown no-dropdown-icon"><!--menu link starts-->
         <a href="" title="Pages" class="as-menu-item nav-link-item-id-152 nav-link megamenu-item-link item-link-alias item-level-1" data-drop-action="hover">
    <span class="nav-title">
                                           Pages                                             </span>
         </a>
-        <!--menu link ends--><div style="width: 250px; max-width: 640px; left: inherit; top: 0px; right: -402.5px;" class="megamenu-container nav-submenu-container nav-item-level-1"><ul class="nav-submenu"><li data-position="right" class="nav-item-submenu nav-item-id-140 nav-item-level-2 no-dropdown-icon"><!--menu link starts-->
+        <!--menu link ends-->
+        <div style="width: 250px; max-width: 640px; left: inherit; top: 0px; right: -402.5px;" class="megamenu-container nav-submenu-container nav-item-level-1"><ul class="nav-submenu"><li data-position="right" class="nav-item-submenu nav-item-id-140 nav-item-level-2 no-dropdown-icon"><!--menu link starts-->
           <a href="" title="About Us" class="as-menu-item nav-link-item-id-140 item-link-component item-level-2" data-drop-action="hover">
    <span class="nav-title">
                                           About Us                              </span>

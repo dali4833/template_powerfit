@@ -14,6 +14,10 @@ import { ForgotPasswordComponent } from './front-office/auth/forgot-password/for
 import { RegisterOwnerComponent } from './front-office/auth/register-owner/register-owner.component';
 import { AuthComponent } from './back-office/auth/auth.component';
 import { UsersComponent } from './back-office/users/users.component';
+import { RecipeComponent } from './front-office/nutrition/recipe/recipe.component';
+import { MealPlanComponent } from './front-office/nutrition/meal-plan/meal-plan.component';
+import { DietProgramComponent } from './front-office/nutrition/diet-program/diet-program.component';
+import { NutritionComponent } from './front-office/nutrition/nutrition.component';
 
 const routes: Routes = [
 
@@ -57,7 +61,19 @@ const routes: Routes = [
       { path: 'products/:id', component: ProductDetailComponent } // Product details
 
     ]
-  },]
+  },
+  {
+    path: 'nutrition',
+    component: NutritionComponent,
+    children: [
+      { path: '', redirectTo: 'meal-plan', pathMatch: 'full' },
+
+      { path: 'meal-plan', component: MealPlanComponent},
+      { path: 'diet-program', component: DietProgramComponent },
+      { path: 'recipe', component: RecipeComponent } 
+    ]
+  }
+]
 },
 { path: '**', redirectTo: '/' },
 

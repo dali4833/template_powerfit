@@ -24,6 +24,13 @@ import { ForgotPasswordComponent } from './front-office/auth/forgot-password/for
 import { RegisterOwnerComponent } from './front-office/auth/register-owner/register-owner.component';
 import { AuthComponent } from './back-office/auth/auth.component';
 import { UsersComponent } from './back-office/users/users.component';
+import { NutritionComponent } from './front-office/nutrition/nutrition.component';
+import { RecipeComponent } from './front-office/nutrition/recipe/recipe.component';
+import { MealPlanComponent } from './front-office/nutrition/meal-plan/meal-plan.component';
+import { DietProgramComponent } from './front-office/nutrition/diet-program/diet-program.component';
+
+
+
 
 
 @NgModule({
@@ -48,13 +55,19 @@ import { UsersComponent } from './back-office/users/users.component';
     RegisterOwnerComponent,
     AuthComponent,
     UsersComponent,
+    NutritionComponent,
+    RecipeComponent,
+    MealPlanComponent,
+    DietProgramComponent,
   ],
   imports: [
     ReactiveFormsModule,
     HttpClientModule,
     BrowserModule,
+  
     AppRoutingModule ,
     FormsModule, 
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
