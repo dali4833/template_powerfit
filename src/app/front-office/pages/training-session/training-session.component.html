@@ -28,10 +28,15 @@
               <dt *ngIf="session.status === 'APPROVED'" class="uk-text-center">
                 <span uk-icon="link"></span>
                 <div class="uk-margin-small-top">
-                  <a href="{{ session.meetLink }}" target="_blank"
+                  <a *ngIf="!session.isElapsed" href="{{ session.meetLink }}" target="_blank"
                      class="uk-button uk-button-small uk-button-primary uk-display-inline-block">
                     Join Meeting <span uk-icon="arrow-right"></span>
                   </a>
+                  <button *ngIf="session.isElapsed"
+                          class="uk-button uk-button-small uk-button-default uk-display-inline-block"
+                          disabled>
+                    Session Ended <span uk-icon="close"></span>
+                  </button>
                 </div>
               </dt>
             </dl>

@@ -4,22 +4,26 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ListComponent } from './list/list.component';
 import { TrainingSessionRoutingModule } from './TrainingSession-routing.module';
 import { EditaddComponent } from './editadd/editadd.component';
+import { CalendarComponent } from '../calendar/calendar.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [
     ListComponent,
-    EditaddComponent
+    EditaddComponent,
+    CalendarComponent
   ],
   imports: [
     CommonModule,
     TrainingSessionRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    FullCalendarModule
   ],
   exports: [
     ListComponent,
     EditaddComponent,
-    TrainingSessionRoutingModule,
+    TrainingSessionRoutingModule
   ]
 })
 export class TrainingSessionModule { }

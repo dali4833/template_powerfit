@@ -4,8 +4,10 @@
     <button class="btn btn-primary" routerLink="new">Add New Session</button>
   </div>
 
-  <table class="table table-striped">
-    <thead>
+  <!-- Scrollable Table Container -->
+  <div class="table-container mb-4" style="max-height: 400px; overflow-y: auto;">
+    <table class="table table-striped">
+      <thead class="sticky-top">
       <tr>
         <th>Description</th>
         <th>Date</th>
@@ -15,25 +17,32 @@
         <th>Meet Link</th>
         <th>Actions</th>
       </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let session of trainingSessions">
-      <td>{{ session.description }}</td>
-      <td>{{ session.date }}</td>
-      <td>{{ session.startTime }}</td>
-      <td>{{ session.endTime }}</td>
-      <td>{{ session.sport }}</td>
-      <td>
-        <a href="{{ session.meetLink }}" target="_blank" *ngIf="session.meetLink; else noLink">
-          {{ session.meetLink }}
-        </a>
-        <ng-template #noLink>No link</ng-template>
-      </td>
-      <td>
-        <button class="btn btn-sm btn-info me-2" [routerLink]="[session.id, 'edit']">Edit</button>
-        <button class="btn btn-sm btn-danger" (click)="deleteSession(session.id)">Delete</button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+      <tr *ngFor="let session of trainingSessions">
+        <td>{{ session.description }}</td>
+        <td>{{ session.date | date }}</td>
+        <td>{{ session.startTime }}</td>
+        <td>{{ session.endTime }}</td>
+        <td>{{ session.sport }}</td>
+        <td>
+          <a href="{{ session.meetLink }}" target="_blank" *ngIf="session.meetLink; else noLink">
+            {{ session.meetLink }}
+          </a>
+          <ng-template #noLink>No link</ng-template>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-info me-2" [routerLink]="[session.id, 'edit']">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteSession(session.id)">Delete</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Calendar Component -->
+  <div class="calendar-container mb-4">
+    <h3 class="mb-3">Training Schedule</h3>
+    <app-calendar [events]="trainingSessions"></app-calendar>
+  </div>
 </div>

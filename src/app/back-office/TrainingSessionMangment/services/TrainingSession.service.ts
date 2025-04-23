@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
 
 @Injectable({
@@ -98,6 +98,18 @@ export class TrainingSessionService {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
         this.http.delete<void>(`${this.apiUrl}/delete-TrainingSession/${id}`, { headers })
+      )
+    );
+  }
+
+  getEventsInRange(start: Date, end: Date): Observable<any[]> {
+    const params = new HttpParams()
+      .set('start', start.toISOString().split('T')[0])
+      .set('end', end.toISOString().split('T')[0]);
+
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/by-date-range`, { headers, params })
       )
     );
   }

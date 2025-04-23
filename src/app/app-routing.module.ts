@@ -12,6 +12,7 @@ import { AllTemplateBackComponentComponent } from './back-office/all-template-ba
 import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
 import {AuthComponent} from "./back-office/auth/auth.component";
 import {UsersComponent} from "./back-office/users/users.component";
+import { ChatComponent } from './front-office/pages/chat/chat.component';
 
 const routes: Routes = [
   {
@@ -58,7 +59,8 @@ const routes: Routes = [
           { path: 'products/:id', component: ProductDetailComponent }
         ]
       },
-      { path: 'trainingSession', component: TrainingSessionComponent }
+      { path: 'trainingSession', component: TrainingSessionComponent },
+      { path: 'chat', component: ChatComponent },
     ]
   },
   { path: '**', redirectTo: '/' }

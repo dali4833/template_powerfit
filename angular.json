@@ -20,6 +20,26 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "allowedCommonJsDependencies": [
+              "svg-gauge",
+              "echarts",
+              "chart.js",
+              "zrender/lib/svg/svg",
+              "zrender/lib/vml/vml",
+              "dragula",
+              "contra/emitter",
+              "crossvent",
+              "apexcharts",
+              "clone-deep",
+              "xlsx",
+              "sweetalert2",
+              "@ckeditor/ckeditor5-build-classic",
+              "fast-deep-equal",
+              "rfdc",
+              "bezier-easing",
+              "sockjs-client",
+              "stompjs"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"
