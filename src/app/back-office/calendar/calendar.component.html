@@ -1,0 +1,15 @@
+<full-calendar [options]="calendarOptions"></full-calendar>
+
+<!-- Add event details modal -->
+<dialog #eventDialog>
+  <h2>{{ selectedEvent?.title }}</h2>
+  <p>{{ selectedEvent?.extendedProps?.description }}</p>
+  <p>Coach: {{ selectedEvent?.extendedProps?.coach }}</p>
+  <p>Sport: {{ selectedEvent?.extendedProps?.sport }}</p>
+  <a *ngIf="selectedEvent?.extendedProps?.meetLink"
+     href="{{ selectedEvent.extendedProps.meetLink }}"
+     target="_blank">
+    Join Google Meet
+  </a>
+  <button (click)="eventDialog.close()">Close</button>
+</dialog>
