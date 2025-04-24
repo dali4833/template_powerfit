@@ -1,0 +1,53 @@
+<div class="container mt-4">
+    <h2>{{isEditing ? 'Edit' : 'Add New'}} Sport</h2>
+    
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="sportForm" (ngSubmit)="onSubmit()" class="mt-3">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" 
+                   id="name"
+                   class="form-control" 
+                   formControlName="name"
+                   [class.is-invalid]="sportForm.get('name')?.invalid && sportForm.get('name')?.touched">
+            <div class="invalid-feedback" *ngIf="sportForm.get('name')?.errors?.['required']">
+                Name is required
+            </div>
+            <div class="invalid-feedback" *ngIf="sportForm.get('name')?.errors?.['minlength']">
+                Name must be at least 3 characters
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description"
+                      class="form-control" 
+                      formControlName="description" 
+                      rows="3"
+                      [class.is-invalid]="sportForm.get('description')?.invalid && sportForm.get('description')?.touched">
+            </textarea>
+            <div class="invalid-feedback" *ngIf="sportForm.get('description')?.errors?.['required']">
+                Description is required
+            </div>
+            <div class="invalid-feedback" *ngIf="sportForm.get('description')?.errors?.['minlength']">
+                Description must be at least 10 characters
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" 
+                    class="btn btn-primary" 
+                    [disabled]="!sportForm.valid || sportForm.pristine">
+                {{isEditing ? 'Update' : 'Create'}}
+            </button>
+            <button type="button" 
+                    class="btn btn-secondary ms-2" 
+                    routerLink="/admin/sports-management">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

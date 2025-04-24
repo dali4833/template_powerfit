@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-userprofile',
   templateUrl: './userprofile.component.html'
+
 })
 export class UserprofileComponent implements OnInit {
   profileMessage: string = '';

@@ -1,0 +1,55 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Clubs List</h2>
+        <button class="btn btn-primary" routerLink="/admin/clubs-management/new">Add New Club</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="loading" class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <table class="table mt-3" *ngIf="!loading && clubs.length > 0">
+        <thead>
+            <tr>
+                <th>capacity</th>
+                <th>Description</th>
+                <th>name</th>
+                <th>status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let club of clubs">
+                <td>{{club.capacity}}</td>
+                <td>{{club.name}}</td>
+                <td>{{club.description}}</td>
+                <td>{{club.status}}</td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <select class="form-select me-2" [(ngModel)]="club.selectedSportId">
+                            <option [ngValue]="null">Select a sport</option>
+                            <option *ngFor="let sport of sports" [ngValue]="sport.id">{{sport.name}}</option>
+                        </select>
+                        <button class="btn btn-sm btn-success" 
+                                (click)="club.id && affecttosport(club.id, club.selectedSportId)"
+                                [disabled]="!club.selectedSportId">
+                            Affect To sport
+                        </button>
+                    </div>
+                    <button class="btn btn-sm btn-primary me-2" (click)="editClub(club.id!)">Edit</button>
+                    <button class="btn btn-sm btn-danger" (click)="club.id && deleteClub(club.id)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="!loading && clubs.length === 0" class="alert alert-info">
+        No clubs found. Click "Add New club" to create one.
+    </div>
+</div>
