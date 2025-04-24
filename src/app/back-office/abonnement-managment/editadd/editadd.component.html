@@ -1,0 +1,94 @@
+<div class="container mt-4">
+    <h2>{{isEditing ? 'Edit' : 'Add New'}} Abonnement</h2>
+    
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="abonnementForm" (ngSubmit)="onSubmit()" class="mt-3">
+        <div class="mb-3">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" 
+                   id="startDate"
+                   class="form-control" 
+                   formControlName="startDate"
+                   [class.is-invalid]="abonnementForm.get('startDate')?.invalid && abonnementForm.get('startDate')?.touched">
+            <div class="invalid-feedback">
+                Start date is required
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" 
+                   id="endDate"
+                   class="form-control" 
+                   formControlName="endDate"
+                   [class.is-invalid]="abonnementForm.get('endDate')?.invalid && abonnementForm.get('endDate')?.touched">
+            <div class="invalid-feedback">
+                End date is required
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="user" class="form-label">User</label>
+            <select id="user"
+                    class="form-control"
+                    formControlName="user"
+                    [class.is-invalid]="abonnementForm.get('user')?.invalid && abonnementForm.get('user')?.touched">
+                <option [ngValue]="null">Select a user</option>
+                <option *ngFor="let user of users" [ngValue]="user">
+                    {{user.name}} 
+                </option>
+            </select>
+            <div class="invalid-feedback">
+                User is required
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="pack" class="form-label">Pack</label>
+            <select id="pack"
+                    class="form-control"
+                    formControlName="pack"
+                    [class.is-invalid]="abonnementForm.get('pack')?.invalid && abonnementForm.get('pack')?.touched">
+                <option [ngValue]="null">Select a pack</option>
+                <option *ngFor="let pack of packs" [ngValue]="pack">
+                    {{pack.name}}
+                </option>
+            </select>
+            <div class="invalid-feedback">
+                Pack is required
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select id="status"
+                    class="form-control"
+                    formControlName="status"
+                    [class.is-invalid]="abonnementForm.get('status')?.invalid && abonnementForm.get('status')?.touched">
+                <option value="pending">Pending</option>
+                <option value="active">Active</option>
+                <option value="expired">Expired</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+            <div class="invalid-feedback">
+                Status is required
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" 
+                    class="btn btn-primary" 
+                    [disabled]="!abonnementForm.valid">
+                {{isEditing ? 'Update' : 'Create'}}
+            </button>
+            <button type="button" 
+                    class="btn btn-secondary ms-2" 
+                    routerLink="/admin/abonnement-management">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

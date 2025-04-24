@@ -1,0 +1,37 @@
+<div class="container mt-4">
+  <h2>{{ isEditing ? 'Edit' : 'Add' }} Training Session</h2>
+  
+  <form [formGroup]="sessionForm" (ngSubmit)="onSubmit()" class="mt-4">
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <input type="text" class="form-control" id="description" formControlName="description">
+    </div>
+
+    <div class="mb-3">
+      <label for="date" class="form-label">Date</label>
+      <input type="date" class="form-control" id="date" formControlName="date">
+    </div>
+
+    <div class="mb-3">
+      <label for="startTime" class="form-label">Start Time</label>
+      <input type="time" class="form-control" id="startTime" formControlName="startTime">
+    </div>
+
+    <div class="mb-3">
+      <label for="endTime" class="form-label">End Time</label>
+      <input type="time" class="form-control" id="endTime" formControlName="endTime">
+    </div>
+
+    <div class="mb-3">
+      <label for="sport" class="form-label">Sport</label>
+      <input type="number" class="form-control" id="sport" formControlName="sport">
+    </div>
+
+ 
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary me-2" [disabled]="!sessionForm.valid">Save</button>
+      <button type="button" class="btn btn-secondary" routerLink="/admin/TrainingSession-management">Cancel</button>
+    </div>
+  </form>
+</div>

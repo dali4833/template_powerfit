@@ -1,0 +1,45 @@
+<div class="container-fluid">
+    <h2>{{ isEditing ? 'Edit' : 'Add' }} Review</h2>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-4">
+        <div class="mb-3">
+            <label for="rating" class="form-label">Rating (1-5)</label>
+            <input type="number" 
+                   class="form-control" 
+                   id="rating" 
+                   formControlName="rating"
+                   min="1"
+                   max="5">
+            <div *ngIf="form.get('rating')?.invalid && form.get('rating')?.touched" class="text-danger">
+                Please enter a valid rating between 1 and 5
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" 
+                      id="description" 
+                      formControlName="description"
+                      rows="3"></textarea>
+            <div *ngIf="form.get('description')?.invalid && form.get('description')?.touched" class="text-danger">
+                Description is required
+            </div>
+        </div>
+
+        <button type="submit" 
+                class="btn btn-primary me-2" 
+                [disabled]="form.invalid || loading">
+            {{ isEditing ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" 
+                class="btn btn-secondary" 
+                routerLink="../"
+                [disabled]="loading">
+            Cancel
+        </button>
+    </form>
+</div>

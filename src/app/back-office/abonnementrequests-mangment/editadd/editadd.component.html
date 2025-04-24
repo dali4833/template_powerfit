@@ -1,0 +1,52 @@
+<div class="container mt-4">
+    <h2>Add New Abonnement Request</h2>
+    
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="abonnementForm" (ngSubmit)="onSubmit()" class="mt-3">
+        <div class="mb-3">
+            <label for="requestedDate" class="form-label">Requested Date</label>
+            <input type="date" 
+                   id="requestedDate"
+                   class="form-control" 
+                   formControlName="requestedDate"
+                   [class.is-invalid]="abonnementForm.get('requestedDate')?.invalid && abonnementForm.get('requestedDate')?.touched">
+            <div class="invalid-feedback" *ngIf="abonnementForm.get('requestedDate')?.invalid && abonnementForm.get('requestedDate')?.touched">
+                Requested date is required
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="packId" class="form-label">Pack</label>
+            <select id="packId"
+                    class="form-control"
+                    formControlName="packId"
+                    [class.is-invalid]="abonnementForm.get('packId')?.invalid && abonnementForm.get('packId')?.touched">
+                <option [ngValue]="null">Select a pack</option>
+                <option *ngFor="let pack of packs" [ngValue]="pack">
+                    {{pack.name}} - {{pack.price}} TND
+                </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="abonnementForm.get('packId')?.invalid && abonnementForm.get('packId')?.touched">
+                Pack selection is required
+            </div>
+        </div>
+
+     
+
+        <div class="mt-4">
+            <button type="submit" 
+                    class="btn btn-primary" 
+                    [disabled]="!abonnementForm.valid">
+                Create
+            </button>
+            <button type="button" 
+                    class="btn btn-secondary ms-2" 
+                    routerLink="/admin/abonnementrequests-management">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
