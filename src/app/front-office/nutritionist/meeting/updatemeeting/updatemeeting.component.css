@@ -1,0 +1,77 @@
+.form-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #dde2dd; /* Light grey background */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-container h2 {
+    text-align: center;
+    color: #213629;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    color: #213629;
+    margin-bottom: 8px;
+  }
+  
+  input[type="text"],
+  input[type="date"],
+  input[type="time"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.3s ease;
+  }
+  
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: #213629;
+  }
+  
+  textarea {
+    resize: vertical;
+  }
+  
+  .form-actions {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  button[type="submit"] {
+    background-color: #213629;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[disabled] {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+  }
+  
+  button[type="submit"]:hover:not([disabled]) {
+    background-color: #1a2c21;
+  }
+  

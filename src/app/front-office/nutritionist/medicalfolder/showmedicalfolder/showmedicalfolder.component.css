@@ -1,0 +1,181 @@
+/* ======= GLOBAL CONTAINER ======= */
+.dossier-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  position: relative;
+}
+
+/* ======= PATIENT HEADER ======= */
+.patient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.patient-details h1 {
+  font-size: 2rem;
+  color: #08351b;
+  margin: 0;
+}
+
+.meta-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.95rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+.meta-info i {
+  margin-right: 0.3rem;
+  color: #08351b;
+}
+
+/* ======= BUTTONS ======= */
+.patient-actions button {
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.btn-modifier {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.btn-modifier:hover {
+  background-color: #e0a800;
+}
+
+.btn-ajouter {
+  background-color: #e53935;
+  color: #fff;
+}
+
+.btn-ajouter:hover {
+  background-color: #c62828;
+}
+
+/* ======= NAV ALLERGIES ======= */
+.dossier-nav {
+  margin-bottom: 2rem;
+}
+
+.urgence-content {
+  background-color: #fff3f3;
+  padding: 1rem;
+  border-left: 6px solid #e53935;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+/* ======= STATS SECTION ======= */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: #f4f8fc;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.1);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #08351b;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.3rem;
+}
+
+/* ======= NOTES ======= */
+.section-header h2 {
+  font-size: 1.3rem;
+  color: #222;
+  border-bottom: 2px solid #08351b;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.dossier-main p {
+  margin-top: 1rem;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* ======= BACK BUTTON ======= */
+.btn-back {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #07460e;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+  background-color: #125ea8;
+}
+
+/* ======= RESPONSIVE ======= */
+@media (max-width: 768px) {
+  .patient-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .meta-info {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .patient-actions {
+    align-self: stretch;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

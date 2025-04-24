@@ -1,0 +1,64 @@
+.show-meeting-container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: #bbbfba; /* Light grey background */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.show-meeting-container h2 {
+  text-align: center;
+  color: #213629;
+  margin-bottom: 30px;
+}
+
+.meeting-details p {
+  font-size: 16px;
+  color: #333;
+  margin: 10px 0;
+}
+
+.meeting-details strong {
+  color: #213629;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: white;
+}
+
+.status-badge.confirmed {
+  background-color: #4caf50; /* Green */
+}
+
+
+
+
+.status-badge.canceled {
+  background-color: #c52e0c; /* Red */
+}
+
+.btn-back {
+  display: block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #213629;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-back:hover {
+  background-color: #1a2c21;
+}
+
+.btn-back:focus {
+  outline: none;
+}

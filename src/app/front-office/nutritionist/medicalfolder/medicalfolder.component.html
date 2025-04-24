@@ -1,0 +1,100 @@
+<router-outlet></router-outlet>
+
+<!-- Ceci s'affiche seulement si on N'EST PAS dans un composant enfant comme addMedical -->
+<div *ngIf="!currentChildRoute">
+  <div class="dashboard-container">
+    <!-- Sidebar intégrée -->
+    <nav class="sidebar">
+      <ul>
+        <li (click)="goToMeetings()" [class.active]="activeTab === 'meetings'">
+          <i class="fas fa-calendar-check"></i> Meetings
+        </li>
+        <li (click)="goToMedicalFolder()" [class.active]="activeTab === 'folder'">
+          <i class="fas fa-folder-open"></i> Medical Folder
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+      <button class="action-btn add" (click)="goToNewMedical()">
+        <i class="fas fa-plus"></i>
+      </button>
+      <header class="main-header">
+        
+        <h1>Medical Folders Overview</h1>
+        
+      </header>
+
+      <!-- Stats + Camembert -->
+      <section class="gender-stats-flex">
+        
+
+        <!-- Chart à droite -->
+        <div class="chart-container">
+          <div style="width: 250px; height: 250px; margin: auto;">
+          <canvas baseChart
+                  [data]="pieChartData"
+                  [labels]="pieChartLabels"
+                  [type]="pieChartType"
+                  [options]="chartOptions">
+          </canvas>
+        </div>
+        </div>
+
+        <!-- Cartes à gauche -->
+        <div class="cards-container">
+          <div class="stat-card female">
+            <h3>Female</h3>
+            <p>{{ femaleCount }}</p>
+          </div>
+          <div class="stat-card male">
+            <h3>Male</h3>
+            <p>{{ maleCount }}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tableau des dossiers -->
+      <section class="folder-table">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Patient</th>
+              <th scope="col">Created</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dossier of paginatedFolders">
+              <td>{{ dossier.patientName }}</td>
+              <td>{{ dossier.createdAt | date: 'short' }}</td>
+              <td class="actions">
+                <button class="action-btn view" (click)="goToShowMedicalfolder(dossier.id)">
+                  <i class="fas fa-eye"></i>
+                </button>
+                
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <div class="pagination">
+        <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">⟨</button>
+      
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          (click)="changePage(i + 1)"
+          [class.active]="currentPage === i + 1"
+        >
+          {{ i + 1 }}
+        </button>
+      
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">⟩</button>
+      </div>
+      
+    </main>
+  </div>
+
+  
+</div>

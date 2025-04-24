@@ -6,5 +6,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
+  collapsed: boolean = false;
+
+  menuItems = [
+    {
+
+      name: 'Nutrionnist', label: 'Nutrionnist', link: '/admin/nutrionnist', icon: 'bx bx-home-circle', submenu: []
+    },
+
+  ];
+  toggleSidebar() {
+    this.collapsed = !this.collapsed;
+  }
 
 }

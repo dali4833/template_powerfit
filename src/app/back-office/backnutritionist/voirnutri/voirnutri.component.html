@@ -1,0 +1,16 @@
+<div class="details-container">
+    
+  
+    <div *ngIf="loading" class="loading">Loading...</div>
+    <div *ngIf="error" class="error">Error loading details.</div>
+  
+    <div *ngIf="!loading && !error && nutritionist">
+      <p><strong>Name:</strong> {{ nutritionist.name }}</p>
+      <p><strong>Email:</strong> {{ nutritionist.email }}</p>
+      <p><strong>Phone:</strong> {{ nutritionist.phone }}</p>
+      <p><strong>Salary:</strong> {{ nutritionist.salary | currency }}</p>
+      <p><strong>Hired Date:</strong> {{ nutritionist.hiredDate | date }}</p>
+      <button (click)="goBack()">Back to List</button>
+    </div>
+  </div>
+  

@@ -1,0 +1,151 @@
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li (click)="goToMeetings()" [class.active]="activeTab === 'meetings'">
+        <i class="fas fa-calendar-check"></i> Meetings
+      </li>
+      <li (click)="goToMedicalFolder()" [class.active]="activeTab === 'folder'">
+        <i class="fas fa-folder-open"></i> Medical Folder
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <router-outlet></router-outlet>
+
+    <div *ngIf="!currentChildRoute">
+      <header class="main-header">
+        <h1>Meetings Management</h1>
+      </header>
+
+      <!-- Filters (Status + Calendar) -->
+      <div class="filter-section" style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-bottom: 20px;">
+        <!-- Status Filter -->
+        <div class="filter-group">
+          <label for="status-filter"><i class="fas fa-filter"></i> Status</label>
+          <select
+            id="status-filter"
+            [(ngModel)]="statusFilter"
+            (change)="applyFilters()"
+          >
+            <option value="">All the status</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="canceled">Canceled</option>
+          </select>
+        </div>
+
+        <!-- Calendar Date Filter -->
+        <div class="filter-group">
+          <label for="date-filter"><i class="fas fa-calendar-alt"></i> Date</label>
+          <input
+            type="date"
+            id="date-filter"
+            [(ngModel)]="selectedDate"
+            (change)="loadSlots()"
+          />
+        </div>
+      </div>
+
+      <!-- Reminders Section -->
+      <div class="reminder-box" *ngIf="reminders && reminders.length > 0">
+        <h3><i class="fas fa-bell"></i> Upcoming Meetings </h3>
+        <ul>
+          <li *ngFor="let meeting of reminders">
+            🔔 <strong>{{ meeting.patientName }}</strong> at <span>{{ meeting.date | date:'shortTime' }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Slots -->
+      <div class="slots-container">
+        <div
+          *ngFor="let slot of slots"
+          [ngClass]="slot.available ? 'available-slot' : 'unavailable-slot'"
+          (click)="slot.available && scheduleMeetingAt(slot.time)"
+          class="slot clickable-slot"
+        >
+          {{ slot.time }} - <span>{{ slot.available ? 'Available' : 'Unavailable' }}</span>
+        </div>
+      </div>
+
+      <!-- Meeting Table -->
+      <div class="meeting-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Date & Hour</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let meeting of paginatedMeetings">
+
+              <td>{{ meeting.patientName }}</td>
+              <td>{{ meeting.date }}</td>
+              <td>
+                <span class="status-badge" [attr.data-status]="meeting.status">
+                  {{ meeting.status }}
+                </span>
+              </td>
+              <td>{{ meeting.notes }}</td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn view" title="Show" (click)="goToShowMeeting(meeting.id)">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="action-btn edit" title="Edit" (click)="editMeeting(meeting.id)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-btn delete" title="Delete" (click)="selectedMeetingId = meeting.id">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Confirmation Modal -->
+      <div
+        class="modal-overlay"
+        *ngIf="selectedMeetingId !== null"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+              background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1050;">
+        <div class="modal-content" style="background: #2c2c2c; color: white; padding: 20px; border-radius: 10px; width: 400px;">
+          <h5>Confirm Deletion</h5>
+          <p>Are you sure you want to delete this meeting?</p>
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button class="btn btn-secondary" (click)="selectedMeetingId = null">Cancel</button>
+            <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+          </div>
+        </div>
+      </div>
+      <!-- End Modal -->
+    </div>
+
+    <footer class="dashboard-footer">
+      <!--pagination-->
+      <div class="pagination">
+        <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">⟨</button>
+      
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          (click)="changePage(i + 1)"
+          [class.active]="currentPage === i + 1"
+        >
+          {{ i + 1 }}
+        </button>
+      
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">⟩</button>
+      </div>
+      
+      <!-- Footer content -->
+    </footer>
+  </div>
+</div>

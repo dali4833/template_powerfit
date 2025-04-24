@@ -1,0 +1,45 @@
+<div class="nutritionist-container">
+  <h2>Nutritionist Management</h2>
+
+  <!-- Afficher seulement si on n'est pas dans /ajout -->
+  <ng-container *ngIf="!isInChildRoute">
+    <button class="add-btn" (click)="goToAdd()">Add Nutritionist</button>
+
+    <table class="nutritionist-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Salary</th>
+          <th>Hired Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let nutri of nutritionists">
+          <td>{{ nutri.name }}</td>
+
+          
+          <td>{{ nutri.email }}</td>
+          <td>{{ nutri.phone }}</td>
+          <td>{{ nutri.salary | currency }}</td>
+          <td>{{ nutri.hiredDate | date }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="view-btn" (click)="goToView(nutri.id)">View</button>
+
+              <button class="edit-btn" (click)="goToUpdate(nutri.id)">Edit</button>
+
+              <button class="delete-btn" (click)="deleteNutritionist(nutri.id)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+
+  <!-- Ici, on affiche le composant Ajout ou autre -->
+  <router-outlet></router-outlet>
+</div>

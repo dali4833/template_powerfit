@@ -1,0 +1,98 @@
+.form-container {
+  max-width: 800px;
+  margin: 60px auto;
+  background: #dde2dd;
+  padding: 50px 40px;
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.form-container h2 {
+  text-align: center;
+  color: #213629;
+  margin-bottom: 40px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  margin-bottom: 10px;
+  color: #213629;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+select,
+textarea {
+  padding: 12px 18px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: 0.3s;
+  background-color: white;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #213629;
+  box-shadow: 0 0 6px rgba(33, 54, 41, 0.4);
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-actions {
+  text-align: center;
+  margin-top: 40px;
+}
+
+button[type="submit"] {
+  background-color: #213629;
+  color: #fff;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover:not([disabled]) {
+  background-color: #1a2c21;
+  transform: translateY(-2px);
+}
+
+button[disabled] {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .form-container {
+    padding: 30px 20px;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+  }
+}
