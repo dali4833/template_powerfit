@@ -1,0 +1,128 @@
+.calendar-container {
+  position: relative;
+  padding: 20px;
+  height: 80vh;
+}
+
+.cal-event {
+  cursor: pointer;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Calendar date widget */
+.calendar-date {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+}
+
+/* Event list items */
+.author-online {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.error-message {
+  color: #f44336;
+  text-align: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Upcoming events section */
+.current-date .line {
+  height: 1px;
+}
+
+.current-event-list h5 {
+  border-left: 3px solid;
+  padding-left: 15px;
+}
+
+.fc-event {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.fc-event:hover {
+  transform: scale(1.02);
+}
+
+.dialog-content {
+  padding: 20px;
+  min-width: 300px;
+}
+
+/* Add sticky header for better scrolling experience */
+.table-container thead.sticky-top {
+  background: white;
+  top: -1px; /* Fixes small gap at top */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1;
+}
+
+/* Calendar container styling */
+.calendar-container {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 20px;
+  background: white;
+}
+
+/* Optional: Add some shadow to the table container */
+.table-container {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 4px;
+}
+
+/* Optional: Style the scrollbar */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+@media (max-width: 768px) {
+  .table-container {
+    max-height: 300px !important;
+  }
+}
