@@ -5,6 +5,7 @@ import { FavoriteRecipeService } from '../../services/favorite-recipe.service';
 import { SuggestedRecipe } from '../models/SuggestedRecipes';
 import { SuggestedRecipesService } from '../../services/suggested-recipes.service';
 import { HeaderService } from '../../services/header.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 
@@ -28,7 +29,8 @@ export class RecipeComponent implements OnInit {
   constructor(private recipeService: RecipeService,
     private FavoriteRecipeService: FavoriteRecipeService,
      private suggestedRecipeService: SuggestedRecipesService,
-     private headerService: HeaderService
+     private headerService: HeaderService,
+     private sanitizer: DomSanitizer
   ) {}
 
   // 🧺 Panier par recette : clé = idRecipe, valeur = liste d'ingrédients personnalisés
@@ -65,6 +67,10 @@ export class RecipeComponent implements OnInit {
       
     });
   }
+  //pour le vd youtube
+  sanitizeYoutubeUrl(url: string) {
+  return this.sanitizer.bypassSecurityTrustResourceUrl(url.replace("watch?v=", "embed/"));
+}
   loadMore() {
     this.visibleRecipesCount += 3;
   }
@@ -103,18 +109,32 @@ export class RecipeComponent implements OnInit {
     ].filter((ing) => ing !== ingredient);
   }
   toggleFavorite(recipe: any) {
-    const userEmail = 'utilisateur@example.com'; // récupère l'email dynamiquement si possible
+    const userEmail = localStorage.getItem('email') || 'nosnos@gmail.com';
+    const recipeId = recipe.idRecipe || recipe.recipe?.id;
+  
+    if (!recipeId) {
+      console.error("ID unfound:", recipe);
+      return;
+    }
   
     if (!recipe.isFavorite) {
-      this.FavoriteRecipeService.addFavorite(userEmail, recipe.id).subscribe(() => {
+      this.FavoriteRecipeService.addFavorite(userEmail, recipeId).subscribe((response: any) => {
         recipe.isFavorite = true;
+        recipe.favoriteId = response.id;
+      }, error => {
+        console.error("Error to add to favorites :", error);
       });
     } else {
       this.FavoriteRecipeService.removeFavorite(recipe.favoriteId).subscribe(() => {
         recipe.isFavorite = false;
+        recipe.favoriteId = null;
+      }, error => {
+        console.error("error to remove from favorites:", error);
       });
     }
   }
+  
+  
   
   expandedRecipeIds: number[] = [];
 
@@ -152,10 +172,13 @@ onSearch(term: string): void {
     const lowerTerm = term.toLowerCase();
     this.filteredRecipes = this.recipes.filter(recipe =>
       recipe.name.toLowerCase().includes(lowerTerm) ||
-      recipe.ingredients.toLowerCase().includes(lowerTerm));
-      this.visibleRecipesCount = 3;
+      recipe.ingredients.toLowerCase().includes(lowerTerm) ||
+      recipe.mealType.toLowerCase().includes(lowerTerm)  // Ajout du filtrage par mealType
+    );
+    this.visibleRecipesCount = 3;
   }
 }
+
 
 
   

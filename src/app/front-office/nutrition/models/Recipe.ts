@@ -9,5 +9,7 @@ export class Recipe {
     isFavorite!: boolean;
     preparationTime!: string;
     mealType!: string;
+    youtubeUrl!:string
+
   }
   

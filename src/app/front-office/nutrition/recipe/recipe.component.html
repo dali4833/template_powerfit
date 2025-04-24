@@ -2,9 +2,9 @@
 <div class="container py-5">
   <h2 class="mb-4 fw-bold text-center text-primary">🌟 Top 10 recipes of the day</h2>
   
-  <div class="row g-4">
-    <div class="col-md-4" *ngFor="let recipe of paginatedRecipes; let i = index">
-      <div class="card shadow h-100 border-0 bg-white rounded-4">
+  <div class="row g-4" >
+    <div class="col-md-4" *ngFor="let recipe of paginatedRecipes; let i = index" >
+      <div class="card shadow   border-0 bg-white rounded-4">
         <div class="position-relative">
           <img
             [src]="recipe.image || 'https://via.placeholder.com/300x200?text=No+Image'"
@@ -17,18 +17,18 @@
           </span>
         </div>
         
-        <div class="card-body text-dark">
+        <div class="card-body text-dark" >
           <h5 class="card-title fw-bold">{{ recipe.name }}</h5>
           <p class="card-text text-muted small">{{ recipe.description }}</p>
           <p class="fw-semibold">🔥 Calories: {{ recipe.calories }} kcal</p>
           <p class="fw-semibold text-success">⏳ Duration: {{ getReadableDuration(recipe.preparationTime) }}</p>
           <p class="fw-semibold text-info">🍽️ Ideal For : {{ recipe.mealType }}</p>
-          <p class="text-muted"><strong>main ingredients:</strong> {{ recipe.ingredients }}</p>
+          <p class="text-muted text-truncate" ><strong>main ingredients:</strong> {{ recipe.ingredients }}</p>
 
-          <div class="d-flex justify-content-between align-items-center mt-3">
+          <div class="d-flex justify-content-between align-items-center mt-4">
             <button class="btn btn-sm btn-outline-primary" (click)="toggleInstructions(recipe.idRecipe)">📖 Instructions</button>
             <button class="btn btn-sm btn-outline-danger" [ngClass]="{ 'active': recipe.isFavorite }" (click)="toggleFavorite(recipe)">
-              ❤️ Favori
+              ❤️ Favorite
             </button>
           </div>
 
@@ -66,7 +66,7 @@
 <!-- 🔍 Section de Recherche -->
 <div class="container py-5">
   <div class="container py-5">
-    <h2 class="mb-4 fw-bold text-center simple-move-text">🔎 Looking for recipes ?</h2>
+    <h2 class="mb-4 fw-bold text-center simple-move-text">🔎 Looking for a special one ?</h2>
     
     <div class="mb-4">
       <input
@@ -86,10 +86,10 @@
     <!-- Contenu des recettes ici... -->
   </div>
   
-  <div *ngIf="filteredRecipes.length > 0; else noResults" class="row g-4">
+  <div *ngIf="filteredRecipes.length > 0; else noResults" class="row g-4" >
     <div class="col-md-4" *ngFor="let recipe of filteredRecipes.slice(0, visibleRecipesCount)">
 
-      <div class="card shadow h-100 border-0 bg-light rounded-4">
+      <div class="card shadow  border-0 bg-light rounded-4" style="min-height: 620px;">
         
         <!-- 🖼️ Image added here -->
         <img
@@ -105,24 +105,36 @@
           <p><strong>Calories:</strong> {{ recipe.calories }} kcal</p>
           <p><strong>Duration:</strong> {{ getReadableDuration(recipe.preparationTime) }}</p>
           <p><strong>Meal Type:</strong> {{ recipe.mealType }}</p>
-          <button class="btn btn-sm btn-outline-primary mt-2" (click)="toggleInstructions(recipe.idRecipe)">
-            🍳 {{ expandedRecipeIds.includes(recipe.idRecipe) ? 'Hide' : 'Show' }} Instructions
-          </button>
           
-          <div *ngIf="expandedRecipeIds.includes(recipe.idRecipe)" class="mt-2">
-            <ul class="list-group list-group-flush">
-              <li *ngFor="let step of getInstructionsAsList(recipe.instructions)" class="list-group-item bg-light">
-                👉 {{ step }}
-              </li>
-            </ul>
-          </div>
+          <a *ngIf="recipe.youtubeUrl" [href]="recipe.youtubeUrl" target="_blank">
+            Watch a video ?
+          </a>
+          
+
+         <!-- Bouton Instructions aligné à gauche -->
+<div class="d-flex justify-content-start">
+  <button class="btn btn-sm btn-outline-primary mt-2" (click)="toggleInstructions(recipe.idRecipe)">
+    🍳 {{ expandedRecipeIds.includes(recipe.idRecipe) ? 'Hide' : 'Show' }} Instructions
+  </button>
+</div>
+
+<!-- Instructions -->
+<div *ngIf="expandedRecipeIds.includes(recipe.idRecipe)" class="mt-2">
+  <ul class="list-group list-group-flush">
+    <li *ngFor="let step of getInstructionsAsList(recipe.instructions)" class="list-group-item bg-light">
+      👉 {{ step }}
+    </li>
+  </ul>
+</div>
+
+
           
           <p><strong>Main Ingredients:</strong> {{ recipe.ingredients }}</p>
         </div>
       </div>
     </div>
   </div>
-  <div class="d-flex justify-content-end mt-4" *ngIf="visibleRecipesCount < filteredRecipes.length">
+  <div class="d-flex justify-content-end mt-3" *ngIf="visibleRecipesCount < filteredRecipes.length">
     <button class="btn see-more-button-pistache" (click)="loadMore()">👀 See More</button>
   </div>
   <ng-template #noResults>

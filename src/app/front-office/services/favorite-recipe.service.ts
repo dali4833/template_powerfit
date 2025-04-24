@@ -16,6 +16,7 @@ export class FavoriteRecipeService {
     const params = {
       email: email,
       recipeId: recipeId.toString()
+      
     };
 
     return this.http.post(`${this.baseUrl}/addfav`, null, {
