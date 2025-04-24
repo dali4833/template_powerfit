@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
-interface TokenResponse {
-  token: string;
-}
+
 
 @Injectable({
   providedIn: 'root'
@@ -36,12 +34,25 @@ login(user: any): Observable<any> {
 
 
   logout() {
-    localStorage.removeItem('token'); // or sessionStorage
-    //navigate to login page 
-     this.router.navigate(['/login']);
-  
+    const token = localStorage.getItem('token');
 
+    if (token) {
+      this.http.post('http://localhost:8089/auth/logout', {}, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: 'text'
+      }).subscribe({
+        next: (res) => console.log(res),
+        error: (err) => console.error('Logout error', err),
+        complete: () => {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+        }
+      });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
+
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
@@ -51,7 +62,7 @@ login(user: any): Observable<any> {
 
   getUserProfile(): Observable<string> {
     const token = localStorage.getItem('token');
-  
+
     return this.http.get(`${this.apiUrl}/user/userProfile`, {
       responseType: 'text',
       headers: {
@@ -59,6 +70,42 @@ login(user: any): Observable<any> {
       }
     });
   }
-  
 
+
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email }, {
+      responseType: 'text'
+    });
+  }
+
+  getCurrentUser(): Observable<any> {
+    const token = localStorage.getItem('token');
+    console.log("Token sent:", token);
+    return this.http.get<any>(`${this.apiUrl}/userDetails`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post(`${this.apiUrl}/reset-password`, {
+      token,
+      newPassword
+    }, {
+      responseType: 'text'
+    });
+  }
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+  getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
 }
+

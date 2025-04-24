@@ -1,0 +1,47 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Abonnement List</h2>
+        <button class="btn btn-primary" routerLink="/admin/abonnement-management/new">Add New Abonnement</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="loading" class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <table class="table mt-3" *ngIf="!loading && abonnements.length > 0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>endDate</th>
+                <th>startDate</th>
+                <th>status</th>
+                <th>pack</th>
+                <th>user</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let abonnement of abonnements">
+                <td>{{abonnement.id}}</td>
+                <td>{{abonnement.name}}</td>
+                <td>{{abonnement.description}}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary me-2" (click)="editAbonnement(abonnement.id!)">Edit</button>
+                    <button class="btn btn-sm btn-danger me-2" (click)="abonnement.id && deleteAbonnement(abonnement.id)">Delete</button>
+                    <button class="btn btn-sm btn-success" (click)="abonnement.id && validateabonnement(abonnement.id)">Validate</button>
+                
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="!loading && abonnements.length === 0" class="alert alert-info">
+        No abonnements found. Click "Add New abonnement" to create one.
+    </div>
+</div>

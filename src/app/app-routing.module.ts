@@ -3,13 +3,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { StoreComponent } from "./front-office/store/store.component";
 import { ProductsComponent } from "./front-office/store/products/products.component";
 import { ProductDetailComponent } from "./front-office/store/product-detail/product-detail.component";
-import { HomeComponent } from "./front-office/home/home.component";
 import { LoginComponent } from './front-office/auth/login/login.component';
 import { RegisterComponent } from './front-office/auth/register/register.component';
 import { ForgotPasswordComponent } from './front-office/auth/forgot-password/forgot-password.component';
 import { UserprofileComponent } from './front-office/userprofile/userprofile.component';
 import { AllTemplateFrontComponentComponent } from './front-office/all-template-front-component/all-template-front-component.component';
 import { AllTemplateBackComponentComponent } from './back-office/all-template-back-component/all-template-back-component.component';
+import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
+import {AuthComponent} from "./back-office/auth/auth.component";
+import {UsersComponent} from "./back-office/users/users.component";
+import { ChatComponent } from './front-office/pages/chat/chat.component';
 import { NutritionistComponent } from "./front-office/nutritionist/nutritionist.component";
 import { MedicalfolderComponent } from "./front-office/nutritionist/medicalfolder/medicalfolder.component";
 import { MeetingComponent } from "./front-office/nutritionist/meeting/meeting.component";
@@ -32,18 +35,10 @@ import { VoirnutriComponent } from 'src/app/back-office/backnutritionist/voirnut
 
 const routes: Routes = [
 
-  { 
-  path: 'admin', component: AllTemplateBackComponentComponent, children: [ 
-    { path: 'nutritionist', component: BacknutritionistComponent  , children: [
+  { path: 'admin', component: AllTemplateBackComponentComponent, children: [ 
     
-      { path: 'ajout', component: AjoutnutriComponent },
-      { path: 'modif/:id', component: ModifnutriComponent },
-      { path: 'voir/:id', component: VoirnutriComponent }
-    ]
-  }
-  ] 
-},
-
+    // Admin route   
+]},
 
 
 
@@ -65,30 +60,7 @@ const routes: Routes = [
       { path: 'products/:id', component: ProductDetailComponent } // Product details
 
     ]
-  },
-  {
-    path: 'nutritionist', component: NutritionistComponent,
-    children: [
-      { path: 'medicalfolder', component: MedicalfolderComponent, 
-        children : [
-          {path: 'showMedicalfolder/:id', component:ShowmedicalfolderComponent},
-          {path: 'addMedical', component:NewmedicalfolderComponent},
-          { path: 'update/:id', component: UpdatemedicalfolderComponent }
-
-        ]
-      }, // /nutritionist/medicalfolder
-      { path: 'meeting', component: MeetingComponent,
-        children:[
-          {path: 'addMeeting', component:NewMeetingComponent},
-          {path: 'showMeeting/:id', component:ShowmeetingComponent},
-          { path: 'updateMeeting/:id', component: UpdatemeetingComponent },
-          { path: 'slot', component: SlotSelectorComponent }
-
-        ]
-      }, // /nutritionist/meeting
-      //{ path: 'new', component: MeetingAddComponent }  //form component
-    ]
-  }]
+  },]
 },
 { path: '**', redirectTo: '/' },
 

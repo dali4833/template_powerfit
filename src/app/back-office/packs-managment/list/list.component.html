@@ -1,0 +1,42 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Packs List</h2>
+        <button class="btn btn-primary" routerLink="/admin/packs-management/new">Add New pack</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="loading" class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <table class="table mt-3" *ngIf="!loading && packs.length > 0">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>duration</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let pack of packs">
+                <td>{{pack.name}}</td>
+                <td>{{pack.duration}}</td>
+                <td>{{pack.price}}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary me-2" (click)="editPack(pack.id!)">Edit</button>
+                    <button class="btn btn-sm btn-danger" (click)="pack.id && deletePack(pack.id)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="!loading && packs.length === 0" class="alert alert-info">
+        No packs found. Click "Add New Pack" to create one.
+    </div>
+</div>

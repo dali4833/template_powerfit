@@ -1,0 +1,41 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Requests List</h2>
+        <button class="btn btn-primary" routerLink="/admin/abonnementrequests-management/new">Add New Sport</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="loading" class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <table class="table mt-3" *ngIf="!loading && requests.length > 0">
+        <thead>
+            <tr>
+                <th>requestedDate</th>
+                <th>status</th>
+             
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let req of requests">
+                <td>{{req.requestedDate}}</td>
+                <td>{{req.status}}</td>
+             
+                <td>
+                    <button class="btn btn-sm btn-info" (click)="req.id && approveRequest(req.id)">approve</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="!loading && requests.length === 0" class="alert alert-info">
+        No requests found. Click "Add New request" to create one.
+    </div>
+</div>

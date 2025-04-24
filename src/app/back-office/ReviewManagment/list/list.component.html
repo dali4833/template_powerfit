@@ -1,0 +1,36 @@
+<div class="container-fluid">
+    <h2 class="mb-4">Reviews</h2>
+    <button class="btn btn-primary mb-3" routerLink="new">Add New Review</button>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+
+    <div *ngIf="loading" class="text-center">
+        Loading...
+    </div>
+
+    <table class="table table-striped" *ngIf="!loading && reviews.length > 0">
+        <thead>
+            <tr>
+                <th>Rating</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let review of reviews">
+                <td>{{ review.rating }}/5</td>
+                <td>{{ review.description }}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary me-2" [routerLink]="[review.id, 'edit']">Edit</button>
+                    <button class="btn btn-sm btn-danger" (click)="deleteReview(review.id)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="!loading && reviews.length === 0" class="alert alert-info">
+        No reviews found. Click "Add New Review" to create one.
+    </div>
+</div>

@@ -1,5 +1,6 @@
-
-<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme"
+ style="height: 100%;"
+>
     <div class="app-brand demo">
       <a href="index.html" class="app-brand-link">
         <span class="app-brand-logo demo">
@@ -60,12 +61,10 @@
         <span class="app-brand-text demo menu-text fw-bolder ms-2"> <P>Powfit</P></span>
       </a>
 
-      <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-        <i class="bx bx-chevron-left bx-sm align-middle"></i>
-      </a>
+
+
     </div>
 
-    <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
       <li class="menu-item">
@@ -79,4 +78,87 @@
       
     </ul>
     
+  </aside>
+      <!-- Dashboard -->
+      <li class="menu-item active">
+        <a href="index.html" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-home-circle"></i>
+          <div data-i18n="Analytics">Dashboard</div>
+        </a>
+      </li>
+
+
+
+
+      <!-- Forms & Tables -->
+      <li class="menu-header small text-uppercase"><span class="menu-header-text">Gestion des Clubs &amp; kolchay</span></li>
+      <!-- Forms -->
+      <li class="menu-item">
+        <ul >
+          <li class="menu-item">
+            <a routerLink="/admin/sports-management" class="menu-link">
+              <div data-i18n="Basic Inputs">Sports</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a routerLink="/admin/packs-management" class="menu-link">
+              <div data-i18n="Input Groups">Packs</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a routerLink="/admin/clubs-management" class="menu-link">
+              <div data-i18n="Input Groups">Clubs</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a routerLink="/admin/clubrequests-management" class="menu-link">
+              <div data-i18n="Input Groups">Club Requests</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a routerLink="/admin/abonnementrequests-management" class="menu-link">
+              <div data-i18n="Input Groups">Abonnement requests</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a routerLink="/admin/abonnement-management" class="menu-link">
+              <div data-i18n="Input Groups">Abonnement </div>
+            </a>
+          </li>
+
+
+
+        </ul>
+      </li>
+
+ <li class="menu-header small text-uppercase"><span class="menu-header-text">Gestion des TrainingSession &amp; Managment</span></li>
+ <!-- Forms -->
+ <li class="menu-item">
+   <ul >
+     <li class="menu-item">
+       <a routerLink="/admin/TrainingSession-management" class="menu-link">
+         <div data-i18n="Basic Inputs">TrainingSession</div>
+       </a>
+     </li>
+     <li class="menu-item">
+       <a routerLink="/admin/Review-management" class="menu-link">
+         <div data-i18n="Input Groups">Review</div>
+       </a>
+     </li>
+     <li class="menu-item">
+       <a routerLink="/admin/Booking-management" class="menu-link">
+         <div data-i18n="Input Groups">Booking</div>
+       </a>
+     </li>
+
+
+
+   </ul>
+ </li>
+
+
+
+
+
+    </ul>
   </aside>

@@ -36,6 +36,9 @@ export class RegisterComponent {
       return;
     }
   
+    this.router.navigate(['/login']);
+
+
     const user = {
       name,
       email,
@@ -45,8 +48,8 @@ export class RegisterComponent {
     };
     this.authService.register(user).subscribe({
       next: (response: any) => {
+
         alert(response); // This will be "User Added Successfully"
-        this.router.navigate(['/login']);
       },
       error: (err) => {
         console.error('Registration error:', err);
