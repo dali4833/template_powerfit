@@ -16,7 +16,7 @@ export class ListComponent implements OnInit {
   }
 
   loadTrainingSessions(): void {
-    this.trainingSessionService.getTrainingSessions()
+    this.trainingSessionService.getTrainingSessionsByCoach()
       .subscribe({
         next: (data) => this.trainingSessions = data,
         error: (error) => console.error('Error loading training sessions:', error)

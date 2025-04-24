@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './front-office/header/header.component';
@@ -38,6 +38,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from "@danielmoncada/angular-datetime-picker";
 import { ChatComponent } from './front-office/pages/chat/chat.component';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 
 @NgModule({
@@ -63,7 +64,7 @@ import { ChatComponent } from './front-office/pages/chat/chat.component';
     AuthComponent,
     UsersComponent,
     TrainingSessionComponent,
-    ChatComponent,
+    ChatComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -80,8 +81,10 @@ import { ChatComponent } from './front-office/pages/chat/chat.component';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatSnackBarModule
   ],
+  schemas:[CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
   exports: [
   ],

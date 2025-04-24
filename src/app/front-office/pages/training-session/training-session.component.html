@@ -24,7 +24,6 @@
             <dl class="uk-description-list">
               <dt><span uk-icon="calendar"></span> Date: {{session.date | date}}</dt>
               <dt><span uk-icon="clock"></span> Time: {{session.startTime}} - {{session.endTime}}</dt>
-              <dt><span uk-icon="users"></span> Max Participants: {{session.maxParticipants}} spots</dt>
               <dt *ngIf="session.status === 'APPROVED'" class="uk-text-center">
                 <span uk-icon="link"></span>
                 <div class="uk-margin-small-top">
