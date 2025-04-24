@@ -1,7 +1,6 @@
 import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
-import { FormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 
 
@@ -42,7 +41,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from "@danielmoncada/angular-datetime-picker";
-import { ChatComponent } from './front-office/pages/chat/chat.component';
+//import { ChatComponent } from './front-office/pages/chat/chat.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 import { NutritionistComponent } from './front-office/nutritionist/nutritionist.component';
@@ -101,7 +100,7 @@ import { VoirnutriComponent } from 'src/app/back-office/backnutritionist/voirnut
     AuthComponent,
     UsersComponent,
     TrainingSessionComponent,
-    ChatComponent
+    //ChatComponent
   ],
   imports: [
     ReactiveFormsModule,
