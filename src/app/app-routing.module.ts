@@ -17,6 +17,8 @@ import { AllTemplateBackComponentComponent } from './back-office/all-template-ba
 import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
 import { ClubsPacksComponent } from './front-office/pages/clubs-packs/clubs-packs.component';
 import { TrophiesComponent } from './front-office/pages/trophies/trophies.component';
+import { ClubPerformanceComponent } from './back-office/clubs-managment/club-performance/club-performance.component'; // Assure-toi que le chemin est correct
+
 
 const routes: Routes = [
 
@@ -82,9 +84,12 @@ const routes: Routes = [
 
 
 
+      {
+        path: '',
+        loadChildren: () => import('./front-office/pages/clubcreation-form/clubreq.module').then(m => m.clubreqModule)
+      },
 
-
-
+      { path: 'performance/:clubId', component: ClubPerformanceComponent }
 
 
 
@@ -93,6 +98,7 @@ const routes: Routes = [
     ]
   },
   { path: '**', redirectTo: '/' },
+
 
 ];
 

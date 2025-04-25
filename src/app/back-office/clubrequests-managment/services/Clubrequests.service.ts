@@ -40,7 +40,19 @@ export class ClubrequestsService {
     });
   }
 
-
+  submitClubCreationRequest(formData: FormData): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers => {
+        const headersWithoutContentType = headers.delete('Content-Type');
+        return this.http.post<any>(
+          `${this.apiUrl}/submit-creation-request`,
+          formData,
+          { headers: headersWithoutContentType }
+        );
+      })
+    );
+  }
+  
 
   getPendingRequests(): Observable<any> {
     return from(this.generateHeaders()).pipe(

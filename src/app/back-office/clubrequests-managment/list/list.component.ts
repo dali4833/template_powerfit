@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ClubrequestsService } from '../services/Clubrequests.service';
-import { ClubService } from '../../clubs-managment/services/club.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,17 +17,17 @@ export class ListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadrequests();
+    this.loadRequests();
   }
 
-  loadrequests(): void {
+  loadRequests(): void {
     this.loading = true;
     this.clubrequestService.getPendingRequests().subscribe({
-      next: (data) => {
+      next: (data: any[]) => {  // Typage explicite de 'data'
         this.requests = data;
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: any) => {  // Typage explicite de 'error'
         this.errorMessage = 'Failed to load requests';
         this.loading = false;
         console.error(error);
@@ -40,9 +39,9 @@ export class ListComponent implements OnInit {
     if (confirm('Are you sure you want to reject this club request?')) {
       this.clubrequestService.rejectClubCreationRequest(id).subscribe({
         next: () => {
-          this.loadrequests();
+          this.loadRequests();
         },
-        error: (error) => {
+        error: (error: any) => {  // Typage explicite de 'error'
           this.errorMessage = 'Failed to reject club request';
           console.error(error);
         }
@@ -54,25 +53,25 @@ export class ListComponent implements OnInit {
     if (confirm('Are you sure you want to approve this club request?')) {
       this.clubrequestService.approveClubCreationRequest(id).subscribe({
         next: () => {
-          this.loadrequests();
+          this.loadRequests();
         },
-        error: (error) => {
+        error: (error: any) => {  // Typage explicite de 'error'
           this.errorMessage = 'Failed to approve club request';
           console.error(error);
         }
       });
     }
   }
+
   viewDocument(requestId: number): void {
     this.clubrequestService.getRequestDocument(requestId).subscribe({
-      next: (blob) => {
+      next: (blob: Blob) => {  // Typage explicite de 'blob'
         const fileURL = URL.createObjectURL(blob);
         window.open(fileURL, '_blank');
       },
-      error: (error) => {
+      error: (error: any) => {  // Typage explicite de 'error'
         console.error('Error fetching document:', error);
       }
     });
   }
-
 }

@@ -19,6 +19,13 @@
 .modal-dialog.modal-xl {
     max-width: 1140px;
 }
+.club-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
 
 .uk-card-hover {
     transition: transform 0.2s ease-in-out;

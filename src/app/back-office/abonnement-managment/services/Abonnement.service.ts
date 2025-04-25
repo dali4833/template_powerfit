@@ -45,7 +45,7 @@ export class AbonnementService {
 
   getAbonnements(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.get<any[]>(`${this.apiUrl}/retrieve-all-abonnements`, { headers })
       )
     );
@@ -98,7 +98,7 @@ export class AbonnementService {
 
   getUsers(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.get<any[]>(`http://localhost:8089/auth/users`, { headers })
       )
     );
@@ -107,23 +107,34 @@ export class AbonnementService {
 
   getpacks(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.get<any[]>(`http://localhost:8089/packs/retrieve-all-packs`, { headers })
       )
     );
   }
 
 
-  renewAbonnement(id: number, newEndDate: string): Observable<any> {
-    console.log(id)
-    const params ={ newEndDate: newEndDate.split('T')[0]}
-    
+  renewAbonnement(id: number, packDuration: number): Observable<any> {
+    const newEndDate = new Date();
+    newEndDate.setDate(newEndDate.getDate() + packDuration);
+
+    const formattedEndDate = newEndDate.toISOString().split('T')[0]; // Ensure format is YYYY-MM-DD
+
+    console.log('New End Date:', formattedEndDate);
+
     return from(this.generateHeaders()).pipe(
-      switchMap(headers =>
-        this.http.put<any>(`${this.apiUrl}/renew-abonnement/${id}`, null, { params, headers })
-      )
+        switchMap(headers =>
+            this.http.put<any>(
+                `${this.apiUrl}/renew-abonnement/${id}?newEndDate=${formattedEndDate}`,
+                {}, // Empty body
+                { headers }
+            )
+        )
     );
   }
+
+
+
 
 
   calculateRenewalRateForClub(id: number): Observable<any> {
@@ -134,13 +145,24 @@ export class AbonnementService {
     );
   }
 
-  analyzeClubPerformance(id: number): Observable<any> {
+  analyzeClubPerformancee(id: number): Observable<any> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
         this.http.get<any>(`${this.apiUrl}/analyzeClubPerformance/${id}`, { headers })
       )
     );
   }
+  analyzeClubPerformance(clubId: number): Observable<any> {
+    console.log('Sending clubId:', clubId);  // Vérifie que le clubId est bien passé
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any>(`${this.apiUrl}/analyzeClubPerformance/${clubId}`, { headers })
+      )
+    );
+  }
+
+
+
 
 
   getvalidusertoken(): Observable<string> {
@@ -176,8 +198,8 @@ export class AbonnementService {
     );
   }
 
-  
 
-  
+
+
 
 }

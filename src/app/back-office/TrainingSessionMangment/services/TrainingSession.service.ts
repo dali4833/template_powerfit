@@ -20,8 +20,8 @@ export class TrainingSessionService {
   };
 
   useraccount = {
-    username: 'user1@email.com',
-    password: 'a',
+    username: 'test@hotmail.fr',
+    password: 'password123',
   };
 
   coachaccount = {

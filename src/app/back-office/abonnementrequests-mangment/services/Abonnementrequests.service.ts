@@ -6,6 +6,7 @@ import { useraccount , clubaccount } from '../../sports-managment/services/bypas
 interface request {
   startDate: string;
   endDate: string;
+  duration?: number;
 }
 
 
@@ -47,34 +48,29 @@ export class AbonnementrequestsService {
 
   // Pour USER
   createRequest(object: request, packId: number): Observable<any> {
-    this.cachedToken = null;
-    const params = {
-      startDate: object.startDate,
-      endDate: object.endDate
-    };
-    
-    return from(this.generateHeaders(useraccount)).pipe(
-      switchMap(headers =>
-        this.http.post<any>(
-          `${this.apiUrl}/request/${packId}`, 
-          null, 
-          { 
-            headers,
-            params
-          }
-        )
-      )
+    if (object.duration == null || object.duration <= 0) {
+      return new Observable(observer => {
+        observer.error(new Error('Invalid duration for subscription.'));
+      });
+    }
+    return from(this.getValidToken(useraccount)).pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+        return this.http.post<any>(`${this.apiUrl}/request/${packId}`, object, { headers });
+      })
     );
   }
 
-  createRequestWithDates(packId: number, startDate: string, endDate: string): Observable<any> {
-    const params = { packId: packId.toString(), startDate, endDate };
-    return from(this.generateHeaders(useraccount)).pipe(
-      switchMap(headers =>
-        this.http.post<any>(`${this.apiUrl}/abonnement-request`, {}, { headers, params })
-      )
-    );
-  }
+
+  //
+  // createRequestWithDates(packId: number, startDate: string, endDate: string): Observable<any> {
+  //   const params = { packId: packId.toString(), startDate, endDate };
+  //   return from(this.generateHeaders(useraccount)).pipe(
+  //     switchMap(headers =>
+  //       this.http.post<any>(`${this.apiUrl}/abonnement-request`, {}, { headers, params })
+  //     )
+  //   );
+  // }
 
   // Pour CLUB OWNER
   getRequests(): Observable<any[]> {

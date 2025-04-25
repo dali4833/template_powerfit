@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClubService } from '../services/club.service';
 import { SportService } from '../../sports-managment/services/sports.service';
+import { AbonnementService } from 'src/app/back-office/abonnement-managment/services/Abonnement.service'; // Ajoutez l'import
 import { Router } from '@angular/router';
 
 interface Club {
@@ -22,10 +23,14 @@ export class ListComponent implements OnInit {
   sports: any[] = [];
   errorMessage: string = '';
   loading: boolean = false;
+  performanceData: any = null;
+  showPerformance: boolean = false; 
+
 
   constructor(
     private clubservice: ClubService,
     private sportservice: SportService,
+    private abonnementService: AbonnementService,
     private router: Router
   ) {}
 
@@ -49,6 +54,21 @@ export class ListComponent implements OnInit {
       }
     });
   }
+ 
+  viewPerformance(clubId: number): void {
+    console.log('Sending clubId:', clubId);
+    this.abonnementService.analyzeClubPerformance(clubId).subscribe({
+      next: (data) => {
+        this.performanceData = data; // Stocker les données de performance
+        console.log('Performance:', data);
+        this.showPerformance = true; // Afficher la section de performance
+      },
+      error: (err) => {
+        this.errorMessage = 'Erreur lors du chargement de la performance du club.';
+      }
+    });
+  }
+  
 
   loadSports(): void {
     this.sportservice.getSports().subscribe({

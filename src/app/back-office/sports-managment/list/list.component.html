@@ -17,7 +17,6 @@
     <table class="table mt-3" *ngIf="!loading && sports.length > 0">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Actions</th>
@@ -25,7 +24,6 @@
         </thead>
         <tbody>
             <tr *ngFor="let sport of sports">
-                <td>{{sport.id}}</td>
                 <td>{{sport.name}}</td>
                 <td>{{sport.description}}</td>
                 <td>

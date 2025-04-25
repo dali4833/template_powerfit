@@ -23,6 +23,8 @@
                 <th>Sport</th>
                 <th>status</th>
                 <th>Actions</th>
+                <th>Performance</th>
+
             </tr>
         </thead>
         <tbody>
@@ -47,6 +49,12 @@
                     </div>
                     <button class="btn btn-sm btn-primary me-2" (click)="editClub(club.id!)">Edit</button>
                     <button class="btn btn-sm btn-danger" (click)="club.id && deleteClub(club.id)">Delete</button>
+ 
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-info" [routerLink]="['/performance', club.id]">
+                        View Performance
+                    </button>
                 </td>
             </tr>
         </tbody>

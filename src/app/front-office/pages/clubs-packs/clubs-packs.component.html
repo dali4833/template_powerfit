@@ -37,7 +37,7 @@
             <li *ngFor="let club of recommendedClubs">
               <div class="modern-club-card">
                 <div class="card-image-wrapper">
-                  <img [src]="club.imageUrl || 'assets/images/samuel-girven-vj2s0c20qco-unsplash.jpg'" [alt]="club.name">
+                  <img [src]="club.imageUrl" alt="Image du club" class="club-image">
                   <div class="image-overlay">
                     <div class="club-quick-info">
                       <span class="members-count">
@@ -137,9 +137,9 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" 
-     id="PackModal" 
-     tabindex="-1" 
+<div class="modal fade"
+     id="PackModal"
+     tabindex="-1"
      role="dialog"
      aria-labelledby="packsModalLabel">
   <div class="modal-dialog modal-xl" role="document">
@@ -232,18 +232,18 @@
 </div>
 
 <!-- Dynamic Action Modal -->
-<div class="modal fade" 
-     id="ActionModal" 
-     tabindex="-1" 
+<div class="modal fade"
+     id="ActionModal"
+     tabindex="-1"
      role="dialog"
      aria-labelledby="actionModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="actionModalLabel">{{ modalTitle }}</h5>
-        <button type="button" 
-                class="btn-close" 
-                data-bs-dismiss="modal" 
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
                 aria-label="Close">
         </button>
       </div>
@@ -251,31 +251,28 @@
         <!-- Subscription Form -->
         <ng-container *ngIf="modalMode === 'subscribe'">
           <div class="mb-3">
-            <label for="startDate" class="form-label">Start Date</label>
-            <input type="date" class="form-control" id="startDate" [(ngModel)]="startDate">
-          </div>
-          <div class="mb-3">
-            <label for="endDate" class="form-label">End Date</label>
-            <input type="date" class="form-control" id="endDate" [(ngModel)]="endDate">
+            <!-- Suppression des champs de date -->
+            <p>Your subscription will automatically be set for the duration of the pack.</p>
           </div>
         </ng-container>
 
         <!-- Renewal Form -->
         <ng-container *ngIf="modalMode === 'renew'">
           <div class="mb-3">
-            <label for="newEndDate" class="form-label">New End Date</label>
-            <input type="date" class="form-control" id="newEndDate" [(ngModel)]="newEndDate">
+            <p>Your subscription will be renewed for the duration of the pack .</p>
           </div>
         </ng-container>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" 
-                class="btn btn-primary" 
-                (click)="handleModalAction()">
-          {{ modalMode === 'subscribe' ? 'Subscribe' : 'Renew' }}
-        </button>
-      </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button"
+                  class="btn btn-primary"
+                  (click)="handleModalAction()">
+            {{ modalMode === 'subscribe' ? 'Subscribe' : 'Renew' }}
+          </button>
+        </div>
+
     </div>
   </div>
 </div>
+

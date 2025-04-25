@@ -27,6 +27,8 @@ import { RegisterOwnerComponent } from './front-office/auth/register-owner/regis
 import { AuthComponent } from './back-office/auth/auth.component';
 import { UsersComponent } from './back-office/users/users.component';
 import { TrophiesComponent } from './front-office/pages/trophies/trophies.component';
+import { clubreqModule } from './front-office/pages/clubcreation-form/clubreq.module';
+import { ClubPerformanceComponent } from './back-office/clubs-managment/club-performance/club-performance.component';
 
 
 @NgModule({
@@ -61,9 +63,9 @@ import { TrophiesComponent } from './front-office/pages/trophies/trophies.compon
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    
     AppRoutingModule ,
     FormsModule, 
+    clubreqModule
   ],
   providers: [],
   bootstrap: [AppComponent]

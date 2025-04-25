@@ -49,12 +49,9 @@ export class ClubService {
   }
 
   getClub(id: number): Observable<any> {
-    return from(this.generateHeaders()).pipe(
-      switchMap(headers =>
-        this.http.get<any>(`${this.apiUrl}/retrieve-clubs/${id}`, { headers })
-      )
-    );
+    return this.http.get<any>(`http://localhost:8089/clubs/retrieve-club/${id}`);
   }
+  
 
   createClub(club: any): Observable<any> {
     return from(this.generateHeaders()).pipe(
@@ -64,13 +61,20 @@ export class ClubService {
     );
   }
 
-  updateClub(club: any, id: number): Observable<any> {
+  updateClub(clubFormData: FormData, id: number): Observable<any> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers =>
-        this.http.put<any>(`${this.apiUrl}/update-club/${id}`, club, { headers })
-      )
+      switchMap(headers => {
+        const headersWithoutContentType = headers.delete('Content-Type');
+        return this.http.put<any>(`${this.apiUrl}/update-club/${id}`, clubFormData, {
+          headers: headersWithoutContentType
+        });
+      })
     );
   }
+  getClubImage(clubId: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${clubId}/image`, { responseType: 'blob' });
+  }
+  
 
   deleteClub(id: number): Observable<void> {
     return from(this.generateHeaders()).pipe(
@@ -87,18 +91,19 @@ export class ClubService {
       )
     );
   }
-
-  submitClubCreationRequest(body: FormData): Observable<any> {
+  submitClubCreationRequest(formData: FormData): Observable<any> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers => {
-        // remove 'Content-Type' because FormData needs boundary
-        const filteredHeaders = headers.delete('Content-Type');
-        return this.http.post<any>(`${this.apiUrl}/submit-creation-request`, body, { headers: filteredHeaders });
+        const headersWithoutContentType = headers.delete('Content-Type');
+        return this.http.post<any>(
+          `${this.apiUrl}/submit-creation-request`,
+          formData,
+          { headers: headersWithoutContentType }
+        );
       })
     );
   }
-
-
+  
 
 
 
@@ -147,5 +152,7 @@ export class ClubService {
     return this.http.post(`http://localhost:8089/auth/generateToken`,
       useraccount, { responseType: 'text' });
   }
+
+  
 
 }
