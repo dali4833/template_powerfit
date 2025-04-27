@@ -5,13 +5,14 @@ import { Router } from '@angular/router';
 
 
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8089/auth';
+  private apiUrl = 'http://localhost:8080/auth';
 
-  constructor(private http: HttpClient,private router: Router) {}
+  constructor(private http: HttpClient,private router: Router ) {}
 
 // src/app/services/auth.service.ts
 login(user: any): Observable<any> {
@@ -37,7 +38,7 @@ login(user: any): Observable<any> {
     const token = localStorage.getItem('token');
 
     if (token) {
-      this.http.post('http://localhost:8089/auth/logout', {}, {
+      this.http.post('http://localhost:8080/auth/logout', {}, {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'text'
       }).subscribe({

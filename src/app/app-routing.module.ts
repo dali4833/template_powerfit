@@ -13,6 +13,7 @@ import { TrainingSessionComponent } from './front-office/pages/training-session/
 import {AuthComponent} from "./back-office/auth/auth.component";
 import {UsersComponent} from "./back-office/users/users.component";
 import { ChatComponent } from './front-office/pages/chat/chat.component';
+import {CategoriesComponent} from "./front-office/categories/categories.component";
 
 const routes: Routes = [
   {
@@ -54,9 +55,18 @@ const routes: Routes = [
         path: 'store',
         component: StoreComponent,
         children: [
-          { path: '', component: StoreComponent },
-          { path: 'products', component: ProductsComponent },
-          { path: 'products/:id', component: ProductDetailComponent }
+          {
+            path: '',
+            component: CategoriesComponent // Show categories by default
+          },
+          {
+            path: 'categories/:categoryId',
+            component: ProductsComponent
+          },
+          {
+            path: 'products/:productId',
+            component: ProductDetailComponent
+          } // Product details
         ]
       },
       { path: 'trainingSession', component: TrainingSessionComponent },
