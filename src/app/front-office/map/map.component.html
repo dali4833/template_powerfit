@@ -1,0 +1,16 @@
+
+<div id="map-container" style="height: 400px; width: 100%; position: relative;">
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Loading map...</p>
+  </div>
+
+  <div *ngIf="error" class="error-overlay">
+    <div class="error-message">
+      <h3>Delivery Location</h3>
+      <div class="divider"></div>
+      <p class="error-text">⚠️ {{error}}</p>
+      <p class="small-text">Technical details available in browser console</p>
+    </div>
+  </div>
+</div>

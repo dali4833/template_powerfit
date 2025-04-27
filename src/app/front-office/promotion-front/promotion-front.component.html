@@ -1,0 +1,33 @@
+<div class="container text-center py-5" style="font-family: 'Poppins', sans-serif;">
+  <div class="position-relative text-white rounded-4 overflow-hidden shadow-lg" style="background: transparent;">
+
+    <div class="slide-wrapper d-flex" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+      <div class="slide w-100 flex-shrink-0" *ngFor="let promo of promotions">
+        <div class="promo-background">
+          <img src="assets/images/equipment1.jpg" class="bg-image" alt="Background Image 1">
+          <img src="assets/images/equipment2.jpg" class="bg-image" alt="Background Image 2">
+          <img src="assets/images/equipment1.jpg" class="bg-image" alt="Background Image 3">
+          <div class="promo-content">
+            <h2 class="fw-bold mb-3 display-5">{{ promo.category }}</h2>
+            <p class="fs-5 mb-4">{{ promo.description }}</p>
+            <h3 class="fw-bold fs-1 text-warning">{{ promo.discountPercentage }}% de réduction</h3>
+            <p class="text-white-50">Promotion du {{ promo.startDate }} au {{ promo.endDate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button (click)="prevPromotion()"
+            class="btn btn-light position-absolute top-50 translate-middle-y shadow rounded-circle d-flex align-items-center justify-content-center"
+            style="left: 20px; width: 48px; height: 48px; z-index: 10;">
+      ‹
+    </button>
+
+    <button (click)="nextPromotion()"
+            class="btn btn-light position-absolute top-50 translate-middle-y shadow rounded-circle d-flex align-items-center justify-content-center"
+            style="right: 20px; width: 48px; height: 48px; z-index: 10;">
+      ›
+    </button>
+  </div>
+</div>

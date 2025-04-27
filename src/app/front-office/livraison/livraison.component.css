@@ -1,0 +1,56 @@
+/*
+.vh-100 {
+  height: 100vh;
+}
+
+.form-container {
+  background-color: dimgray;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark-input {
+  background-color: #343a40;
+  color: #fff;
+  border: 1px solid #495057;
+}
+
+.dark-input::placeholder {
+  color: #adb5bd;
+}
+
+.dark-input:focus {
+  background-color: #495057;
+  color: #fff;
+  border-color: #6c757d;
+  outline: none;
+}
+
+.list-item {
+  background-color: slategray; !* Light gray for better contrast *!
+  padding: 20px; !* Add padding for spacing *!
+  border-radius: 10px; !* Rounded corners *!
+  margin-bottom: 15px; !* Space between items *!
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); !* Subtle shadow for depth *!
+}
+*/
+
+
+.delivery-card {
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.delivery-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.delivery-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+

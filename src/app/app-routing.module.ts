@@ -14,6 +14,10 @@ import {AuthComponent} from "./back-office/auth/auth.component";
 import {UsersComponent} from "./back-office/users/users.component";
 import { ChatComponent } from './front-office/pages/chat/chat.component';
 import {CategoriesComponent} from "./front-office/categories/categories.component";
+import {LivraisonComponent} from "./front-office/livraison/livraison.component";
+import {PromotionFrontComponent} from "./front-office/promotion-front/promotion-front.component";
+import {ConfirmDeliveryComponent} from "./front-office/livraison/confirm-delivery/confirm-delivery.component";
+import {PromotionComponent} from "./back-office/promotion/promotion.component";
 
 const routes: Routes = [
   {
@@ -40,7 +44,8 @@ const routes: Routes = [
       { path: 'abonnement-management', loadChildren: () => import('./back-office/abonnement-managment/Abonn.module').then(m => m.AbonnModule) },
       { path: 'TrainingSession-management', loadChildren: () => import('./back-office/TrainingSessionMangment/TrainingSession.module').then(m => m.TrainingSessionModule) },
       { path: 'Review-management', loadChildren: () => import('./back-office/ReviewManagment/Review.module').then(m => m.ReviewModule) },
-      { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) }
+      { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
+      { path: 'promotions' , component: PromotionComponent }
     ]
   },
   {
@@ -71,6 +76,10 @@ const routes: Routes = [
       },
       { path: 'trainingSession', component: TrainingSessionComponent },
       { path: 'chat', component: ChatComponent },
+      { path: 'livraison', component: LivraisonComponent },
+      { path: 'promotionsfront', component: PromotionFrontComponent },
+      {path: 'delivery-confirm/:livraisonId',
+        component: ConfirmDeliveryComponent}
     ]
   },
   { path: '**', redirectTo: '/' }

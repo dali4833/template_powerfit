@@ -44,6 +44,11 @@ import { CategoriesComponent } from './front-office/categories/categories.compon
 import { NotificationComponent } from './front-office/notification/notification.component';
 import {CartCounterComponent} from "./front-office/cart-counter/cart-counter.component";
 import {RouterModule} from "@angular/router";
+import { PromotionComponent } from './back-office/promotion/promotion.component';
+import { LivraisonComponent } from './front-office/livraison/livraison.component';
+import { ConfirmDeliveryComponent } from './front-office/livraison/confirm-delivery/confirm-delivery.component';
+import { MapComponent } from './front-office/map/map.component';
+import { PromotionFrontComponent } from './front-office/promotion-front/promotion-front.component';
 
 
 @NgModule({
@@ -72,7 +77,12 @@ import {RouterModule} from "@angular/router";
     ChatComponent,
     CategoriesComponent,
     CartCounterComponent,
-    NotificationComponent
+    NotificationComponent,
+    PromotionComponent,
+    LivraisonComponent,
+    ConfirmDeliveryComponent,
+    MapComponent,
+    PromotionFrontComponent
   ],
   imports: [
     ReactiveFormsModule,
