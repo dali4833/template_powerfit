@@ -1,66 +1,110 @@
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Clubs List</h2>
-        <button class="btn btn-primary" routerLink="/admin/clubs-management/new">Add New Club</button>
-    </div>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Clubs List</h2>
+    <button class="btn btn-primary" routerLink="/admin/clubs-management/new">Add New Club</button>
+  </div>
 
-    <div *ngIf="errorMessage" class="alert alert-danger">
-        {{ errorMessage }}
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
-    
-    <div *ngIf="loading" class="text-center">
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+  </div>
+
+  <table class="table mt-3" *ngIf="!loading && clubs.length > 0">
+    <thead>
+    <tr>
+      <th>capacity</th>
+      <th>Description</th>
+      <th>name</th>
+      <th>Sport</th>
+      <th>status</th>
+      <th>Actions</th>
+      <th>Performance</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let club of clubs">
+      <td>{{club.capacity}}</td>
+      <td>{{club.description}}</td>
+      <td>{{club.name}}</td>
+      <td>{{club.sports?.[0]?.name || 'N/A'}}</td>
+      <td>{{club.status}}</td>
+      <td>
+        <div class="d-flex align-items-center">
+          <select class="form-select me-2" [(ngModel)]="club.selectedSportId">
+            <option [ngValue]="null">Select a sport</option>
+            <option *ngFor="let sport of sports" [ngValue]="sport.id">{{sport.name}}</option>
+          </select>
+          <button class="btn btn-sm btn-success"
+                  (click)="club.id && affecttosport(club.id, club.selectedSportId)"
+                  [disabled]="!club.selectedSportId">
+            Affect To sport
+          </button>
         </div>
+        <button class="btn btn-sm btn-primary me-2" (click)="editClub(club.id!)">Edit</button>
+        <button class="btn btn-sm btn-danger" (click)="club.id && deleteClub(club.id)">Delete</button>
+      </td>
+      <td>
+        <button class="btn btn-sm btn-info" (click)="club.id ? openPerformanceModal(club.id) : null">
+          View Performance
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && clubs.length === 0" class="alert alert-info">
+    No clubs found. Click "Add New club" to create one.
+  </div>
+
+  <!-- Modal pour afficher les performances du club -->
+  <div *ngIf="showPerformanceModal" class="modal fade show d-block" tabindex="-1" role="dialog" aria-labelledby="performanceModalLabel"  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="performanceModalLabel"><i class="bx bx-bar-chart-alt-2"></i> Club Performance</h5>
+          <button type="button" class="close" (click)="closePerformanceModal()" aria-label="Close">
+            <span  >&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            <i class="bx bx-error-circle"></i> {{ errorMessage }}
+          </div>
+
+          <div *ngIf="performanceData">
+            <div class="card shadow-sm mb-4">
+              <div class="card-body">
+                <p class="fw-bold mb-2">
+                  <i class="bx bx-info-circle text-primary"></i> Interpretation :
+                  <span class="text-primary">{{ performanceData.interpretation }}</span>
+                </p>
+                <p class="fw-bold">
+                  <i class="bx bx-refresh text-success"></i> Renewal Rate :
+                  <span class="text-success">{{ performanceData.renewalRate | number:'1.0-2' }} %</span>
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="performanceData.packPerformance" class="card shadow-sm">
+              <div class="card-body">
+                <h5 class="fw-bold mb-3"><i class="bx bx-box"></i> Packs :</h5>
+                <ul class="list-group">
+                  <li *ngFor="let pack of performanceData.packPerformance"
+                      class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">{{ pack.packName }}</span>
+                    <span class="badge bg-primary rounded-pill">{{ pack.subscriptionCount }} subscriptions</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <table class="table mt-3" *ngIf="!loading && clubs.length > 0">
-        <thead>
-            <tr>
-                <th>capacity</th>
-                <th>Description</th>
-                <th>name</th>
-                <th>Sport</th>
-                <th>status</th>
-                <th>Actions</th>
-                <th>Performance</th>
-
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let club of clubs">
-                <td>{{club.capacity}}</td>
-                <td>{{club.description}}</td>
-
-                <td>{{club.name}}</td>
-                <td>{{club.sports?.[0]?.name || 'N/A'}}</td>
-                <td>{{club.status}}</td>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <select class="form-select me-2" [(ngModel)]="club.selectedSportId">
-                            <option [ngValue]="null">Select a sport</option>
-                            <option *ngFor="let sport of sports" [ngValue]="sport.id">{{sport.name}}</option>
-                        </select>
-                        <button class="btn btn-sm btn-success" 
-                                (click)="club.id && affecttosport(club.id, club.selectedSportId)"
-                                [disabled]="!club.selectedSportId">
-                            Affect To sport
-                        </button>
-                    </div>
-                    <button class="btn btn-sm btn-primary me-2" (click)="editClub(club.id!)">Edit</button>
-                    <button class="btn btn-sm btn-danger" (click)="club.id && deleteClub(club.id)">Delete</button>
- 
-                </td>
-                <td>
-                    <button class="btn btn-sm btn-info" [routerLink]="['/performance', club.id]">
-                        View Performance
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div *ngIf="!loading && clubs.length === 0" class="alert alert-info">
-        No clubs found. Click "Add New club" to create one.
-    </div>
+  </div>
 </div>

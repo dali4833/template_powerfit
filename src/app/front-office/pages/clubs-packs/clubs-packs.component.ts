@@ -3,6 +3,10 @@ import { AbonnementService } from 'src/app/back-office/abonnement-managment/serv
 import { AbonnementrequestsService } from 'src/app/back-office/abonnementrequests-mangment/services/Abonnementrequests.service';
 import { ClubService } from 'src/app/back-office/clubs-managment/services/club.service';
 import { PackService } from 'src/app/back-office/packs-managment/services/pack.service';
+import {TrophyService} from "../../../back-office/trophiesManagement/services/Trophy.service";
+import { ToastrService } from 'ngx-toastr';
+import { NgZone } from '@angular/core';
+
 declare var bootstrap: any;
 
 interface Pack {
@@ -41,11 +45,15 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   private actionModal: any;
 
   recommendedClubs: any[] = [];
+  private pointsRequiredForTrophy: any;
 
   constructor(
     private ClubService: ClubService,
     private AbonnementRequest: AbonnementrequestsService,
-    private AbonnementService: AbonnementService
+    private AbonnementService: AbonnementService,
+    private trophyService: TrophyService,
+    private toastr: ToastrService,
+    private ngZone: NgZone
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +62,9 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
     const today = new Date();
     this.startDate = today.toISOString().split('T')[0];
     this.endDate = today.toISOString().split('T')[0];
+    this.ngZone.run(() => {
+      this.toastr.success('Test dans NgZone', 'Succès');
+    });
   }
 
   ngOnDestroy(): void {
@@ -65,6 +76,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   }
 
   loadClubs(): void {
+    this.toastr.info('Ceci est une notification d\'information.', 'Information');
     this.loading = true;
     this.ClubService.getClubs().subscribe({
       next: (clubs) => {
@@ -238,11 +250,11 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
     }
 
 // Calculer la nouvelle date de fin en fonction de la durée du pack
-const newEndDate = new Date();
-newEndDate.setDate(newEndDate.getDate() + this.selectedAbonnementPackDuration);  // Ajouter la durée du pack
+    const newEndDate = new Date();
+    newEndDate.setDate(newEndDate.getDate() + this.selectedAbonnementPackDuration);  // Ajouter la durée du pack
 
 // Formater la nouvelle date au format YYYY-MM-DD
-this.newEndDate = newEndDate.toISOString().split('T')[0];  // Assurez-vous que c'est une chaîne
+    this.newEndDate = newEndDate.toISOString().split('T')[0];  // Assurez-vous que c'est une chaîne
 
 
     const abonnementData = {
@@ -253,6 +265,8 @@ this.newEndDate = newEndDate.toISOString().split('T')[0];  // Assurez-vous que c
     this.AbonnementService.renewAbonnement(this.selectedAbonnementId, this.selectedAbonnementPackDuration).subscribe({
       next: (response) => {
         console.log('Abonnement renouvelé:', response);
+        this.assignTrophy();
+
         this.loadClubs();
         this.closeModals();
       },
@@ -277,4 +291,32 @@ this.newEndDate = newEndDate.toISOString().split('T')[0];  // Assurez-vous que c
     const today = new Date();
     return endDate < today;
   }
+
+  // assignTrophy() {
+  //   this.trophyService.assignTrophyToUser().subscribe({
+  //     next: (response) => {
+  //       console.log('Trophée attribué:', response);
+  //       this.toastr.success('Félicitations! Un trophée a été attribué pour le renouvellement de votre abonnement.', 'Succès');
+  //     },
+  //     error: (error) => {
+  //       console.error('Erreur lors de l\'attribution du trophée:', error);
+  //       this.toastr.error('Une erreur est survenue lors de l\'attribution du trophée.', 'Erreur');
+  //     }
+  //   });
+  // }
+
+  assignTrophy() {
+    this.trophyService.assignTrophyToUser().subscribe({
+      next: (response) => {
+        console.log('Trophy assigned:', response);
+        alert('Congratulations! A trophy has been awarded for your subscription renewal.');
+      },
+      error: (error) => {
+        console.error('Error while assigning the trophy:', error);
+        alert('❌ An error occurred while assigning the trophy.');
+      }
+    });
+  }
+
+
 }

@@ -89,7 +89,7 @@ export class TrophyService {
     );
   }
 
-  //get valid user token 
+  //get valid user token
   private async getValidUserToken(): Promise<string> {
     if (this.cachedToken) {
       return this.cachedToken;
@@ -122,8 +122,22 @@ export class TrophyService {
       )
     );
   }
-
-
+  assignTrophyToUser(): Observable<any> {
+    return from(this.getValidUserToken()).pipe(
+      switchMap(token =>
+        this.http.post<any>(
+          `http://localhost:8089/trophies/assignTrophy`,
+          {}, // Body vide
+          {
+            headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            })
+          }
+        )
+      )
+    );
+  }
 
 
 

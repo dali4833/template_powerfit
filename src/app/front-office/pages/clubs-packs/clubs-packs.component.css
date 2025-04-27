@@ -1037,3 +1037,69 @@
   box-shadow: 0 4px 15px rgba(243, 156, 18, 0.25);
   background: linear-gradient(45deg, #f39c12 0%, #e67e22 100%);
 }
+
+.toast-container {
+  position: fixed;
+  z-index: 999999;
+}
+
+.toast-top-right {
+  top: 12px;
+  right: 12px;
+}
+
+.toast-success {
+  background-color: #51a351;
+}
+
+.trophy-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  z-index: 1000;
+  animation: slideIn 0.5s ease-out;
+  border-left: 4px solid #ffc107;
+  max-width: 350px;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.trophy-notification-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.trophy-icon {
+  color: #ffc107;
+  font-size: 2rem;
+}
+
+.trophy-message h4 {
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.trophy-message p {
+  margin: 0;
+  color: #666;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.close-btn:hover {
+  color: #333;
+}

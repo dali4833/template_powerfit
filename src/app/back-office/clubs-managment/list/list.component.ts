@@ -24,7 +24,7 @@ export class ListComponent implements OnInit {
   errorMessage: string = '';
   loading: boolean = false;
   performanceData: any = null;
-  showPerformance: boolean = false; 
+  showPerformance: boolean = false;
 
 
   constructor(
@@ -54,7 +54,7 @@ export class ListComponent implements OnInit {
       }
     });
   }
- 
+
   viewPerformance(clubId: number): void {
     console.log('Sending clubId:', clubId);
     this.abonnementService.analyzeClubPerformance(clubId).subscribe({
@@ -68,7 +68,7 @@ export class ListComponent implements OnInit {
       }
     });
   }
-  
+
 
   loadSports(): void {
     this.sportservice.getSports().subscribe({
@@ -101,7 +101,7 @@ export class ListComponent implements OnInit {
       this.errorMessage = 'Please select a sport';
       return;
     }
-    
+
     this.clubservice.affecterSportToClub(clubId, sportId).subscribe({
       next: () => {
         this.loadClubs();
@@ -117,4 +117,29 @@ export class ListComponent implements OnInit {
   editClub(id: number): void {
     this.router.navigate(['/admin/clubs-management', id, 'edit']);
   }
+
+  selectedClubId: number | null = null;
+  showPerformanceModal: boolean = false;
+
+  openPerformanceModal(clubId: number) {
+    this.selectedClubId = clubId;
+    this.showPerformanceModal = true;
+
+    // Appel du service avec subscribe() corrigé
+    this.abonnementService.analyzeClubPerformance(clubId).subscribe(
+      (data) => {
+        this.performanceData = data;
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des performances', error);
+      }
+    );
+  }
+
+  closePerformanceModal() {
+    this.showPerformanceModal = false;
+    this.performanceData = null;
+  }
+
+
 }

@@ -7,7 +7,7 @@
     <div *ngIf="errorMessage" class="alert alert-danger">
         {{ errorMessage }}
     </div>
-    
+
     <div *ngIf="loading" class="text-center">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -31,9 +31,15 @@
                 <td>
                     <button class="btn btn-sm btn-primary me-2" (click)="editPack(pack.id!)">Edit</button>
                     <button class="btn btn-sm btn-danger me-2" (click)="pack.id && deletePack(pack.id)">Delete</button>
+                  <div *ngIf="pack.club; else affectButton">
+                    <span class="badge bg-success">Affected to {{ pack.club.name }}</span>
+                  </div>
+                  <ng-template #affectButton>
                     <button class="btn btn-sm btn-info" (click)="$event.preventDefault(); openAffectModal(pack)">
-                        Affect to Club
+                      Affect to Club
                     </button>
+                  </ng-template>
+
                 </td>
             </tr>
         </tbody>
@@ -55,7 +61,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
-                    <button type="button" class="btn btn-primary" (click)="confirmAffectToClub()" 
+                    <button type="button" class="btn btn-primary" (click)="confirmAffectToClub()"
                             [disabled]="!selectedClubId">Confirm</button>
                 </div>
             </div>

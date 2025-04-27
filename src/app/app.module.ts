@@ -29,6 +29,8 @@ import { UsersComponent } from './back-office/users/users.component';
 import { TrophiesComponent } from './front-office/pages/trophies/trophies.component';
 import { clubreqModule } from './front-office/pages/clubcreation-form/clubreq.module';
 import { ClubPerformanceComponent } from './back-office/clubs-managment/club-performance/club-performance.component';
+import {BrowserAnimationsModule, provideAnimations} from "@angular/platform-browser/animations";
+import {provideToastr, ToastrModule} from 'ngx-toastr';
 
 
 @NgModule({
@@ -64,10 +66,19 @@ import { ClubPerformanceComponent } from './back-office/clubs-managment/club-per
     BrowserModule,
     AppRoutingModule,
     AppRoutingModule ,
-    FormsModule, 
-    clubreqModule
+    FormsModule,
+    clubreqModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right', // Positionner en bas à droite
+      timeOut: 3000, // Durée de la notification (en ms)
+      progressBar: true, // Ajouter une barre de progression
+      closeButton: true, // Ajouter un bouton de fermeture
+      preventDuplicates: true // Empêcher l'affichage de notifications en double
+    })
   ],
-  providers: [],
+  providers: [ provideAnimations(), // required animations providers
+    provideToastr(),],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
