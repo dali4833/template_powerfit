@@ -23,7 +23,7 @@ login(user: any): Observable<any> {
       console.log('JWT Token saved:', token);
     })
   );
-}
+} 
 
 
   register(user: any): Observable<any> {

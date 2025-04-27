@@ -48,22 +48,23 @@ const routes: Routes = [
       { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) }
     ]
   },
-  {
-    path: 'nutrition',
-    component: NutritionComponent,
-    children: [
-      { path: '', redirectTo: 'meal-plan', pathMatch: 'full' },
-
-      { path: 'meal-plan', component: MealPlanComponent},
-      { path: 'diet-program', component: DietProgramComponent },
-      { path: 'recipe', component: RecipeComponent } 
-    ]
-  },
+  
 { 
 
     path: '',
     component: AllTemplateFrontComponentComponent,
     children: [
+      {
+        path: 'nutrition',
+        component: NutritionComponent,
+        children: [
+          { path: '', redirectTo: 'meal-plan', pathMatch: 'full' },
+    
+          { path: 'meal-plan', component: MealPlanComponent},
+          { path: 'diet-program', component: DietProgramComponent },
+          { path: 'recipe', component: RecipeComponent } 
+        ]
+      },
       { path: 'login', component: LoginComponent },
       { path: 'userprofile', component: UserprofileComponent },
       { path: 'register', component: RegisterComponent },

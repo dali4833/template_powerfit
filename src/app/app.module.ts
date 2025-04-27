@@ -45,7 +45,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from "@danielmoncada/angular-datetime-picker";
-//import { ChatComponent } from './front-office/pages/chat/chat.component';
+import { ChatComponent } from './front-office/pages/chat/chat.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 
@@ -76,7 +76,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MealPlanComponent,
     DietProgramComponent,
     TrainingSessionComponent,
-    //ChatComponent
+    ChatComponent
   ],
   imports: [
     ReactiveFormsModule,

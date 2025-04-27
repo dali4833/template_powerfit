@@ -6,6 +6,9 @@ export class MealPlan {
   dayOfWeek: string;
   description: string;
   userId: number;
+  userEmail?: string;      
+  mealType?: string;        
+  mealOrder?: number;
   dietProgramId?: number; 
   dietProgram?: DietProgram;
   recipe?: Recipe;

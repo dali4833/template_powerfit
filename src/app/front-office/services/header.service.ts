@@ -11,7 +11,7 @@ export class HeaderService {
   getHeader() {
     const auth_token =
       localStorage.getItem('token') ||
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3Nub3NAZ21haWwuY29tIiwiaWF0IjoxNzQ1NTIwOTgyLCJleHAiOjE3NDU2Mjg5ODJ9.A_Pjcm6F42qk8bf9p3uQarDZRDc6fh8TT2OEw-Zzn4s';
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3Nub3NAZ21haWwuY29tIiwiaWF0IjoxNzQ1NTMwMDg4LCJleHAiOjE3NDU2MzgwODh9.1HIgoARMDN-N8aPxpwS7E0P6kNsjnKRDsmH1BuiU1Jc';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${auth_token}`,

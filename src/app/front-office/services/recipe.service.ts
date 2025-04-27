@@ -9,7 +9,7 @@ import { WeeklyAnalytics } from 'src/app/front-office/nutrition/models/WeeklyAna
   providedIn: 'root'
 })
 export class RecipeService {
-  private apiUrl = 'http://localhost:8089/Powfit/recipe';
+  private apiUrl = 'http://localhost:8089/recipe';
 
   constructor(private http: HttpClient, private headerService: HeaderService) {}
 

@@ -44,7 +44,7 @@ export class RegisterComponent {
       email,
       password,
       roles: 'ROLE_USER',
-      user_type: 'UserInfo'
+      user_type: 'NUTRITIONIST'
     };
     this.authService.register(user).subscribe({
       next: (response: any) => {

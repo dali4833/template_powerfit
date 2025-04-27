@@ -6,9 +6,8 @@ import { SuggestedRecipe } from '../models/SuggestedRecipes';
 import { SuggestedRecipesService } from '../../services/suggested-recipes.service';
 import { HeaderService } from '../../services/header.service';
 import { DomSanitizer } from '@angular/platform-browser';
-
-
-
+import { NutritionService } from '../../services/nutrition.service';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -16,6 +15,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './recipe.component.html',
   styleUrls: ['./recipe.component.css']
 })
+
 export class RecipeComponent implements OnInit {
  
   recipes: Recipe[] = [];
@@ -23,6 +23,13 @@ export class RecipeComponent implements OnInit {
   filteredRecipes: Recipe[] = [];
    searchTerm: string = '';
    visibleRecipesCount = 3;
+   nutritionRecipes: any[] = [];
+   nutritionPage = 4;
+   nutritionPageSize = 10;
+   nutritionDetail: any=null; 
+   searchNutritionTerm = ''; 
+   roles :any;
+   searchTermNutrition: string = '';
 
 
 
@@ -30,12 +37,15 @@ export class RecipeComponent implements OnInit {
     private FavoriteRecipeService: FavoriteRecipeService,
      private suggestedRecipeService: SuggestedRecipesService,
      private headerService: HeaderService,
-     private sanitizer: DomSanitizer
+     private sanitizer: DomSanitizer,
+     private nutritionService: NutritionService,
+     private authService:AuthService
   ) {}
 
   // 🧺 Panier par recette : clé = idRecipe, valeur = liste d'ingrédients personnalisés
   customIngredientsMap: { [recipeId: number]: string[] } = {};
   newIngredientsMap: { [recipeId: number]: string } = {};
+
 
  
 
@@ -43,9 +53,82 @@ export class RecipeComponent implements OnInit {
     this.getAll();
     this.getSuggestedRecipes();
     this.filteredRecipes = this.recipes;
+    this.getCurrentUser();
+    
 
+  
+  }
+  //laffichage formulaire selon role nutritionist 
+getCurrentUser(){
+  this.authService.getCurrentUser().subscribe((res)=>{
+    console.log(res);
+    this.roles = res?.user_type;
+  })
+}
+  showNutritionModal = false;
+  onSearchNutritionRecipe(term: string) {
+    if (term.trim() !== '') {
+      this.getNutritionRecipes(term.trim());
+    } else {
+      this.nutritionRecipes = []; // Vide si rien tapé
+    }
+  }
+  //pour l'affichage des recette de l api 
+  hoverEffect(event: MouseEvent): void {
+    const image = event.target as HTMLImageElement;
+    image.style.transform = 'scale(1.05)';
   }
   
+  removeHoverEffect(event: MouseEvent): void {
+    const image = event.target as HTMLImageElement;
+    image.style.transform = 'scale(1)';
+  }
+  
+
+  openNutritionModal(id: number) {
+    this.nutritionService.getRecipeDetails(id).subscribe(
+      detail => {
+        this.nutritionDetail = detail;
+        this.showNutritionModal = true;  // déclenche l’affichage du modal
+      },
+      err => console.error('Erreur détails nutrition:', err)
+    );
+  }
+
+  closeNutritionModal() {
+    this.showNutritionModal = false;
+    this.nutritionDetail = null;
+  }
+
+  onSearchNutrition(term: string) {
+    if (!term.trim()) {
+      this.nutritionRecipes = [];
+      return;
+    }
+    this.nutritionService.getRecipes(term.trim())
+      .subscribe(data => {
+        this.nutritionRecipes = data.results;
+        this.nutritionPage = 1;  // reset pagination
+      });
+  }
+  get paginatedNutritionRecipes() {
+    const start = (this.nutritionPage - 1) * this.nutritionPageSize;
+    return this.nutritionRecipes.slice(start, start + this.nutritionPageSize);
+  }
+
+  loadMoreNutrition() {
+    if (this.nutritionPage * this.nutritionPageSize < this.nutritionRecipes.length) {
+      this.nutritionPage++;
+    }
+  }
+
+  // Méthode pour récupérer les recettes nutritionnelles
+  getNutritionRecipes(goal: string): void {
+    this.nutritionService.getRecipes(goal).subscribe((data) => {
+      this.nutritionRecipes = data.results; // Récupérer les recettes à partir de la réponse
+      console.log('Nutrition Recipes:', this.nutritionRecipes);
+    });
+  }
 
   getAll() {
     this.recipeService.getAll().subscribe((data) => {
@@ -166,25 +249,13 @@ changePage(page: number) {
   }
 }
 onSearch(term: string): void {
-  if (!term || term.trim() === '') {
-    this.filteredRecipes = this.recipes;
-  } else {
-    const lowerTerm = term.toLowerCase();
-    this.filteredRecipes = this.recipes.filter(recipe =>
-      recipe.name.toLowerCase().includes(lowerTerm) ||
-      recipe.ingredients.toLowerCase().includes(lowerTerm) ||
-      recipe.mealType.toLowerCase().includes(lowerTerm)  // Ajout du filtrage par mealType
-    );
-    this.visibleRecipesCount = 3;
-  }
+  this.filteredRecipes = this.recipes.filter(recipe =>
+    recipe.name.toLowerCase().includes(term.toLowerCase()) ||
+    recipe.ingredients.toLowerCase().includes(term.toLowerCase()) ||
+    recipe.mealType.toLowerCase().includes(term.toLowerCase())
+  );
+  this.currentPage = 1; // Réinitialiser la page à 1 après chaque recherche
 }
-
-
-
-  
-  
-
-
 
 
 }

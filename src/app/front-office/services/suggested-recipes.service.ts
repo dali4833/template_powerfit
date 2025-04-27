@@ -14,7 +14,7 @@ export class SuggestedRecipesService {
    ) { }
 
   getSuggestedRecipes(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:8089/Powfit/recipe/suggestedrecipes',{
+    return this.http.get<any[]>('http://localhost:8089/recipe/suggestedrecipes',{
       headers: this.headerService.getHeader(),
     });
   }

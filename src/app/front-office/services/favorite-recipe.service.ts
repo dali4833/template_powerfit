@@ -7,7 +7,7 @@ import { HeaderService } from './header.service';
 })
 export class FavoriteRecipeService {
 
-  private baseUrl = 'http://localhost:8089/Powfit/recipe/favorites';  
+  private baseUrl = 'http://localhost:8089/recipe/favorites';  
 
   constructor(private http: HttpClient, private headerService: HeaderService) {}
 

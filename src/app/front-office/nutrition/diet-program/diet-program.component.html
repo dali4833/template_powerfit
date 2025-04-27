@@ -1,109 +1,231 @@
-<div class="container py-4">
-    <h2 class="mb-4 text-primary">Diet Program Management</h2>
-  
-    <!-- Form -->
-    <form (ngSubmit)="updateDietProgram()" #form="ngForm" class="card p-4 shadow-sm mb-4">
-        <input type="hidden" [(ngModel)]="newDietProgram.idDiet" name="idDiet" />
+<div class="diet-container">
+  <!-- Nutritionist Form Section -->
+  <div *ngIf="roles === 'NUTRITIONIST'" class="nutritionist-form-section">
+    <div class="form-card">
+      <h3 class="form-title">
+        <i class="bi bi-clipboard2-pulse me-2"></i> 
+        {{ newDietProgram.idDiet ? 'Update Diet Program' : 'Create New Diet Program' }}
+      </h3>
       
+      <form #form="ngForm" (submit)="false" class="diet-form">
+        <input type="hidden" [(ngModel)]="newDietProgram.idDiet" name="idDiet" />
+
         <div class="row g-3">
           <div class="col-md-6">
-            <label for="name" class="form-label">Program Name</label>
-            <input
-              type="text"
-              id="name"
-              class="form-control"
-              [(ngModel)]="newDietProgram.name"
-              name="name"
-              placeholder="Enter program name"
-              required
-            />
-            <div class="col-md-6">
-                <label for="idDiet" class="form-label">ID (debug)</label>
-                <input type="text" id="idDiet" class="form-control" [(ngModel)]="newDietProgram.idDiet" name="idDiet" disabled>
-              </div>
-              
+            <label for="name" class="form-label">
+              <i class="bi bi-card-heading me-1"></i> Program Name
+            </label>
+            <input type="text" id="name" class="form-control" 
+                   [(ngModel)]="newDietProgram.name" name="name" 
+                   placeholder="e.g. Keto Weight Loss Plan" required />
           </div>
-      
+
           <div class="col-md-6">
-            <label for="description" class="form-label">Description</label>
-            <input
-              type="text"
-              id="description"
-              class="form-control"
-              [(ngModel)]="newDietProgram.description"
-              name="description"
-              placeholder="Enter description"
-              required
-            />
+            <label for="description" class="form-label">
+              <i class="bi bi-text-paragraph me-1"></i> Description
+            </label>
+            <textarea id="description" class="form-control" rows="2"
+                      [(ngModel)]="newDietProgram.description" name="description"
+                      placeholder="Brief description of the program" required></textarea>
           </div>
-      
+
           <div class="col-md-4">
-            <label for="calories" class="form-label">Calories</label>
-            <input
-              type="number"
-              id="calories"
-              class="form-control"
-              [(ngModel)]="newDietProgram.calories"
-              name="calories"
-              placeholder="e.g. 2000"
-              required
-            />
+            <label for="calories" class="form-label">
+              <i class="bi bi-fire me-1"></i> Daily Calories
+            </label>
+            <div class="input-group">
+              <input type="number" id="calories" class="form-control" 
+                     [(ngModel)]="newDietProgram.calories" name="calories" 
+                     placeholder="e.g. 2000" required />
+              <span class="input-group-text">kcal</span>
+            </div>
           </div>
-      
+
           <div class="col-md-4">
-            <label for="duration" class="form-label">Duration (days)</label>
-            <input
-              type="number"
-              id="duration"
-              class="form-control"
-              [(ngModel)]="newDietProgram.duration"
-              name="duration"
-              placeholder="e.g. 30"
-              required
-            />
+            <label for="duration" class="form-label">
+              <i class="bi bi-calendar-range me-1"></i> Duration
+            </label>
+            <div class="input-group">
+              <input type="number" id="duration" class="form-control" 
+                     [(ngModel)]="newDietProgram.duration" name="duration" 
+                     placeholder="e.g. 3" required />
+              <span class="input-group-text">months</span>
+            </div>
           </div>
-      
-          <div class="col-md-4 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">
-              <i class="bi bi-arrow-repeat me-2"></i>Update Program
+
+          <div class="col-md-4">
+            <label for="targetGoal" class="form-label">
+              <i class="bi bi-bullseye me-1"></i> Target Goal
+            </label>
+            <select id="targetGoal" class="form-select" 
+                    [(ngModel)]="newDietProgram.targetGoal" name="targetGoal" required>
+              <option value="" disabled selected>Select a goal</option>
+              <option *ngFor="let goal of targetGoals" [value]="goal">
+                {{ formatGoal(goal) }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-12 form-actions">
+            <button type="button" class="btn btn-success" (click)="addDietProgram()" 
+                    [disabled]="form.invalid">
+              <i class="bi bi-plus-circle me-2"></i> 
+              {{ newDietProgram.idDiet ? 'Save Changes' : 'Add Program' }}
+            </button>
+            
+            <button *ngIf="newDietProgram.idDiet" type="button" 
+                    class="btn btn-outline-secondary" (click)="resetForm()">
+              <i class="bi bi-x-circle me-2"></i> Cancel
+            </button>
+            
+            <button *ngIf="!newDietProgram.idDiet" type="button" 
+                    class="btn btn-outline-secondary" (click)="resetForm()">
+              <i class="bi bi-arrow-counterclockwise me-2"></i> Reset
             </button>
           </div>
         </div>
       </form>
-      
-  
-    <!-- Table of diet programs -->
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover shadow-sm">
-        <thead class="table-light">
-          <tr>
-           
-            <th>Name</th>
-            <th>Description</th>
-            <th>Calories</th>
-            <th>Duration</th>
-            <th>Creation Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let diet of dietPrograms">
-            
-            <td>{{ diet.name }}</td>
-            <td>{{ diet.description }}</td>
-            <td>{{ diet.calories }}</td>
-            <td>{{ diet.duration }} days</td>
-            <td>{{ diet.creationDate || 'N/A' }}</td>
-            <td>
-              <button class="btn btn-sm btn-primary me-2" (click)="selectDietProgramForEdit(diet)">Edit</button>
-              <button class="btn btn-sm btn-danger" (click)="deleteDietProgram(diet.idDiet)">Delete</button>
-            </td>
-          </tr>
-          <tr *ngIf="dietPrograms.length === 0">
-            <td colspan="7" class="text-center text-muted">No diet programs found.</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
-  
+
+  <!-- Goal Recommendation Section -->
+  <div class="recommendation-section">
+    <div class="recommendation-card">
+      <h3 class="section-title">
+        <i class="bi bi-lightbulb me-2"></i> Personalized Recommendations
+      </h3>
+      <div class="goal-selector">
+        <label for="goalSelect">
+          <i class="bi bi-arrow-right-circle me-1"></i> Select your fitness goal:
+        </label>
+        <select id="goalSelect" class="form-select" [(ngModel)]="selectedGoal" (change)="onSelectGoal()">
+          <option value="" disabled selected>Choose a goal...</option>
+          <option *ngFor="let goal of targetGoals" [value]="goal">
+            {{ formatGoal(goal) }}
+          </option>
+        </select>
+      </div>
+      
+      <div *ngIf="recommendation" class="recommendation-result mt-3 p-3">
+        <h4><i class="bi bi-stars me-2"></i> Recommended Plan:</h4>
+        <div class="recommendation-content">
+          <div *ngIf="recommendation.nutritionAdvice">
+            <h5>Nutrition Advice:</h5>
+            <p>{{ recommendation.nutritionAdvice }}</p>
+          </div>
+          <div *ngIf="recommendation.exerciseRecommendations">
+            <h5>Exercise Recommendations:</h5>
+            <p>{{ recommendation.exerciseRecommendations }}</p>
+          </div>
+          <div *ngIf="recommendation.sampleMealPlan">
+            <h5>Sample Meal Plan:</h5>
+            <pre>{{ recommendation.sampleMealPlan }}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Diet Programs List Section -->
+  <div class="programs-list-section">
+    <h2 class="section-title">
+      <i class="bi bi-list-check me-2"></i> Available Diet Programs
+    </h2>
+    
+    <div *ngIf="isLoading" class="loading-spinner">
+      <div class="spinner-grow text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p>Loading diet programs...</p>
+    </div>
+
+    <div *ngIf="!isLoading && dietPrograms.length === 0" class="no-programs">
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle-fill me-2"></i>
+        No diet programs available yet. Check back later!
+      </div>
+    </div>
+
+    <div class="programs-grid">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col" *ngFor="let program of paginatedPrograms()">
+          <div class="program-card">
+            <div class="card-header">
+              <h5 class="program-name">{{ program.name }}</h5>
+              <span class="program-goal-badge" [ngClass]="{
+                'weight-loss': program.targetGoal === 'WEIGHT_LOSS',
+                'maintenance': program.targetGoal === 'MAINTENANCE',
+                'muscle-gain': program.targetGoal === 'MUSCLE_GAIN',
+                'weight-gain': program.targetGoal === 'WEIGHT_GAIN'
+              }">
+                {{ formatGoal(program.targetGoal) }}
+              </span>
+            </div>
+            <div class="card-body">
+              <p class="program-description">{{ program.description }}</p>
+              
+              <div class="program-stats">
+                <div class="stat-item">
+                  <i class="bi bi-fire stat-icon"></i>
+                  <span class="stat-value">{{ program.calories }} kcal/day</span>
+                </div>
+                <div class="stat-item">
+                  <i class="bi bi-calendar-check stat-icon"></i>
+                  <span class="stat-value">{{ program.duration }} months</span>
+                </div>
+              </div>
+              
+              <div class="program-meta">
+                <small class="text-muted">
+                  <i class="bi bi-clock-history me-1"></i>
+                  Created {{ program.creationDate | date:'mediumDate' }}
+                </small>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-pdf" (click)="printProgram(program)">
+                <i class="bi bi-file-earmark-pdf"></i> PDF
+              </button>
+              
+              <div *ngIf="roles === 'NUTRITIONIST'" class="nutritionist-actions">
+                <button class="btn btn-edit" (click)="confirmUpdate(program)">
+                  <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button class="btn btn-delete" (click)="deleteDietProgram(program.idDiet)">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+<!-- Pagination -->
+<div *ngIf="totalPages > 1" class="pagination-container">
+  <nav aria-label="Diet programs pagination">
+    <ul class="pagination">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="prevPage()" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      
+      <li *ngFor="let page of getPagesArray(); let i = index" 
+          class="page-item" [class.active]="currentPage === i + 1">
+        <a class="page-link" (click)="goToPage(i + 1)">{{ i + 1 }}</a>
+      </li>
+      
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="nextPage()" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="pagination-info">
+    Showing {{ getFirstItemIndex() }} - {{ getLastItemIndex() }} of {{ dietPrograms.length }} programs
+  </div>
+</div>
+</div>
