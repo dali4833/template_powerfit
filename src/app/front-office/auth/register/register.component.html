@@ -69,7 +69,8 @@
             <div class="text-center mb-7">
               <h3 class="text-body-highlight">Sign Up</h3>
               <p class="text-body-tertiary">Create your account today</p>
-            </div><button class="btn btn-phoenix-secondary w-100 mb-3"><span class="fab fa-google text-danger me-2 fs-9"></span>Sign up with google</button><button class="btn btn-phoenix-secondary w-100"><span class="fab fa-facebook text-primary me-2 fs-9"></span>Sign up with facebook</button>
+            </div>
+            <!-- <button class="btn btn-phoenix-secondary w-100 mb-3"><span class="fab fa-google text-danger me-2 fs-9"></span>Sign up with google</button><button class="btn btn-phoenix-secondary w-100"><span class="fab fa-facebook text-primary me-2 fs-9"></span>Sign up with facebook</button> -->
             <div class="position-relative mt-4">
               <hr class="bg-body-secondary" />
               <div class="divider-content-center">or use email</div>
@@ -89,6 +90,10 @@
                   <div class="col-sm-6">
                     <label class="form-label" for="password">Password</label>
                     <input class="form-control" id="password" formControlName="password" type="password" placeholder="Password" />
+                    <div *ngIf="registerForm.get('password')?.errors?.['minlength'] && registerForm.get('password')?.touched" class="text-danger">
+                      Password must be at least 8 characters long.
+                    </div>
+                    
                   </div>
                   <div class="col-sm-6">
                     <label class="form-label" for="confirmPassword">Confirm Password</label>

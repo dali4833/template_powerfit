@@ -14,54 +14,52 @@ import { ForgotPasswordComponent } from './front-office/auth/forgot-password/for
 import { RegisterOwnerComponent } from './front-office/auth/register-owner/register-owner.component';
 import { AuthComponent } from './back-office/auth/auth.component';
 import { UsersComponent } from './back-office/users/users.component';
+import { RegisterNutrusionistComponent } from './front-office/auth/register-nutrusionist/register-nutrusionist.component';
+import { AuthGuard } from './guards/auth.guard';
+
 
 const routes: Routes = [
-
-
-  { path: 'admin/auth', component: AuthComponent }, // Display StoreComponent when /store
-
-  { path: 'dashboard', component: AllTemplateBackComponentComponent, children: [ 
-
-
-      {path: 'users', component: UsersComponent}, // Users listing
-]},
-
-
-
-
-
-
-
-
-
-
-// redirect to home if no path is wrong 
-
-
-  { path: '', component: AllTemplateFrontComponentComponent, children: [ // Home route
-  { path: 'login', component: LoginComponent },
-  { path: 'userprofile', component: UserprofileComponent },
-
-  { path: 'register', component: RegisterComponent },
-  { path: 'register-club', component: RegisterOwnerComponent },
-
-  { path: 'reset-password', component: ResetPasswordComponent },
-  {path: 'forgot-password', component: ForgotPasswordComponent},
-
-  {
-    path: 'store',
-    component: StoreComponent,
-    children: [
-      { path: '', component: StoreComponent }, // Display StoreComponent when /store
-      { path: 'products', component: ProductsComponent }, // Products listing
-      { path: 'products/:id', component: ProductDetailComponent } // Product details
-
+  { path: 'admin/auth', component: AuthComponent },
+  { 
+    path: 'dashboard', 
+    component: AllTemplateBackComponentComponent,
+    canActivate: [AuthGuard], // 🔒 Protect Dashboard
+    children: [ 
+      { path: 'users', component: UsersComponent, canActivate: [AuthGuard] }, // 🔒 Protect Users
     ]
-  },]
-},
-{ path: '**', redirectTo: '/' },
+  },
+  { 
+    path: '', 
+    component: AllTemplateFrontComponentComponent,
+    children: [
+      { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
+      { path: 'register-club', component: RegisterOwnerComponent },
+      { path: 'register-nutrisonist', component: RegisterNutrusionistComponent },
+      { path: 'reset-password', component: ResetPasswordComponent },
+      { path: 'forgot-password', component: ForgotPasswordComponent },
 
+      { 
+        path: 'userprofile', 
+        component: UserprofileComponent, 
+        canActivate: [AuthGuard] // 🔒 Protect Profile
+      },
+
+      {
+        path: 'store',
+        component: StoreComponent,
+        canActivate: [AuthGuard], // 🔒 Protect Store
+        children: [
+          { path: '', component: StoreComponent },
+          { path: 'products', component: ProductsComponent },
+          { path: 'products/:id', component: ProductDetailComponent }
+        ]
+      },
+    ]
+  },
+  { path: '**', redirectTo: '/' }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

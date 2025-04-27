@@ -151,15 +151,34 @@
         
         <!-- register as a club owner -->
 
-        <li data-position="right" class="nav-item nav-item-id-101 nav-item-level-1 nav-item-default nav-item-current nav-item-active no-dropdown-icon"><!--menu link starts-->
-          <a routerLink="/register" title="signup" class="as-menu-item nav-link-item-id-126 nav-link megamenu-item-link item-link-component item-level-1" data-drop-action="hover">
-     <span class="nav-title">
-                                    sign up as  club                                  </span>
+        <li data-position="right" class="nav-item nav-item-id-101 nav-item-level-1 nav-item-default nav-item-current nav-item-active no-dropdown-icon">
+          <!-- Menu link starts -->
+          <a href="#" title="signup" class="as-menu-item nav-link-item-id-126 nav-link megamenu-item-link item-link-component item-level-1" data-drop-action="hover" id="signupDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="nav-title">
+              Sign Up
+            </span>
           </a>
-
-
-  
-          <!--menu link ends--></li>
+        
+          <!-- Dropdown Menu -->
+          <ul class="dropdown-menu" aria-labelledby="signupDropdown">
+            <li>
+              <a class="dropdown-item" routerLink="/register" title="Sign up as User">
+                Sign up as a User
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/register-club" title="Sign up as Club">
+                Sign up as a Club
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/register-nutrisonist" title="Sign up as Nutritionist">
+                Sign up as a Nutritionist
+              </a>
+            </li>
+          </ul>
+        </li>
+        
         
         
         <li data-position="right" class="nav-item nav-item-id-126 nav-item-level-1 nav-item-deeper nav-item-parent has-megamenu nav-item-dropdown no-dropdown-icon"><!--menu link starts-->
