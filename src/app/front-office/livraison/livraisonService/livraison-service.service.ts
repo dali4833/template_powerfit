@@ -14,7 +14,7 @@ export interface Livraison {
   providedIn: 'root',
 })
 export class LivraisonService {
-  private apiUrl = 'http://localhost:8087/api/Livraison';
+  private apiUrl = 'http://localhost:8089/api/Livraison';
 
   constructor(private http: HttpClient) {}
 
