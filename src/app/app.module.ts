@@ -49,6 +49,7 @@ import { LivraisonComponent } from './front-office/livraison/livraison.component
 import { ConfirmDeliveryComponent } from './front-office/livraison/confirm-delivery/confirm-delivery.component';
 import { MapComponent } from './front-office/map/map.component';
 import { PromotionFrontComponent } from './front-office/promotion-front/promotion-front.component';
+import { LivreurComponent } from './back-office/livreur/livreur.component';
 
 
 @NgModule({
@@ -82,7 +83,8 @@ import { PromotionFrontComponent } from './front-office/promotion-front/promotio
     LivraisonComponent,
     ConfirmDeliveryComponent,
     MapComponent,
-    PromotionFrontComponent
+    PromotionFrontComponent,
+    LivreurComponent
   ],
   imports: [
     ReactiveFormsModule,
