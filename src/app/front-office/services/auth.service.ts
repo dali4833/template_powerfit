@@ -35,23 +35,10 @@ export class AuthService {
 
 
   logout() {
-    const token = localStorage.getItem('token');
+    localStorage.removeItem('token'); // or sessionStorage
+    //navigate to login page
+    this.router.navigate(['/login']);
 
-    if (token) {
-      this.http.post('http://localhost:8080/auth/logout', {}, {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: 'text'
-      }).subscribe({
-        next: (res) => console.log(res),
-        error: (err) => console.error('Logout error', err),
-        complete: () => {
-          localStorage.removeItem('token');
-          this.router.navigate(['/login']);
-        }
-      });
-    } else {
-      this.router.navigate(['/login']);
-    }
   }
 
   isLoggedIn(): boolean {
