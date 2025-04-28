@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router'; // Import Router
 import { environment } from '../../../environments/environment';
 
 interface CartItem {
@@ -16,14 +17,14 @@ interface CartItem {
 export class StripeCheckoutService {
   private stripePromise: Promise<Stripe | null>;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) { // Inject Router
     this.stripePromise = loadStripe(environment.stripePublishableKey);
   }
 
   async redirectToCheckout(cartItems: CartItem[]): Promise<void> {
     try {
       // Health check with proper response type
-      const healthCheck = await this.http.get<{status: string}>(
+      const healthCheck = await this.http.get<{ status: string }>(
         `${environment.apiUrl}/api/payments/health`,
         { responseType: 'json' }
       ).toPromise();
@@ -33,43 +34,45 @@ export class StripeCheckoutService {
       throw new Error('Service unavailable. Please try again later.');
     }
 
-      // Create session
-      const response = await this.http.post<{ sessionId: string }>(
-        `${environment.apiUrl}/api/payments/create-session`,
-        cartItems,
-        { observe: 'response' }
-      ).toPromise();
+    // Create session
+    const response = await this.http.post<{ sessionId: string }>(
+      `${environment.apiUrl}/api/payments/create-session`,
+      cartItems,
+      { observe: 'response' }
+    ).toPromise();
 
-      if (!response || !response.body) {
-        throw new Error('Invalid server response');
-      }
-
-      const stripe = await this.stripePromise;
-      if (!stripe) {
-        throw new Error('Stripe not loaded');
-      }
-
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: response.body.sessionId
-      });
-
-      if (error) throw error;
-
-    } catch (error: unknown) {
-      console.error('Checkout error:', error);
-
-      // Proper error type handling
-      if (isStripeError(error)) {
-        throw new Error(error.message);
-      } else if (isHttpError(error)) {
-        throw new Error(error.error?.message || 'Payment service error');
-      } else if (error instanceof Error) {
-        throw error;
-      } else {
-        throw new Error('Checkout failed. Please try again.');
-      }
+    if (!response || !response.body) {
+      throw new Error('Invalid server response');
     }
 
+    const stripe = await this.stripePromise;
+    if (!stripe) {
+      throw new Error('Stripe not loaded');
+    }
+
+    const { error } = await stripe.redirectToCheckout({
+      sessionId: response.body.sessionId
+    });
+
+    if (error) throw error;
+
+    // Redirect to success page after successful checkout
+    this.router.navigate(['/success']); // Redirect here
+
+  } catch (error: unknown) {
+    console.error('Checkout error:', error);
+
+    // Proper error type handling
+    if (isStripeError(error)) {
+      throw new Error(error.message);
+    } else if (isHttpError(error)) {
+      throw new Error(error.error?.message || 'Payment service error');
+    } else if (error instanceof Error) {
+      throw error;
+    } else {
+      throw new Error('Checkout failed. Please try again.');
+    }
+  }
 }
 
 // Type guards for error handling

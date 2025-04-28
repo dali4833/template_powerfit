@@ -91,4 +91,13 @@ export class TrainingSessionService {
       )
     );
   }
+
+
+  getstats(): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<void>(`http://localhost:8089/statistics/stats`, { headers })
+      )
+    );
+  }
 }

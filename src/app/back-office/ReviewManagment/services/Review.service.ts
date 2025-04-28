@@ -66,4 +66,14 @@ export class ReviewService {
       )
     );
   }
+
+
+
+  getReviewsByCoachId(): Observable<any[]> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/reviews`, { headers })
+      )
+    );
+  }
 }
