@@ -21,9 +21,8 @@ import { NewmedicalfolderComponent } from './front-office/nutritionist/medicalfo
 import { SlotSelectorComponent } from './front-office/nutritionist/meeting/slot-selector/slot-selector.component';
 import { UpdatemedicalfolderComponent } from './front-office/nutritionist/medicalfolder/updatemedicalfolder/updatemedicalfolder.component';
 import { BacknutritionistComponent } from './back-office/backnutritionist/backnutritionist.component';
-import { AjoutnutriComponent } from 'src/app/back-office/backnutritionist/ajoutnutri/ajoutnutri.component';
-import { ModifnutriComponent } from 'src/app/back-office/backnutritionist/modifnutri/modifnutri.component';
-import { VoirnutriComponent } from 'src/app/back-office/backnutritionist/voirnutri/voirnutri.component';
+
+
 
 
 
@@ -35,10 +34,10 @@ const routes: Routes = [
   { 
   path: 'admin', component: AllTemplateBackComponentComponent, children: [ 
     { path: 'nutritionist', component: BacknutritionistComponent  , children: [
+
+      
     
-      { path: 'ajout', component: AjoutnutriComponent },
-      { path: 'modif/:id', component: ModifnutriComponent },
-      { path: 'voir/:id', component: VoirnutriComponent }
+     
     ]
   }
   ] 

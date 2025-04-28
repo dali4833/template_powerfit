@@ -19,7 +19,7 @@ export class MeetingService {
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWJhQGdtYWlsLmNvbSIsImlhdCI6MTc0NTUzMTI4MSwiZXhwIjoxNzQ1NjM5MjgxfQ.r6r4xbIILydy6e7E8Q9Xdje4KcodUjtI8qbMe_rQYBo'; // ou mettre manuellement : 'Bearer eyJhbGci...'
+    const token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWJhQGdtYWlsLmNvbSIsImlhdCI6MTc0NTc3MTE3NiwiZXhwIjoxNzQ1ODc5MTc2fQ.y2hJcW7iyvNcrvhorKWbkYN2LWUDbfg-uW0TdSti9LM'; // ou mettre manuellement : 'Bearer eyJhbGci...'
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
@@ -57,11 +57,7 @@ export class MeetingService {
     });
   }
 
-  getTopPatients(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/top-patients`, {
-      headers: this.getAuthHeaders()
-    });
-  }
+  
 
   getMeetingReminders(): Observable<Meeting[]> {
     return this.http.get<Meeting[]>(`${this.apiUrl}/reminders`, {
@@ -74,4 +70,8 @@ export class MeetingService {
       headers: this.getAuthHeaders()
     });
   }
+
+  
+  
+  
 }

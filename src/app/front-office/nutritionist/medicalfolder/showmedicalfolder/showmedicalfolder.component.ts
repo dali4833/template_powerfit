@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MedicalFolder, MedicalfolderService } from 'src/app/front-office/services/medicalfolder.service';
+import { MedicalFolder, MedicalfolderService ,Meeting} from 'src/app/front-office/services/medicalfolder.service';
 
 @Component({
   selector: 'app-showmedicalfolder',
@@ -10,6 +10,7 @@ import { MedicalFolder, MedicalfolderService } from 'src/app/front-office/servic
 export class ShowmedicalfolderComponent implements OnInit {
   folderId: number = 0;
   medicalFolderData?: MedicalFolder;
+  meetings: Meeting[] = []; 
   selectedMedicalFolderId: number | null = null;
 
   showAlert = false;
@@ -28,6 +29,7 @@ export class ShowmedicalfolderComponent implements OnInit {
     if (idParam) {
       this.folderId = Number(idParam);
       this.loadMedicalFolder();
+      this.loadMeetings();
     } else {
       console.error('❌ ID du dossier manquant dans la route !');
     }
@@ -42,6 +44,12 @@ export class ShowmedicalfolderComponent implements OnInit {
       (error) => {
         console.error('🔴 Erreur lors de la récupération du dossier médical :', error);
       }
+    );
+  }
+  loadMeetings(): void {
+    this.medicalfolderService.getMeetingsByFolderId(this.folderId).subscribe(
+      data => this.meetings = data,
+      err  => console.error('Erreur loading meetings', err)
     );
   }
 
@@ -77,5 +85,17 @@ export class ShowmedicalfolderComponent implements OnInit {
   goToUpdate(id: number) {
     this.router.navigate(['/nutritionist/medicalfolder/update', id]);
   }
+  goToAddMeeting(): void {
+    if (this.medicalFolderData?.id) {
+      this.router.navigate(['/nutritionist/meeting/'], {
+        queryParams: {
+          patientId: this.medicalFolderData.id,
+          patientName: this.medicalFolderData.patientName
+        }
+      });
+    }
+  }
+  
+  
   
 }

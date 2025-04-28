@@ -19,6 +19,13 @@ export interface MedicalFolder {
   createdAt: Date;
   updatedAt?: Date;
 }
+export interface Meeting {
+  id: number;
+  date: string;
+  patientName: string;
+  status: string;
+  notes: string;
+}
 
 export interface GenderStat {
   count: number;
@@ -34,7 +41,7 @@ export class MedicalfolderService {
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWJhQGdtYWlsLmNvbSIsImlhdCI6MTc0NTUzMTI4MSwiZXhwIjoxNzQ1NjM5MjgxfQ.r6r4xbIILydy6e7E8Q9Xdje4KcodUjtI8qbMe_rQYBo';
+    const token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWJhQGdtYWlsLmNvbSIsImlhdCI6MTc0NTc3MTE3NiwiZXhwIjoxNzQ1ODc5MTc2fQ.y2hJcW7iyvNcrvhorKWbkYN2LWUDbfg-uW0TdSti9LM';
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
@@ -74,6 +81,12 @@ export class MedicalfolderService {
   getGenderStats(): Observable<{ [key: string]: GenderStat }> {
     return this.http.get<{ [key: string]: GenderStat }>(`${this.baseUrl}/gender-stats`, {
       headers: this.getAuthHeaders()
+    });
+  }
+
+  getMeetingsByFolderId(id: number): Observable<Meeting[]> {
+    return this.http.get<Meeting[]>(`${this.baseUrl}/${id}/meetings`, {
+      headers: this.getAuthHeaders()  
     });
   }
 }

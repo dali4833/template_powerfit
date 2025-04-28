@@ -38,6 +38,7 @@ export class MeetingComponent implements OnInit {
   ngOnInit() {
     this.updateChildRouteVisibility(this.router.url);
     this.refreshData();
+    
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -81,7 +82,7 @@ export class MeetingComponent implements OnInit {
       (data) => {
         this.allMeetings = data;
         this.meetings = data;
-        this.loadTopPatients(); // ← recharge les top patients aussi
+        
       },
       (error) => {
         console.error('Error fetching meetings:', error);
@@ -98,16 +99,7 @@ export class MeetingComponent implements OnInit {
     });
   }
 
-  loadTopPatients(): void {
-    this.meetingService.getTopPatients().subscribe(
-      (data) => {
-        this.topPatients = data;
-      },
-      (error) => {
-        console.error("Error loading top patients:", error);
-      }
-    );
-  }
+  
 
   refreshData(): void {
     this.getMeetings(); // ← ce get recharge aussi les top patients
@@ -217,12 +209,21 @@ confirmDelete(): void {
       });
     }
   }
-  scheduleMeetingAt(time: string): void {
-    const selectedDateTime = `${this.selectedDate}T${time}`;
-    this.router.navigate(['/nutritionist/meeting/addMeeting'], {
-      queryParams: { datetime: selectedDateTime }
+  scheduleMeetingAt(time: string) {
+    const datetime = `${this.selectedDate}T${time}`;
+    const qp = this.route.snapshot.queryParams;
+    this.router.navigate(['addMeeting'], {
+      relativeTo: this.route,
+      queryParams: {
+        dossierId: qp['patientId'],   
+        patientName: qp['patientName'],
+        datetime
+      },
+      queryParamsHandling: 'merge'
     });
   }
+  
+  
   // Pagination
 currentPage: number = 1;
 itemsPerPage: number = 5;

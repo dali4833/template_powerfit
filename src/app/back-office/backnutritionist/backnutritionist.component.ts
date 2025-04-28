@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BacknutriService } from 'src/app/back-office/services/backnutri.service';
-import { Nutritionist } from 'src/app/back-office/models/Nutri';
-import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
-
+import { StatService } from '../services/stat.service';
+import { ChartConfiguration } from 'chart.js';
 
 @Component({
   selector: 'app-backnutritionist',
@@ -12,115 +9,44 @@ import Swal from 'sweetalert2';
 })
 export class BacknutritionistComponent implements OnInit {
 
-  nutritionists: Nutritionist[] = [];
-  selectedNutritionist: Nutritionist = this.initNutritionist();
-  isInChildRoute = false;
+  totalMeetings = 0;
+  confirmedMeetings = 0;
+  canceledMeetings = 0;
+  totalMedicalFolders = 0;
 
-  constructor(
-    private nutritionistService: BacknutriService,
-    private router: Router
-  ) {}
+  pieChartData: ChartConfiguration<'pie'>['data'] = {
+    labels: ['Confirmed', 'Canceled'],
+    datasets: [
+      { data: [0, 0], backgroundColor: ['#4CAF50', '#F44336'] }
+    ]
+  };
+
+  barChartData: ChartConfiguration<'bar'>['data'] = {
+    labels: ['Meetings', 'Medical Folders'],
+    datasets: [
+      { data: [0, 0], label: 'Total', backgroundColor: ['#2196F3', '#FF9800'] }
+    ]
+  };
+
+  constructor(private statService: StatService) {}
 
   ngOnInit(): void {
-    this.getNutritionists();
-    this.router.events.subscribe(() => {
-      const url = this.router.url;
-      this.isInChildRoute =
-        url.includes('/admin/nutritionist/ajout') ||
-        url.includes('/admin/nutritionist/modif') ||
-        url.includes('/admin/nutritionist/voir');
+    this.loadStats();
+  }
+
+  loadStats() {
+    this.statService.getMeetingStats().subscribe(data => {
+      this.totalMeetings = data.totalMeetings;
+      this.confirmedMeetings = data.confirmedMeetings;
+      this.canceledMeetings = data.canceledMeetings;
+
+      this.pieChartData.datasets[0].data = [this.confirmedMeetings, this.canceledMeetings];
+      this.barChartData.datasets[0].data[0] = this.totalMeetings;
+    });
+
+    this.statService.getMedicalFolderStats().subscribe(data => {
+      this.totalMedicalFolders = data.totalMedicalFolders;
+      this.barChartData.datasets[0].data[1] = this.totalMedicalFolders;
     });
   }
-  
-  
-
-  private initNutritionist(): Nutritionist {
-    return {
-      id: 0,
-      name: '',
-      email: '',
-      phone: '',
-      salary: 0,
-      hiredDate: new Date(),
-      user_type: 'NUTRITIONIST',
-      roles: 'NUTRITIONIST',
-      enabled: true
-    };
-  }
-
-  getNutritionists(): void {
-    this.nutritionistService.getAllNutritionists().subscribe(
-      (data: Nutritionist[]) => this.nutritionists = data,
-      (error) => console.error('Erreur lors de la récupération', error)
-    );
-  }
-
-  addNutritionist(): void {
-    this.nutritionistService.addNutritionist(this.selectedNutritionist).subscribe(
-      (newNutri: Nutritionist) => {
-        this.nutritionists.push(newNutri);
-        this.selectedNutritionist = this.initNutritionist();
-      },
-      (error) => console.error('Erreur d\'ajout', error)
-    );
-  }
-
-  updateNutritionist(): void {
-    this.nutritionistService.updateNutritionist(this.selectedNutritionist).subscribe(
-      (updatedNutri: Nutritionist) => {
-        const index = this.nutritionists.findIndex(n => n.id === updatedNutri.id);
-        if (index !== -1) {
-          this.nutritionists[index] = updatedNutri;
-        }
-        this.selectedNutritionist = this.initNutritionist();
-      },
-      (error) => console.error('Erreur de mise à jour', error)
-    );
-  }
-
-  deleteNutritionist(id: number): void {
-    Swal.fire({
-      title: 'Confirmation',
-      text: 'Are you sure you want to delete this nutritionist?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'Cancel'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.nutritionistService.deleteNutritionist(id).subscribe(
-          () => {
-            this.nutritionists = this.nutritionists.filter(n => n.id !== id);
-            Swal.fire('Deleted!', 'The nutritionist has been deleted.', 'success');
-          },
-          (error) => {
-            console.error('Deletion error', error);
-            Swal.fire('Error', 'An error occurred while deleting.', 'error');
-          }
-        );
-      }
-    });
-  }
-  
-
-  editNutritionist(nutri: Nutritionist): void {
-    this.selectedNutritionist = { ...nutri };
-  }
-
-  cancelEdit(): void {
-    this.selectedNutritionist = this.initNutritionist();
-  }
-
-  goToAdd(): void {
-    this.router.navigate(['admin/nutritionist/ajout']);
-  }
-  goToUpdate(id: number): void {
-    this.router.navigate(['admin/nutritionist/modif', id]);
-  }
-  goToView(id: number): void {
-    this.router.navigate(['admin/nutritionist/voir', id]);
-  }
-  
 }

@@ -12,14 +12,19 @@
       </div>
     </div>
     <div class="patient-actions">
+
+      <button class="btn btn-add-meeting" (click)="goToAddMeeting()">
+        Add Meeting
+      </button>
+      
       <button *ngIf="medicalFolderData?.id" class="btn btn-modifier" (click)="goToUpdate(medicalFolderData.id)">
         <i class="fas fa-edit"></i> Update
       </button>
       
-      
       <button class="btn btn-ajouter" (click)="selectedMedicalFolderId = medicalFolderData.id">
         <i class="fas fa-trash"></i> Delete
       </button>
+      
     </div>
   </header>
 
@@ -63,10 +68,42 @@
       </section>
     </main>
   </div>
+<!-- Nouvelle Section pour afficher les meetings -->
+<section class="meetings-section">
+  <div class="section-header">
+    <h2>Meetings</h2>
+  </div>
 
+  <!-- Si des meetings sont présents, on les affiche -->
+  <div *ngIf="meetings.length > 0; else noMeetings">
+    <table class="meetings-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let meeting of meetings">
+          <td>{{ meeting.date | date:'short' }}</td>
+          
+          
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Si aucun meeting, afficher un message -->
+  <ng-template #noMeetings>
+    <p>No meetings found for this folder.</p>
+  </ng-template>
+</section>
   <button class="btn-back" routerLink="/nutritionist/medicalfolder">
     ← Back to Medical Folders
   </button>
+
+  
 
   <!-- Confirmation Modal -->
   <div

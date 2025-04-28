@@ -69,6 +69,16 @@
 .btn-ajouter:hover {
   background-color: #c62828;
 }
+.btn-add-meeting {
+  background-color: #d4e157; /* Vert clair, similaire aux autres couleurs pastels */
+  color: black;
+  
+}
+
+.btn-add-meeting:hover {
+  background-color: #c0ca33;
+}
+
 
 /* ======= NAV ALLERGIES ======= */
 .dossier-nav {
@@ -178,4 +188,28 @@
   .stats-grid {
     grid-template-columns: 1fr;
   }
+}
+/* Style pour la table des meetings */
+.meetings-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.meetings-table th, .meetings-table td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.meetings-table th {
+  background-color: #f4f4f4;
+}
+
+.meetings-section {
+  margin-top: 20px;
+}
+
+.section-header h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
 }

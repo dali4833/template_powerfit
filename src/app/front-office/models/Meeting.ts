@@ -1,9 +1,10 @@
 
 export interface Meeting {
-  id: number;
+  id: number ;
   patientName: string;
-  date: Date;  // correspond à une date complète (date + heure)
+  date: Date | string;  // correspond à une date complète (date + heure)
   
   status: string;
   notes: string;
+  dossierId ?: number; 
 }

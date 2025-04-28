@@ -1,47 +1,65 @@
+// backnutri.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Nutritionist {
-  id: number;  // L'ID peut être optionnel si c'est généré automatiquement par le backend
+  id: number;
   name: string;
-  
   email: string;
   phone: string;
   salary: number;
-  hiredDate: Date;  // ou Date selon la manière dont tu veux manipuler les dates
+  hiredDate: Date;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class BacknutriService {
   private apiUrl = 'http://localhost:8089/nutritionist';
 
   constructor(private http: HttpClient) {}
 
-  // Récupérer tous les nutritionnistes
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWJhQGdtYWlsLmNvbSIsImlhdCI6MTc0NTc3MTE3NiwiZXhwIjoxNzQ1ODc5MTc2fQ.y2hJcW7iyvNcrvhorKWbkYN2LWUDbfg-uW0TdSti9LM';
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+  }
+
   getAllNutritionists(): Observable<Nutritionist[]> {
-    return this.http.get<Nutritionist[]>(`${this.apiUrl}/retrieve-all-nutritionist`);
+    return this.http.get<Nutritionist[]>(
+      `${this.apiUrl}/retrieve-all-nutritionist`,
+      { headers: this.getAuthHeaders() }
+    );
   }
 
-  // Récupérer un nutritionniste par son ID
   getNutritionistById(nutritionistId: number): Observable<Nutritionist> {
-    return this.http.get<Nutritionist>(`${this.apiUrl}/retrieve-nutritionist/${nutritionistId}`);
+    return this.http.get<Nutritionist>(
+      `${this.apiUrl}/retrieve-nutritionist/${nutritionistId}`,
+      { headers: this.getAuthHeaders() }
+    );
   }
 
-  // Ajouter un nutritionniste
   addNutritionist(nutritionist: Nutritionist): Observable<Nutritionist> {
-    return this.http.post<Nutritionist>(`${this.apiUrl}/add-nutritionist`, nutritionist);
+    return this.http.post<Nutritionist>(
+      `${this.apiUrl}/add-nutritionist`,
+      nutritionist,
+      { headers: this.getAuthHeaders() }
+    );
   }
 
-  // Mettre à jour un nutritionniste
   updateNutritionist(nutritionist: Nutritionist): Observable<Nutritionist> {
-    return this.http.put<Nutritionist>(`${this.apiUrl}/update-nutritionist`, nutritionist);
+    return this.http.put<Nutritionist>(
+      `${this.apiUrl}/update-nutritionist`,
+      nutritionist,
+      { headers: this.getAuthHeaders() }
+    );
   }
 
-  // Supprimer un nutritionniste par son ID
   deleteNutritionist(nutritionistId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/remove-nutritionist/${nutritionistId}`);
+    return this.http.delete<void>(
+      `${this.apiUrl}/remove-nutritionist/${nutritionistId}`,
+      { headers: this.getAuthHeaders() }
+    );
   }
 }
