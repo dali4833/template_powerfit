@@ -18,7 +18,7 @@ interface Command {
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  private apiUrl = 'http://localhost:8080/api/commands';
+  private apiUrl = 'http://localhost:8089/api/commands';
   public cartItemsSubject = new BehaviorSubject<Command[]>([]);
   private cartCountSubject = new BehaviorSubject<number>(0);
 
@@ -121,7 +121,7 @@ export class CartService {
 
   private processImageUrl(url?: string): string | undefined {
     if (!url) return undefined;
-    return url.startsWith('http') ? url : `http://localhost:8080${url}`;
+    return url.startsWith('http') ? url : `http://localhost:8089${url}`;
   }
 
   private updateCartCount(items: Command[]): void {

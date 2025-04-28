@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import { Category } from '../models/category.model'; // Adjust the path
+import { Category } from './categorie.module'; // Adjust the path if necessary
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +22,20 @@ export class CategoryService {
         return category;
       }))
     );
+  }
+
+  // Add a new category
+  addCategory(categoryData: FormData): Observable<Category> {
+    return this.http.post<Category>(this.apiUrl, categoryData);
+  }
+
+  // Edit an existing category
+  editCategory(categoryId: string | undefined, categoryData: FormData):  Observable<Category> {
+    return this.http.put<Category>(`${this.apiUrl}/${categoryId}`, categoryData);
+  }
+
+  // Delete a category
+  deleteCategory(categoryId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${categoryId}`);
   }
 }

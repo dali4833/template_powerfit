@@ -44,6 +44,9 @@ import { CategoriesComponent } from './front-office/categories/categories.compon
 import { NotificationComponent } from './front-office/notification/notification.component';
 import {CartCounterComponent} from "./front-office/cart-counter/cart-counter.component";
 import {RouterModule} from "@angular/router";
+import { CategorieComponent } from './back-office/categorie/categorie.component';
+import { ProductComponent } from './back-office/product/product.component';
+import { SuccessComponent } from './front-office/success/success.component';
 
 
 @NgModule({
@@ -72,7 +75,10 @@ import {RouterModule} from "@angular/router";
     ChatComponent,
     CategoriesComponent,
     CartCounterComponent,
-    NotificationComponent
+    NotificationComponent,
+    CategorieComponent,
+    ProductComponent,
+    SuccessComponent
   ],
   imports: [
     ReactiveFormsModule,

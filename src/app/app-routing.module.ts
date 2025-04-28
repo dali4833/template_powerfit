@@ -14,14 +14,24 @@ import {AuthComponent} from "./back-office/auth/auth.component";
 import {UsersComponent} from "./back-office/users/users.component";
 import { ChatComponent } from './front-office/pages/chat/chat.component';
 import {CategoriesComponent} from "./front-office/categories/categories.component";
+import {CategorieComponent} from "./back-office/categorie/categorie.component";
+import {ProductComponent} from "./back-office/product/product.component";
+import {SuccessComponent} from "./front-office/success/success.component";
 
 const routes: Routes = [
   {
     path: 'admin',
     component: AllTemplateBackComponentComponent,
     children: [
-      // Authentication
+     // Authentication
       { path: 'auth', component: AuthComponent },
+      { path: 'categories', component: CategorieComponent },
+      { path: 'products', component: ProductComponent },
+      { path: 'success', component: SuccessComponent },
+
+
+
+
 
       // Dashboard
       {
@@ -29,6 +39,7 @@ const routes: Routes = [
         children: [
           { path: 'users', component: UsersComponent }  // Users listing
         ]
+
       },
 
       // Management Modules

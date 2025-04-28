@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8080/api/products'; // Adjust the API URL as necessary
+  private apiUrl = 'http://localhost:8089/api/products'; // Adjust the API URL as necessary
 
   constructor(private http: HttpClient) {}
 
@@ -17,7 +17,7 @@ export class ProductService {
       map(products => products.map(product => {
         // Prepend the base URL if the imageUrl is relative
         if (product.imageUrl && !product.imageUrl.startsWith('http')) {
-          product.imageUrl = `http://localhost:8080${product.imageUrl}`;
+          product.imageUrl = `http://localhost:8089${product.imageUrl}`;
         }
         return product;
       }))
