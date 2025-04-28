@@ -18,6 +18,10 @@ import { AuthComponent } from './back-office/auth/auth.component';
 import { UsersComponent } from './back-office/users/users.component';
 import { RegisterNutrusionistComponent } from './front-office/auth/register-nutrusionist/register-nutrusionist.component';
 import { AuthGuard } from './guards/auth.guard';
+import {CategoriesComponent} from "./front-office/categories/categories.component";
+import {CategorieComponent} from "./back-office/categorie/categorie.component";
+import {ProductComponent} from "./back-office/product/product.component";
+import {SuccessComponent} from "./front-office/success/success.component";
 
 const routes: Routes = [
   { path: 'admin/auth', component: AuthComponent },
@@ -35,8 +39,20 @@ const routes: Routes = [
       { path: 'abonnement-management', loadChildren: () => import('./back-office/abonnement-managment/Abonn.module').then(m => m.AbonnModule) },
       { path: 'TrainingSession-management', loadChildren: () => import('./back-office/TrainingSessionMangment/TrainingSession.module').then(m => m.TrainingSessionModule) },
       { path: 'Review-management', loadChildren: () => import('./back-office/ReviewManagment/Review.module').then(m => m.ReviewModule) },
-      { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) }
+      { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
+      { path: 'auth', component: AuthComponent },
+      { path: 'categories', component: CategorieComponent },
+      { path: 'products', component: ProductComponent },
+      { path: 'success', component: SuccessComponent },
+
     ]
+  },
+  {
+    path: 'dashboard',
+    children: [
+      { path: 'users', component: UsersComponent }  // Users listing
+    ]
+
   },
   {
     path: '',
@@ -61,9 +77,23 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
           { path: 'products', component: ProductsComponent },
-          { path: 'products/:id', component: ProductDetailComponent }
+          { path: 'products/:id', component: ProductDetailComponent },
+          {
+            path: '',
+            component: CategoriesComponent // Show categories by default
+          },
+          {
+            path: 'categories/:categoryId',
+            component: ProductsComponent
+          },
+          {
+            path: 'products/:productId',
+            component: ProductDetailComponent
+          } // Product details
         ]
       },
+      { path: 'trainingSession', component: TrainingSessionComponent },
+      { path: 'chat', component: ChatComponent },
     ]
   },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
@@ -73,4 +103,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

@@ -1,0 +1,189 @@
+/* General Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #1a1a1a; /* Dark background */
+  color: #ffffff; /* Light text */
+  margin: 0;
+  padding: 0;
+}
+
+/* Container for the products */
+.container {
+  padding: 20px; /* Reduced padding */
+}
+
+/* Title Styles */
+h2 {
+  text-align: center;
+  margin-bottom: 20px; /* Reduced margin */
+  font-size: 2.5em; /* Adjusted title size */
+  color: rgb(205, 222, 107); /* Accent color for title */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+}
+
+/* Product Grid */
+.product-grid {
+  display: grid; /* Use grid for better layout control */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Smaller min width */
+  gap: 20px; /* Space between products */
+  padding: 10px; /* Reduced padding around the grid */
+  background-color: rgba(25, 25, 25, 0.8); /* Light black background */
+  border-radius: 12px; /* Rounded corners for the grid */
+}
+
+/* Individual Product Card */
+.product-card {
+  background-color: #444; /* Darker card background */
+  border-radius: 8px; /* Slightly smaller radius */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Lighter shadow */
+  overflow: hidden; /* Rounded corners */
+  transition: transform 0.3s, box-shadow 0.3s; /* Smooth hover effect */
+}
+
+/* Hover Effect */
+.product-card:hover {
+  transform: translateY(-3px); /* Slight lift effect */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7); /* Deeper shadow on hover */
+}
+
+/* Product Image */
+.product-image {
+  width: 100%; /* Full width */
+  height: auto; /* Maintain aspect ratio */
+  border-bottom: 3px solid rgb(205, 222, 107); /* Accent border */
+}
+
+/* Product Name */
+.product-card h3 {
+  font-size: 1.4em; /* Smaller font size */
+  margin: 10px; /* Reduced margin */
+  color: rgb(205, 222, 107); /* Accent color for product name */
+}
+
+/* Product Description */
+.product-card p {
+  margin: 5px 10px; /* Adjusted margin */
+  font-size: 0.9em; /* Smaller font size */
+  color: #bdc3c7; /* Lighter text for description */
+}
+
+/* Price Display */
+.product-card p:last-child {
+  font-weight: bold;
+  color: rgb(205, 222, 107); /* Accent color for price */
+  margin: 10px; /* Adjusted margin */
+  font-size: 1em; /* Adjusted price size */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .product-grid {
+    gap: 15px; /* Adjusted gap for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    gap: 10px; /* Further adjust gap for mobile */
+  }
+}
+
+/* Add to Cart Button Styles */
+.add-to-cart {
+  background-color: rgb(205, 222, 107); /* Button background color */
+  color: #1a1a1a; /* Button text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 15px; /* Padding for button */
+  font-size: 1em; /* Font size for button text */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition effects */
+  margin: 10px; /* Spacing around the button */
+}
+
+/* Hover Effect for Button */
+.add-to-cart:hover {
+  background-color: #b3c300; /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Disabled Button Style (Optional) */
+.add-to-cart:disabled {
+  background-color: #aaa; /* Gray background for disabled state */
+  cursor: not-allowed; /* Not-allowed cursor */
+}
+
+
+/* Product Card Styles */
+.css
+
+Copier
+  /* Product Card Styles */
+.product-card {
+  position: relative; /* Position relative for layout control */
+  margin: 15px; /* Spacing between cards */
+  overflow: hidden; /* Ensure nothing overflows */
+}
+
+/* Description Styles */
+.description {
+  position: absolute; /* Position absolutely to overlay on image */
+  top: 10px; /* Position from the top */
+  left: 10px; /* Align to the left */
+  right: 10px; /* Align to the right */
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  color: #ffffff; /* Text color */
+  padding: 5px; /* Padding for description */
+  border-radius: 5px; /* Rounded corners */
+  opacity: 0; /* Hide by default */
+  transition: opacity 0.3s ease; /* Smooth transition */
+}
+
+/* Show description on hover */
+.product-card:hover .description {
+  opacity: 1; /* Show on hover */
+}
+
+/* Image Styles */
+.product-image {
+  width: 100%; /* Responsive image */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Additional Styles */
+h3 {
+  text-align: center; /* Center the product name */
+}
+
+.add-to-cart {
+  display: block; /* Make button block level */
+  margin: 10px auto; /* Center the button */
+}
+
+/* Add to your global styles.css */
+/* Notification styles (global) */
+::ng-deep .notifications-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+}
+
+::ng-deep .notification {
+  padding: 15px 20px;
+  border-radius: 4px;
+  color: white;
+  background-color: #4CAF50;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  animation: slideIn 0.3s ease-out;
+  max-width: 300px;
+  word-wrap: break-word;
+}
+
+::ng-deep @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }

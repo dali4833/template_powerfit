@@ -39,6 +39,14 @@ import {MatIconModule} from "@angular/material/icon";
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from "@danielmoncada/angular-datetime-picker";
 import { ChatComponent } from './front-office/pages/chat/chat.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { CategoriesComponent } from './front-office/categories/categories.component';
+
+import { NotificationComponent } from './front-office/notification/notification.component';
+import {CartCounterComponent} from "./front-office/cart-counter/cart-counter.component";
+import {RouterModule} from "@angular/router";
+import { CategorieComponent } from './back-office/categorie/categorie.component';
+import { ProductComponent } from './back-office/product/product.component';
+import { SuccessComponent } from './front-office/success/success.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
@@ -92,6 +100,13 @@ import { RegisterNutrusionistComponent } from './front-office/auth/register-nutr
     AuthComponent,
     UsersComponent,
     TrainingSessionComponent,
+    ChatComponent,
+    CategoriesComponent,
+    CartCounterComponent,
+    NotificationComponent,
+    CategorieComponent,
+    ProductComponent,
+    SuccessComponent
     ChatComponent
     LoadingSpinnerComponent,
     RegisterNutrusionistComponent,
@@ -112,7 +127,14 @@ import { RegisterNutrusionistComponent } from './front-office/auth/register-nutr
     MatButtonModule,
     MatIconModule,
     BrowserAnimationsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    BrowserModule,
+    AppRoutingModule,
+    RouterModule,
+    FormsModule,
+    BrowserAnimationsModule,
   ],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
