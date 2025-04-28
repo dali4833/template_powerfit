@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -15,12 +15,12 @@ export class AuthService {
 
 // src/app/services/auth.service.ts
 login(user: any): Observable<any> {
-  return this.http.post(`${this.apiUrl}/generateToken`, user, {
-    responseType: 'text'  // <--- This is important!
-  }).pipe(
-    tap((token: string) => {
-      localStorage.setItem('token', token);
-      console.log('JWT Token saved:', token);
+  return this.http.post<any>(`${this.apiUrl}/generateToken`, user).pipe(
+    tap((res) => {
+      if (res.token) {
+        localStorage.setItem('token', res.token);
+        console.log('JWT Token saved:', res.token);
+      }
     })
   );
 }
@@ -34,42 +34,92 @@ login(user: any): Observable<any> {
 
 
   logout() {
-    const token = localStorage.getItem('token');
+    localStorage.removeItem('token'); // or sessionStorage
+    //navigate to login page
+    this.router.navigate(['/login']);
 
-    if (token) {
-      this.http.post('http://localhost:8089/auth/logout', {}, {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: 'text'
-      }).subscribe({
-        next: (res) => console.log(res),
-        error: (err) => console.error('Logout error', err),
-        complete: () => {
-          localStorage.removeItem('token');
-          this.router.navigate(['/login']);
-        }
-      });
-    } else {
-      this.router.navigate(['/login']);
-    }
+
   }
-
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
 
-
-
-  getUserProfile(): Observable<string> {
+  getUserProfile(): Observable<any> {
     const token = localStorage.getItem('token');
-
-    return this.http.get(`${this.apiUrl}/user/userProfile`, {
-      responseType: 'text',
+    return this.http.get<any>(`${this.apiUrl}/owner/userProfile`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
   }
+
+
+
+  getUserProfileBsic(): Observable<any> {
+        const token = localStorage.getItem('token');
+
+    return this.http.get<any>(`${this.apiUrl}/userProfile`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+
+    });
+  }
+
+  addUserToClub(userInfo: any, clubId: number): Observable<any> {
+    const token = localStorage.getItem('token');
+
+    return this.http.post(
+      `http://localhost:8089/auth/owner/add-to-club?clubId=${clubId}`,
+      userInfo,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        responseType: 'text'
+      }
+    );
+  }
+
+generateRandomPassword(length: number = 10): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let password = '';
+  for (let i = 0; i < length; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+}
+
+
+
+getRoleFromToken(): string | null {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('No token found.');
+    return null;
+  }
+
+  try {
+    const payloadPart = token.split('.')[1];
+    const base64 = payloadPart.replace(/-/g, '+').replace(/_/g, '/'); // handle base64url
+    const decodedPayload = atob(base64);
+    const payload = JSON.parse(decodedPayload);
+
+    let role = null;
+    if (Array.isArray(payload.roles)) {
+      role = payload.roles[0]; // 👈 pick the first role
+    } else {
+      role = payload.roles;
+    }
+
+    console.log('Role from token:', role);
+    return role || null;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return null;
+  }
+}
 
 
 
@@ -109,3 +159,4 @@ login(user: any): Observable<any> {
   }
 }
 
+}
