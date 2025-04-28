@@ -13,7 +13,7 @@ export class EditaddComponent implements OnInit {
   loading = false;
   errorMessage = '';
   reviewId: number | null = null;
-  sessionId = 6;
+  sessionId = 1;
 
   constructor(
     private fb: FormBuilder,

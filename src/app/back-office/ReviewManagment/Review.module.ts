@@ -4,11 +4,13 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ListComponent } from './list/list.component';
 import { ReviewRoutingModule } from './Review-routing.module';
 import { EditaddComponent } from './editadd/editadd.component';
+import { MaxReviewPipe } from './shared/max-review.pipe';
 
 @NgModule({
   declarations: [
     ListComponent,
-    EditaddComponent
+    EditaddComponent,
+    MaxReviewPipe
   ],
   imports: [
     CommonModule,
