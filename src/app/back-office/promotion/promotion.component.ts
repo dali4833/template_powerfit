@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PromotionService, Promotion } from 'src/app/back-office/promotion/promotionService/promotion-service.service';
-
+import { Category } from 'src/app/back-office/categorie/categorie.module';
+import { CategoryService } from 'src/app/back-office/categorie/category.service';
 @Component({
   selector: 'app-promotion',
   templateUrl: './promotion.component.html',
@@ -10,9 +11,11 @@ import { PromotionService, Promotion } from 'src/app/back-office/promotion/promo
 export class PromotionComponent implements OnInit {
   promotions: Promotion[] = [];
   promotionForm: FormGroup;
+  categoryNames: string[] = [];
   isEdit = false;
 
-  constructor(private fb: FormBuilder, private promotionService: PromotionService) {
+  constructor(private fb: FormBuilder, private promotionService: PromotionService,  private categoryService: CategoryService) {
+
     this.promotionForm = this.fb.group({
       id: [null],
       category: ['', Validators.required],
@@ -27,6 +30,13 @@ export class PromotionComponent implements OnInit {
   ngOnInit(): void {
     this.loadPromotions();
   }
+
+  loadCategoryNames(): void {
+    this.categoryService.getAllCategories().subscribe(categories => {
+      this.categoryNames = categories.map(c => c.name); // Extract just the names
+    });
+  }
+
 
   loadPromotions(): void {
     this.promotionService.getPromotions().subscribe((data) => {

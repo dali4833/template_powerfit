@@ -36,15 +36,14 @@
         </div>
         <div class="modal-body">
           <form (ngSubmit)="onSubmit()" [formGroup]="promotionForm">
-            <div class="mb-2">
-              <label class="form-label text-body" for="promotion-category">Category</label>
-              <input
-                class="form-control"
-                type="text"
-                id="promotion-category"
-                placeholder="Category"
-                formControlName="category"
-              />
+            <div class="form-group">
+              <label for="categoryName">Category</label>
+              <select id="categoryName" formControlName="categoryName" class="form-control">
+                <option value="">Select a category</option>
+                <option *ngFor="let name of categoryNames" [value]="name">
+                  {{name}}
+                </option>
+              </select>
             </div>
             <div class="mb-2">
               <label class="form-label text-body" for="promotion-description">Description</label>
