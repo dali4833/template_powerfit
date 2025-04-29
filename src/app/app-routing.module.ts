@@ -20,6 +20,7 @@ import {AuthComponent} from "./back-office/auth/auth.component";
 import {UsersComponent} from "./back-office/users/users.component";
 import { NutritionistAIComponent } from './front-office/nutrition/nutritionist-ai/nutritionist-ai.component';
 import { FavoriterecipesComponent } from './front-office/nutrition/favoriterecipes/favoriterecipes.component';
+import {ChatComponent} from "./front-office/pages/chat/chat.component";
 //import { ChatComponent } from './front-office/pages/chat/chat.component';
 
 const routes: Routes = [
@@ -50,8 +51,8 @@ const routes: Routes = [
       { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) }
     ]
   },
-  
-{ 
+
+{
 
     path: '',
     component: AllTemplateFrontComponentComponent,
@@ -61,7 +62,7 @@ const routes: Routes = [
         component: NutritionComponent,
         children: [
           { path: '', redirectTo: 'nutritionistAI', pathMatch: 'full' },
-    
+
           { path: 'meal-plan', component: MealPlanComponent},
           { path: 'diet-program', component: DietProgramComponent },
           { path: 'recipe', component: RecipeComponent } ,
@@ -83,7 +84,7 @@ const routes: Routes = [
         ]
       },
       { path: 'trainingSession', component: TrainingSessionComponent },
-      //{ path: 'chat', component: ChatComponent },
+      { path: 'chat', component: ChatComponent },
     ]
   },
   { path: '**', redirectTo: '/' }
