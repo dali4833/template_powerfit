@@ -18,7 +18,7 @@ export class RegisterOwnerComponent {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]], 
       confirmPassword: ['', Validators.required],
       terms: [false, Validators.requiredTrue]
     });

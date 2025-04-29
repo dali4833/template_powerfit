@@ -89,6 +89,11 @@
                   <div class="col-sm-6">
                     <label class="form-label" for="password">Password</label>
                     <input class="form-control" id="password" formControlName="password" type="password" placeholder="Password" />
+                    <div *ngIf="registerForm.get('password')?.errors?.['minlength'] && registerForm.get('password')?.touched" class="text-danger">
+                      Password must be at least 8 characters long.
+                    </div>
+                    
+                    
                   </div>
                   <div class="col-sm-6">
                     <label class="form-label" for="confirmPassword">Confirm Password</label>
