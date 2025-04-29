@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { StoreComponent } from "./front-office/store/store.component";
 import { ProductsComponent } from "./front-office/store/products/products.component";
 import { ProductDetailComponent } from "./front-office/store/product-detail/product-detail.component";
@@ -39,6 +40,7 @@ import { PromotionFrontComponent } from './front-office/promotion-front/promotio
 import {ConfirmDeliveryComponent} from "./front-office/livraison/confirm-delivery/confirm-delivery.component";
 
 const routes: Routes = [
+  { path: 'admin/auth', component: AuthComponent },
   {
     path: 'dashboard',
     component: AllTemplateBackComponentComponent,

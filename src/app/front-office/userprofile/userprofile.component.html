@@ -101,7 +101,7 @@
   </div>
 
   <!-- Add Coach Section Only for Owner -->
-  <div *ngIf="!isCoach">
+  <div *ngIf="role === 'ROLE_OWNER'">
     <div class="text-center mb-4">
       <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#addCoachForm" aria-expanded="false" aria-controls="addCoachForm">
         ➕ Add a Coach
