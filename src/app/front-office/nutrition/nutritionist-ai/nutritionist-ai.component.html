@@ -1,0 +1,119 @@
+<div class="container-fluid py-4">
+    <div class="row g-4">
+      <!-- Profile Form Column -->
+      <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-user-circle me-2"></i>Nutrition Profile
+            </h5>
+          </div>
+          <div class="card-body">
+            <form (ngSubmit)="submitProfile()" [formGroup]="nutritionForm">
+              <div class="mb-3">
+                <label class="form-label">Gender</label>
+                <select class="form-select" formControlName="gender">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+  
+              <div class="mb-3">
+                <label class="form-label">Height (cm)</label>
+                <input type="number" class="form-control" formControlName="height" min="100" max="250">
+              </div>
+  
+              <div class="mb-3">
+                <label class="form-label">Weight (kg)</label>
+                <input type="number" class="form-control" formControlName="weight" min="30" max="300">
+              </div>
+  
+              <div class="mb-3">
+                <label class="form-label">Activity Level</label>
+                <select class="form-select" formControlName="trainingPreferences">
+                  <option value="sedentary">Sedentary</option>
+                  <option value="light">Light Exercise</option>
+                  <option value="moderate">Moderate Exercise</option>
+                  <option value="intense">Intense Exercise</option>
+                  <option value="athlete">Athlete</option>
+                </select>
+              </div>
+  
+              <div class="mb-3">
+                <label class="form-label">Dietary Goals</label>
+                <select class="form-select" formControlName="dietaryGoals">
+                  <option value="weight_loss">Weight Loss</option>
+                  <option value="maintenance">Weight Maintenance</option>
+                  <option value="muscle_gain">Muscle Gain</option>
+                </select>
+              </div>
+  
+              <button type="submit" class="btn btn-primary w-100" [disabled]="nutritionForm.invalid || isLoading">
+                <span *ngIf="!isLoading">Get Nutrition Plan</span>
+                <span *ngIf="isLoading">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Processing...
+                </span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Chat Column -->
+      <div class="col-lg-8">
+        <div class="card shadow-sm h-100 d-flex flex-column">
+          <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-robot me-2"></i>AI Nutritionist
+            </h5>
+            <button class="btn btn-sm btn-light" >
+              <i class="fas fa-trash-alt me-1"></i>Clear Chat
+            </button>
+          </div>
+          
+          <div class="card-body flex-grow-1 overflow-auto py-3"  style="max-height: 500px;min-height: 500px;overflow-y: auto;">
+            <!-- Welcome Message -->
+            <div *ngIf="messages.length === 0" class="text-center text-muted my-5">
+              <i class="fas fa-comments fa-3x mb-3"></i>
+              <p class="h5">Complete your profile to get personalized nutrition advice</p>
+            </div>
+  
+            <!-- Conversation Messages -->
+            <div *ngFor="let message of messages" class="mb-3">
+              <!-- AI Response -->
+              <div *ngIf="message.role === 'assistant'" class="d-flex" >
+                <div class="flex-shrink-0 me-3">
+                  <div class="avatar text-bg-success text-white rounded-circle p-2">
+                    <i class="fas fa-robot"></i>
+                  </div>
+                </div>
+                <div class="flex-grow-1">
+                  <div class="card bg-success-subtle border-success">
+                    <div class="card-body p-3">
+                      <div [innerHTML]="message.content" 
+                           class="message-content" 
+                          
+                           style="overflow-wrap: break-word;"></div>
+                    
+                    </div>
+                  </div>
+                  <small class="text-muted ms-2">AI Nutritionist</small>
+                </div>
+              </div>
+          </div>
+  
+          <!-- Chat Input -->
+          <div class="card-footer border-top-0 bg-light">
+            <form (ngSubmit)="sendMessage()" class="input-group">
+              <input type="text" class="form-control" placeholder="Ask your nutritionist..." 
+                     [(ngModel)]="userQuery" name="userQuery">
+              <button class="btn btn-success" type="submit">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

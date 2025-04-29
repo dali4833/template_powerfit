@@ -1,3 +1,11 @@
+
+import { NutritionComponent } from './front-office/nutrition/nutrition.component';
+import { RecipeComponent } from './front-office/nutrition/recipe/recipe.component';
+import { MealPlanComponent } from './front-office/nutrition/meal-plan/meal-plan.component';
+import { DietProgramComponent } from './front-office/nutrition/diet-program/diet-program.component';
+
+
+
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
@@ -33,8 +41,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 import { ChatComponent } from './front-office/pages/chat/chat.component';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { NutritionistAIComponent } from './front-office/nutrition/nutritionist-ai/nutritionist-ai.component';
+import { FavoriterecipesComponent } from './front-office/nutrition/favoriterecipes/favoriterecipes.component';
+
 import { CategoriesComponent } from './front-office/categories/categories.component';
 import { NotificationComponent } from './front-office/notification/notification.component';
 import { CartCounterComponent } from './front-office/cart-counter/cart-counter.component';
@@ -73,24 +85,19 @@ import { RouterModule } from '@angular/router';
     RegisterOwnerComponent,
     AuthComponent,
     UsersComponent,
+    NutritionComponent,
+    RecipeComponent,
+    MealPlanComponent,
+    DietProgramComponent,
     TrainingSessionComponent,
     ChatComponent,
-    CategoriesComponent,
-    CartCounterComponent,
-    NotificationComponent,
-    CategorieComponent,
-    ProductComponent,
-    SuccessComponent,
-    PromotionComponent,
-    LivraisonComponent,
-    PromotionFrontComponent,
-    MapComponent,
-    ConfirmDeliveryComponent,
+    NutritionistAIComponent,
+    FavoriterecipesComponent,
 
-    LoadingSpinnerComponent,
-    RegisterNutrusionistComponent,
   ],
   imports: [
+    ReactiveFormsModule,
+    HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,

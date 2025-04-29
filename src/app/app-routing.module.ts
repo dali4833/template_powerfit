@@ -1,15 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { StoreComponent } from "./front-office/store/store.component";
 import { ProductsComponent } from "./front-office/store/products/products.component";
 import { ProductDetailComponent } from "./front-office/store/product-detail/product-detail.component";
 import { LoginComponent } from './front-office/auth/login/login.component';
 import { RegisterComponent } from './front-office/auth/register/register.component';
+
 import { UserprofileComponent } from './front-office/userprofile/userprofile.component';
 import { AllTemplateFrontComponentComponent } from './front-office/all-template-front-component/all-template-front-component.component';
 import { AllTemplateBackComponentComponent } from './back-office/all-template-back-component/all-template-back-component.component';
+
+import { RecipeComponent } from './front-office/nutrition/recipe/recipe.component';
+import { MealPlanComponent } from './front-office/nutrition/meal-plan/meal-plan.component';
+import { DietProgramComponent } from './front-office/nutrition/diet-program/diet-program.component';
+import { NutritionComponent } from './front-office/nutrition/nutrition.component';
 import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
+
+
+import { NutritionistAIComponent } from './front-office/nutrition/nutritionist-ai/nutritionist-ai.component';
+import { FavoriterecipesComponent } from './front-office/nutrition/favoriterecipes/favoriterecipes.component';
+
+//import { ChatComponent } from './front-office/pages/chat/chat.component';
 import { ChatComponent } from './front-office/pages/chat/chat.component';
 import { ResetPasswordComponent } from './front-office/auth/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './front-office/auth/forgot-password/forgot-password.component';
@@ -28,7 +39,6 @@ import { PromotionFrontComponent } from './front-office/promotion-front/promotio
 import {ConfirmDeliveryComponent} from "./front-office/livraison/confirm-delivery/confirm-delivery.component";
 
 const routes: Routes = [
-  { path: 'admin/auth', component: AuthComponent },
   {
     path: 'dashboard',
     component: AllTemplateBackComponentComponent,
@@ -43,20 +53,26 @@ const routes: Routes = [
       { path: 'abonnement-management', loadChildren: () => import('./back-office/abonnement-managment/Abonn.module').then(m => m.AbonnModule) },
       { path: 'TrainingSession-management', loadChildren: () => import('./back-office/TrainingSessionMangment/TrainingSession.module').then(m => m.TrainingSessionModule) },
       { path: 'Review-management', loadChildren: () => import('./back-office/ReviewManagment/Review.module').then(m => m.ReviewModule) },
-      { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
-      { path: 'promotions' , component: PromotionComponent },
-      { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
-      { path: 'auth', component: AuthComponent },
-      { path: 'categories', component: CategorieComponent },
-      { path: 'products', component: ProductComponent },
-      { path: 'success', component: SuccessComponent },
-
+      { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) }
     ]
   },
   {
     path: '',
     component: AllTemplateFrontComponentComponent,
     children: [
+      {
+        path: 'nutrition',
+        component: NutritionComponent,
+        children: [
+          { path: '', redirectTo: 'nutritionistAI', pathMatch: 'full' },
+
+          { path: 'meal-plan', component: MealPlanComponent},
+          { path: 'diet-program', component: DietProgramComponent },
+          { path: 'recipe', component: RecipeComponent } ,
+          {path:'nutritionistAI',component:NutritionistAIComponent},
+          {path:'favorite', component:FavoriterecipesComponent}
+        ]
+      },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'register-club', component: RegisterOwnerComponent },
