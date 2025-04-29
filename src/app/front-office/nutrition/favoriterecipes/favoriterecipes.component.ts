@@ -3,6 +3,8 @@ import { FavoriteRecipeService } from '../../services/favorite-recipe.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../models/User';
 import { RecipeService } from '../../services/recipe.service';
+import { WeeklyAnalyticsService } from '../../services/weeklyanalysis.service';
+import { WeeklyAnalytics } from '../models/WeeklyAnalytics';
 
 @Component({
   selector: 'app-favoriterecipes',
@@ -15,15 +17,17 @@ export class FavoriterecipesComponent implements OnInit{
   userId: number | null = null;
   user:any;
   isLoading = false;
-  
+  analyticsData: WeeklyAnalytics[] = [];
 
 
   constructor(private FavoriteRecipeService:FavoriteRecipeService,
     private AuthService:AuthService,
     private recipeService: RecipeService,
+    private WeeklyAnalyticsService: WeeklyAnalyticsService
   ){}
   ngOnInit(): void {
     this.getCurrentUser();
+    this.loadAnalytics();
   }
   loadFavorites() {
   
@@ -60,5 +64,24 @@ export class FavoriterecipesComponent implements OnInit{
       }
     });
   }
+  getMaxRecipes(): number {
+    return Math.max(...this.analyticsData.map(data => data.totalRecipes), 10);
+  }
+  
+  getMaxMealPlans(): number {
+    return Math.max(...this.analyticsData.map(data => data.totalMealPlans), 10);
+  }
+  //analytic partie
+  loadAnalytics(): void {
+    this.WeeklyAnalyticsService.getAllWeeklyAnalytics().subscribe({
+      next: (data) => {
+        this.analyticsData = data;
+      },
+      error: (err) => {
+        console.error('Error fetching analytics data', err);
+      }
+    });
+  }
+
 
 }

@@ -1,5 +1,8 @@
+// weekly-analytics.model.ts
 export interface WeeklyAnalytics {
-  week: number;
+  id?: number; 
+  week: number;      
   totalRecipes: number;
   totalMealPlans: number;
+  mostUsedDietType?: string;
 }

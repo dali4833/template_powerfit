@@ -2,8 +2,8 @@
 <div class="container py-5">
   <!-- Recipe Form Section -->
 <div *ngIf="roles === 'NUTRITIONIST'" class="recipe-form-section mt-4" id="recipe-form">
-  <div class="form-card p-4 border rounded shadow-sm">
-    <h3 class="form-title mb-4">
+  <div class="form-card p-4 border rounded shadow-sm" style="background-color: #f9f9f9; color: #000;">
+    <h3 class="form-title mb-4 text-success">
       <i class="bi bi-egg-fried me-2"></i> 
       {{ editMode ? 'Update Recipe' : 'Create New Recipe' }}
     </h3>
@@ -174,11 +174,11 @@
   <div class="d-flex justify-content-center mt-4">
     <nav>
       <ul class="pagination">
-        <li class="page-item" [class.disabled]="currentPage === 1">
+        <li class="page-item " [class.disabled]="currentPage === 1">
           <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
         </li>
         <li *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="currentPage === i + 1" class="page-item">
-          <a class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+          <a class="page-link bg-light text-success" (click)="changePage(i + 1)">{{ i + 1 }}</a>
         </li>
         <li class="page-item" [class.disabled]="currentPage === totalPages">
           <a class="page-link" (click)="changePage(currentPage + 1)">More</a>
@@ -260,7 +260,7 @@
     </div>
   </div>
   <div class="d-flex justify-content-end mt-3" *ngIf="visibleRecipesCount < filteredRecipes.length">
-    <button class="btn see-more-button-pistache" (click)="loadMore()">👀 See More</button>
+    <button class="btn see-more-button-pistache text-bg-light text-success" (click)="loadMore()">👀 See More</button>
   </div>
   <ng-template #noResults>
     <p class="text-center text-muted">No recipes found.</p>
@@ -303,49 +303,91 @@
   </div>
 </div>
 
- <!-- Bouton dans la carte nutritionnelle -->
- <input
- type="text"
- class="form-control form-control-lg"
- placeholder="Search your recipe name or ingredient"
- [(ngModel)]="searchTermNutrition"
- (input)="onSearchNutritionRecipe(searchTermNutrition)"
-/>
-
-
-<div *ngFor="let recipe of paginatedNutritionRecipes">
-<button class="btn btn-sm btn-outline-primary" (click)="openNutritionModal(recipe.id)">
- 🔎 Details
-</button>
+<!-- Search Bar -->
+<div class="search-container mb-5">
+  <div class="search-bar">
+    <i class="search-icon">🔍</i>
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search recipes by name or ingredient..."
+      [(ngModel)]="searchTermNutrition"
+      (input)="onSearchNutritionRecipe(searchTermNutrition)"
+    />
+  </div>
 </div>
-<!-- Modal Bootstrap (place-le une seule fois dans ta template) -->
-<div class="modal fade" tabindex="-1" [ngClass]="{'show d-block': showNutritionModal}" role="dialog">
- <div class="modal-dialog modal-lg" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <h5 class="modal-title">{{ nutritionDetail?.title }}</h5>
-       <button type="button" class="btn-close" (click)="closeNutritionModal()"></button>
-     </div>
-     <div class="modal-body" *ngIf="nutritionDetail">
-       <img [src]="nutritionDetail.image" class="img-fluid mb-3" alt="{{ nutritionDetail.title }}">
-       <p><strong>Ready in:</strong> {{ nutritionDetail.readyInMinutes }} min</p>
-       <p><strong>Servings:</strong> {{ nutritionDetail.servings }}</p>
-       <h6>Summary:</h6>
-       <div [innerHTML]="nutritionDetail.summary"></div>
-       <h6>Ingredients:</h6>
-       <ul>
-         <li *ngFor="let ing of nutritionDetail.extendedIngredients">
-           {{ ing.original }}
-         </li>
-       </ul>
-       <h6>Instructions:</h6>
-       <div [innerHTML]="nutritionDetail.instructions"></div>
-     </div>
-     <div class="modal-footer">
-       <button class="btn btn-secondary" (click)="closeNutritionModal()">Close</button>
-     </div>
-   </div>
- </div>
+
+<!-- Recipe Cards Grid -->
+<div class="recipe-grid">
+  <div *ngFor="let recipe of paginatedNutritionRecipes" class="recipe-card">
+    <div class="card-image" [style.backgroundImage]="'url(' + recipe.image + ')'">
+      <div class="card-badge">{{recipe.readyInMinutes}} min</div>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">{{recipe.title}}</h3>
+      <div class="card-meta">
+        <span class="servings">🍽️ {{recipe.servings}} servings</span>
+      </div>
+      <button class="card-action-btn" (click)="openNutritionModal(recipe.id)">
+        View Details
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Nutrition Modal -->
+<div class="custom-modal" [ngClass]="{'visible': showNutritionModal}">
+  <div class="modal-overlay" (click)="closeNutritionModal()"></div>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>{{ nutritionDetail?.title }}</h2>
+      <button class="close-btn" (click)="closeNutritionModal()">&times;</button>
+    </div>
+    
+    <div class="modal-body" *ngIf="nutritionDetail">
+      <div class="recipe-hero">
+        <img [src]="nutritionDetail.image" alt="{{ nutritionDetail.title }}" class="hero-image">
+        <div class="recipe-stats">
+          <div class="stat-item">
+            <span class="stat-icon">⏱️</span>
+            <span>{{ nutritionDetail.readyInMinutes }} min</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">🍽️</span>
+            <span>{{ nutritionDetail.servings }} servings</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="recipe-content">
+        <section class="recipe-section">
+          <h3>About This Recipe</h3>
+          <div class="summary" [innerHTML]="nutritionDetail.summary"></div>
+        </section>
+        
+        <div class="columns-container">
+          <section class="recipe-section ingredients">
+            <h3>Ingredients</h3>
+            <ul class="ingredient-list">
+              <li *ngFor="let ing of nutritionDetail.extendedIngredients">
+                <span class="ingredient-checkbox">□</span>
+                {{ ing.original }}
+              </li>
+            </ul>
+          </section>
+          
+          <section class="recipe-section instructions">
+            <h3>Instructions</h3>
+            <div class="instruction-steps" [innerHTML]="nutritionDetail.instructions"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn-close-modal" (click)="closeNutritionModal()">Close Recipe</button>
+    </div>
+  </div>
 </div>
 
 <!-- 🥗 Recettes Nutritionnelles -->

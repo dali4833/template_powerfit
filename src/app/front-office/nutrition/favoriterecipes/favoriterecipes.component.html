@@ -1,34 +1,91 @@
 <div class="favorites-container">
-    <h2 class="favorites-title">My Favorite Recipes</h2>
-  
-    <div *ngIf="isLoading" class="loading-message">
-      Loading your recipes...
+  <h2 class="favorites-title">My Favorite Recipes</h2>
+
+  <div *ngIf="isLoading" class="loading-message">
+    Loading your recipes...
+  </div>
+
+  <div *ngIf="!isLoading && favoriteRecipes.length === 0" class="empty-message">
+    No favorite recipes saved yet
+  </div>
+
+  <div *ngIf="!isLoading && favoriteRecipes.length > 0" class="scrollable-list-container">
+    <div class="favorites-list">
+      <div *ngFor="let fav of favoriteRecipes" class="recipe-card floating-card">
+        <div class="recipe-header">
+          <h3>{{fav.recipe.name}}</h3>
+          <span class="recipe-type">{{fav.user.user_type.toLowerCase()}}</span>
+        </div>
+        <p class="recipe-description">{{fav.recipe.description}}</p>
+        <div class="recipe-calories">{{fav.recipe.calories}} kcal</div>
+        <div class="recipe-instructions">
+          <h4>Instructions:</h4>
+          <p>{{fav.recipe.instructions}}</p>
+        </div>
+        <div class="recipe-footer">
+          <span class="recipe-author">By {{fav.user.name}}</span>
+          <button class="remove-btn" (click)="removeFavorite(fav.id)">
+            Remove
+          </button>
+        </div>
+      </div>
     </div>
-  
-    <div *ngIf="!isLoading && favoriteRecipes.length === 0" class="empty-message">
-      No favorite recipes saved yet
-    </div>
-  
-    <div *ngIf="!isLoading && favoriteRecipes.length > 0" class="scrollable-list-container">
-      <div class="favorites-list">
-        <div *ngFor="let fav of favoriteRecipes" class="recipe-card floating-card">
-          <div class="recipe-header">
-            <h3>{{fav.recipe.name}}</h3>
-            <span class="recipe-type">{{fav.user.user_type.toLowerCase()}}</span>
+  </div>
+</div>
+
+  <!-- Analytics Section for Nutritionists - Version simplifiée -->
+  <div *ngIf="user?.user_type === 'NUTRITIONIST'" class="analytics-section">
+    <h2 class="analytics-title">Weekly Analytics</h2>
+    
+    <div *ngIf="analyticsData.length > 0">
+      <!-- Tableau des données -->
+      <div class="analytics-table-container">
+        <table class="analytics-table">
+          <thead>
+            <tr>
+              <th>Week</th>
+              <th>Recipes</th>
+              <th>Meal Plans</th>
+              <th>Top Diet</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of analyticsData">
+              <td>Week {{ data.week }}</td>
+              <td>{{ data.totalRecipes }}</td>
+              <td>{{ data.totalMealPlans }}</td>
+              <td>{{ data.mostUsedDietType || '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Visualisation avec barres CSS -->
+      <div class="analytics-visualization">
+        <h3>Weekly Activity</h3>
+        <div *ngFor="let data of analyticsData" class="week-data">
+          <div class="week-label">Week {{ data.week }}</div>
+          <div class="bars-container">
+            <div class="bar-label">Recipes</div>
+            <div class="bar-container">
+              <div class="bar recipe-bar" [style.width.%]="(data.totalRecipes / getMaxRecipes()) * 100">
+                <span class="bar-value">{{ data.totalRecipes }}</span>
+              </div>
+            </div>
           </div>
-          <p class="recipe-description">{{fav.recipe.description}}</p>
-          <div class="recipe-calories">{{fav.recipe.calories}} kcal</div>
-          <div class="recipe-instructions">
-            <h4>Instructions:</h4>
-            <p>{{fav.recipe.instructions}}</p>
-          </div>
-          <div class="recipe-footer">
-            <span class="recipe-author">By {{fav.user.name}}</span>
-            <button class="remove-btn" (click)="removeFavorite(fav.id)">
-              Remove
-            </button>
+          <div class="bars-container">
+            <div class="bar-label">Meal Plans</div>
+            <div class="bar-container">
+              <div class="bar mealplan-bar" [style.width.%]="(data.totalMealPlans / getMaxMealPlans()) * 100">
+                <span class="bar-value">{{ data.totalMealPlans }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div *ngIf="analyticsData.length === 0" class="empty-message">
+      No analytics data available
     </div>
   </div>
