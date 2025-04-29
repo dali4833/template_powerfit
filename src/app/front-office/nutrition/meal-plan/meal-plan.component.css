@@ -20,7 +20,7 @@
 
 .theme-header {
   background: var(--theme-primary);
-  color: white;
+  color: rgb(190, 227, 165);
   border-radius: 0.75rem 0.75rem 0 0 !important;
   padding: 1.25rem 1.5rem;
 }
@@ -28,6 +28,8 @@
 .theme-header-light {
   background: var(--theme-primary-extra-light);
   color: var(--theme-text);
+
+  
   border-radius: 0.75rem 0.75rem 0 0 !important;
   padding: 1.25rem 1.5rem;
 }

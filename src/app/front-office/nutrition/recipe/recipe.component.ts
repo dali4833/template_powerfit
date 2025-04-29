@@ -8,6 +8,7 @@ import { HeaderService } from '../../services/header.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NutritionService } from '../../services/nutrition.service';
 import { AuthService } from '../../services/auth.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 @Component({
@@ -30,7 +31,25 @@ export class RecipeComponent implements OnInit {
    searchNutritionTerm = ''; 
    roles :any;
    searchTermNutrition: string = '';
+   newRecipe: Recipe = new Recipe();
+editMode = false;
+mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Dessert']; 
+isSubmitting = false;
 
+//lel formulaire 
+recipe: Recipe = {
+  idRecipe: 0,
+  name: '',
+  description: '',
+  instructions: '',
+  calories: 0,
+  ingredients: '',
+  image: '',
+  isFavorite: false,
+  preparationTime: '',
+  mealType: '',
+  youtubeUrl: ''
+};
 
 
   constructor(private recipeService: RecipeService,
@@ -186,13 +205,26 @@ getCurrentUser(){
 }
 
 
+ decodeToken() {
+    let helper = new JwtHelperService();
+    let decode = localStorage.getItem('token');
+
+    if (decode) {
+      let token = helper.decodeToken(decode);
+     
+      return token?.sub;
+
+    }
+    return null;
+  }
+
   removeIngredient(recipeId: number, ingredient: string): void {
     this.customIngredientsMap[recipeId] = this.customIngredientsMap[
       recipeId
     ].filter((ing) => ing !== ingredient);
   }
   toggleFavorite(recipe: any) {
-    const userEmail = localStorage.getItem('email') || 'nosnos@gmail.com';
+    const userEmail = this.decodeToken() || 'nosnos@gmail.com';
     const recipeId = recipe.idRecipe || recipe.recipe?.id;
   
     if (!recipeId) {
@@ -255,6 +287,70 @@ onSearch(term: string): void {
     recipe.mealType.toLowerCase().includes(term.toLowerCase())
   );
   this.currentPage = 1; // Réinitialiser la page à 1 après chaque recherche
+}
+addRecipe(): void {
+  this.isSubmitting = true;
+  this.recipeService.create(this.newRecipe).subscribe({
+    next: () => {
+      this.resetRecipeForm();
+      this.getAll(); // Refresh the list
+      this.isSubmitting = false;
+    },
+    error: (err) => {
+      console.error('Error adding recipe:', err);
+      this.isSubmitting = false;
+    }
+  });
+}
+updateRecipe(): void {
+  this.isSubmitting = true;
+  this.recipeService.update(this.newRecipe).subscribe({
+    next: () => {
+      this.resetRecipeForm();
+      this.getAll(); // Refresh the list
+      this.isSubmitting = false;
+    },
+    error: (err) => {
+      console.error('Error updating recipe:', err);
+      this.isSubmitting = false;
+    }
+  });
+}
+
+resetRecipeForm(): void {
+  this.newRecipe = new Recipe();
+  this.editMode = false;
+}selectRecipeForEdit(recipe: Recipe): void {
+  this.newRecipe = { ...recipe };
+  this.editMode = true;
+  // Scroll to the form for better UX
+  setTimeout(() => {
+    document.querySelector('#recipe-form')?.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
+
+deleteRecipe(id: number): void {
+  if (confirm('Are you sure you want to delete this recipe?')) {
+    this.recipeService.delete(id).subscribe({
+      next: () => {
+        this.getAll(); // Refresh the list
+      },
+      error: (err) => console.error('Error deleting recipe:', err)
+    });
+  }
+}
+getMinutesFromISO(isoDuration: string): number {
+  if (!isoDuration) return 0;
+  const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+  if (!match) return 0;
+  
+  const hours = match[1] ? parseInt(match[1]) : 0;
+  const minutes = match[2] ? parseInt(match[2]) : 0;
+  return hours * 60 + minutes;
+}
+
+onPreparationTimeChange(minutes: number): void {
+  this.newRecipe.preparationTime = `PT${minutes}M`;
 }
 
 

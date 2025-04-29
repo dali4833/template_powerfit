@@ -1,4 +1,4 @@
-<div class="container py-4">
+<div class="container py-4 text-bg-light">
   <!-- Alert Messages - Modern Floating Alerts -->
   <div class="alert-container">
     <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show floating-alert">
@@ -18,11 +18,11 @@
   </div>
 
   <!-- Nutritionist Form Section - Modern Card -->
-  <div *ngIf="roles === 'NUTRITIONIST'" class="card theme-card mb-4">
+  <div *ngIf="roles === 'NUTRITIONIST'" class="card theme-card mb-4 border border-dark">
     <div class="card-header theme-header">
       <div class="d-flex justify-content-between align-items-center">
-        <h3 class="mb-0">
-          <i class="bi bi-journal-plus me-2"></i>
+        <h3 class="mb-0 text-dark">
+          <i class="bi bi-journal-plus me-2 text-dark"></i>
           {{ editMode ? 'Update Meal Plan' : 'Create New Meal Plan' }}
         </h3>
         <span class="badge bg-white theme-badge-text">{{ editMode ? 'Editing Mode' : 'New Entry' }}</span>
@@ -32,15 +32,30 @@
       <form #form="ngForm" (ngSubmit)="editMode ? updateMealPlan() : addMealPlan()">
         <div class="row g-3">
           <!-- Day of Week -->
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label class="form-label fw-semibold">Day of Week</label>
             <select class="form-select theme-input" [(ngModel)]="newMeal.dayOfWeek" name="dayOfWeek" required>
               <option *ngFor="let day of daysOfWeek" [value]="day">{{ day }}</option>
             </select>
           </div>
 
+          <!-- Meal Type -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Meal Type</label>
+            <select class="form-select theme-input" [(ngModel)]="newMeal.mealType" name="mealType" required>
+              <option *ngFor="let type of mealTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+
+          <!-- Meal Order -->
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">Meal Order</label>
+            <input type="number" class="form-control theme-input" [(ngModel)]="newMeal.mealOrder" 
+                   name="mealOrder" placeholder="Order (1-6)" min="1" max="6">
+          </div>
+
           <!-- Description -->
-          <div class="col-md-8">
+          <div class="col-md-4">
             <label class="form-label fw-semibold">Description</label>
             <input type="text" class="form-control theme-input" [(ngModel)]="newMeal.description" 
                    name="description" placeholder="Enter meal description" required>
@@ -64,11 +79,17 @@
             </select>
           </div>
 
-          <!-- User ID -->
-          <div class="col-md-4">
+          <!-- User Information -->
+          <div class="col-md-2">
             <label class="form-label fw-semibold">User ID</label>
             <input type="number" class="form-control theme-input" [(ngModel)]="newMeal.userId" 
-                   name="userId" placeholder="Enter user ID" required>
+                   name="userId" placeholder="User ID" required>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">User Email</label>
+            <input type="email" class="form-control theme-input" [(ngModel)]="newMeal.userEmail" 
+                   name="userEmail" placeholder="Email (optional)">
           </div>
 
           <!-- Form Actions -->
@@ -88,16 +109,16 @@
   </div>
 
   <!-- Meal Plans List - Modern Table Card -->
-  <div class="card theme-card">
+  <div class="card theme-card border border-dark">
     <div class="card-header theme-header-light">
       <div class="d-flex justify-content-between align-items-center">
-        <h3 class="mb-0"><i class="bi bi-list-check me-2"></i> Meal Plans</h3>
+        <h3 class="mb-0 text-dark"><i class="bi bi-list-check me-2 text-dark"></i> Meal Plans</h3>
         <span class="badge theme-badge rounded-pill">{{ mealPlans.length }} total</span>
       </div>
     </div>
     
     <!-- Loading State -->
-    <div *ngIf="isLoading" class="card-body text-center py-5">
+    <div *ngIf="isLoading" class="card-body text-center py-5 border border-dark">
       <div class="spinner-grow theme-spinner" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
@@ -123,8 +144,9 @@
           <thead class="theme-table-header">
             <tr>
               <th class="ps-4">Day</th>
+              <th>Type</th>
+              <th>Order</th>
               <th>Description</th>
-              <th>User</th>
               <th>Program</th>
               <th>Recipe</th>
               <th *ngIf="roles === 'NUTRITIONIST'" class="text-end pe-4">Actions</th>
@@ -136,11 +158,15 @@
                 <span class="day-badge">{{ meal.dayOfWeek | slice:0:3 }}</span>
               </td>
               <td>
-                <div class="fw-semibold">{{ meal.description }}</div>
+                <span class="badge theme-badge-light">{{ meal.mealType || '-' }}</span>
               </td>
               <td>
-                <span class="badge theme-badge-light">ID: {{ meal.userId }}</span>
+                <span class="badge theme-badge-info">{{ meal.mealOrder || '-' }}</span>
               </td>
+              <td>
+                <div class="fw-semibold">{{ meal.description }}</div>
+              </td>
+             
               <td>
                 <span *ngIf="meal.dietProgram" class="badge theme-badge-info">
                   {{ meal.dietProgram.name }}
@@ -177,7 +203,7 @@
         <nav>
           <ul class="pagination mb-0">
             <li class="page-item" [class.disabled]="currentPage === 1">
-              <button class="page-link rounded-start-pill theme-pagination">
+              <button class="page-link rounded-start-pill theme-pagination" (click)="prevPage()">
                 <i class="bi bi-chevron-left"></i>
               </button>
             </li>

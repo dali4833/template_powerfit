@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as Stomp from 'stompjs';
-import * as SockJS from 'sockjs-client';
+import SockJS from 'sockjs-client';
 import { Subject } from 'rxjs';
 import { NotificationService } from './NotificationService';
 import { ChatNotification } from '../model/ChatNotification';

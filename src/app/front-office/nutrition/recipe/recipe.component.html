@@ -1,7 +1,130 @@
-<!--formulaire juste lel nutritioniste -->
-
 <!-- 💫 Top 10 des Recettes -->
 <div class="container py-5">
+  <!-- Recipe Form Section -->
+<div *ngIf="roles === 'NUTRITIONIST'" class="recipe-form-section mt-4" id="recipe-form">
+  <div class="form-card p-4 border rounded shadow-sm">
+    <h3 class="form-title mb-4">
+      <i class="bi bi-egg-fried me-2"></i> 
+      {{ editMode ? 'Update Recipe' : 'Create New Recipe' }}
+    </h3>
+    
+    <form #recipeForm="ngForm" class="recipe-form">
+      <div class="row g-3">
+        <!-- Recipe Name -->
+        <div class="col-md-6">
+          <label for="name" class="form-label">
+            <i class="bi bi-card-heading me-1"></i> Recipe Name
+          </label>
+          <input type="text" id="name" class="form-control" 
+                 [(ngModel)]="newRecipe.name" name="name" 
+                 placeholder="e.g. Keto Avocado Salad" required />
+        </div>
+
+        <!-- Meal Type -->
+        <div class="col-md-6">
+          <label for="mealType" class="form-label">
+            <i class="bi bi-egg me-1"></i> Meal Type
+          </label>
+          <select id="mealType" class="form-select" 
+                  [(ngModel)]="newRecipe.mealType" name="mealType" required>
+            <option value="" disabled selected>Select meal type</option>
+            <option *ngFor="let type of mealTypes" [value]="type">{{type}}</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="col-12">
+          <label for="description" class="form-label">
+            <i class="bi bi-text-paragraph me-1"></i> Description
+          </label>
+          <textarea id="description" class="form-control" rows="2"
+                    [(ngModel)]="newRecipe.description" name="description"
+                    placeholder="Brief description of the recipe" required></textarea>
+        </div>
+
+        <!-- Ingredients -->
+        <div class="col-md-6">
+          <label for="ingredients" class="form-label">
+            <i class="bi bi-list-ul me-1"></i> Ingredients
+          </label>
+          <textarea id="ingredients" class="form-control" rows="4"
+                    [(ngModel)]="newRecipe.ingredients" name="ingredients"
+                    placeholder="List ingredients separated by commas or new lines" required></textarea>
+        </div>
+
+        <!-- Instructions -->
+        <div class="col-md-6">
+          <label for="instructions" class="form-label">
+            <i class="bi bi-list-check me-1"></i> Instructions
+          </label>
+          <textarea id="instructions" class="form-control" rows="4"
+                    [(ngModel)]="newRecipe.instructions" name="instructions"
+                    placeholder="Step-by-step preparation instructions" required></textarea>
+        </div>
+
+        <!-- Calories -->
+        <div class="col-md-4">
+          <label for="calories" class="form-label">
+            <i class="bi bi-fire me-1"></i> Calories
+          </label>
+          <div class="input-group">
+            <input type="number" id="calories" class="form-control" 
+                   [(ngModel)]="newRecipe.calories" name="calories" 
+                   placeholder="e.g. 350" required min="0" />
+            <span class="input-group-text">kcal</span>
+          </div>
+        </div>
+
+        <!-- Preparation Time -->
+        <div class="col-md-4">
+          <label for="preparationTime" class="form-label">
+            <i class="bi bi-clock me-1"></i> Preparation Time (minutes)
+          </label>
+          <input type="number" id="preparationTime" class="form-control" 
+                 [(ngModel)]="newRecipe.preparationTime" name="preparationTime"
+                 placeholder="e.g. 30" min="0" required />
+        </div>
+
+        <!-- YouTube URL -->
+        <div class="col-md-4">
+          <label for="youtubeUrl" class="form-label">
+            <i class="bi bi-youtube me-1"></i> YouTube URL (optional)
+          </label>
+          <input type="url" id="youtubeUrl" class="form-control" 
+                 [(ngModel)]="newRecipe.youtubeUrl" name="youtubeUrl" 
+                 placeholder="https://www.youtube.com/watch?v=..." />
+        </div>
+
+        <!-- Image URL -->
+        <div class="col-12">
+          <label for="image" class="form-label">
+            <i class="bi bi-image me-1"></i> Image URL
+          </label>
+          <input type="text" id="image" class="form-control" 
+                 [(ngModel)]="newRecipe.image" name="image" 
+                 placeholder="https://example.com/image.jpg" />
+        </div>
+
+        <!-- Form Actions -->
+        <div class="col-12 form-actions mt-3">
+          <button type="button" class="btn btn-success me-2" 
+                  (click)="editMode ? updateRecipe() : addRecipe()" 
+                  [disabled]="recipeForm.invalid || isSubmitting">
+            <i class="bi bi-save me-2"></i> 
+            {{ editMode ? 'Update Recipe' : 'Add Recipe' }}
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm ms-2"></span>
+          </button>
+          
+          <button type="button" class="btn btn-outline-secondary" 
+                  (click)="resetRecipeForm()">
+            <i class="bi bi-x-circle me-2"></i> 
+            {{ editMode ? 'Cancel' : 'Reset' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
   <h2 class="mb-4 fw-bold text-center text-primary">🌟 Top 10 recipes of the day</h2>
   
   <div class="row g-4" >
@@ -272,9 +395,4 @@
  <div *ngIf="nutritionRecipes.length === 0" class="text-center text-muted mt-4">
    <p>No nutrition recipes available.</p>
  </div>
-</div>
-
-  
-
-
-
+</div> 

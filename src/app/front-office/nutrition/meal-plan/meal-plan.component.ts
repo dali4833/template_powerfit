@@ -23,6 +23,7 @@ export class MealPlanComponent implements OnInit {
   roles: any;
   editMode: boolean = false;
   daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  mealTypes = ['Breakfast', 'Snack', 'Lunch', 'Dinner'];
   
   // Pagination
   pageSize = 5;
@@ -47,9 +48,11 @@ export class MealPlanComponent implements OnInit {
       this.roles = res?.user_type;
     });
   }
+
   getPagesArray(): number[] {
     return Array.from({length: this.totalPages}, (_, i) => i + 1);
   }
+
   loadRecipes(): void {
     this.recipeService.getAll().subscribe({
       next: (data) => {
@@ -94,6 +97,7 @@ export class MealPlanComponent implements OnInit {
       },
     });
   }
+
   updateMealPlan(): void {
     if (!this.newMeal.idMealPlan) {
       this.showError('Cannot update - meal plan ID is missing');
@@ -190,6 +194,7 @@ export class MealPlanComponent implements OnInit {
   goToPage(page: number) {
     this.currentPage = page;
   }
+
   getFirstItemIndex(): number {
     if (this.mealPlans.length === 0) return 0;
     return (this.currentPage - 1) * this.pageSize + 1;

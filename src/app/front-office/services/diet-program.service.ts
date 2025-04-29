@@ -78,9 +78,7 @@ export class DietProgramService {
   }
     // tconverty e diet programm l dietprogram request (aka dto)
     private convertToDietProgramRequest(dietProgram: DietProgram): DietProgramRequest {
-      const creationDate = dietProgram.creationDate 
-        ? dietProgram.creationDate.toISOString().split('T')[0]  // ken date definis f wakt shyh bel format shyha iso
-        : new Date().toISOString().split('T')[0];  //sinon nestaaml lwakt l actuel
+      const creationDate =  new Date()?.toISOString()?.split('T')[0];  //sinon nestaaml lwakt l actuel
     
       return {
         idDiet: dietProgram.idDiet,

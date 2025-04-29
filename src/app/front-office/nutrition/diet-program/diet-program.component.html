@@ -106,26 +106,62 @@
         </select>
       </div>
       
-      <div *ngIf="recommendation" class="recommendation-result mt-3 p-3">
-        <h4><i class="bi bi-stars me-2"></i> Recommended Plan:</h4>
-        <div class="recommendation-content">
-          <div *ngIf="recommendation.nutritionAdvice">
-            <h5>Nutrition Advice:</h5>
-            <p>{{ recommendation.nutritionAdvice }}</p>
+      <!-- Loading state -->
+      <div *ngIf="isLoading" class="loading-recommendations mt-3">
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Fetching recommendations...</p>
+      </div>
+      
+      <!-- Recommendation display -->
+      <div *ngIf="recommendation && !isLoading" class="recommendation-result mt-3 p-3">
+        <h4><i class="bi bi-stars me-2"></i> Recommended Plan for {{ formatGoal(selectedGoal) }}:</h4>
+        
+        <!-- Error message -->
+        <div *ngIf="recommendation.error" class="alert alert-warning">
+          {{ recommendation.error }}
+        </div>
+        
+        <!-- Message when no specific recommendations -->
+        <div *ngIf="recommendation.message" class="alert alert-info">
+          <p>{{ recommendation.message }}</p>
+          <p>{{ recommendation.generalAdvice }}</p>
+        </div>
+        
+        <!-- Actual recommendations -->
+        <div class="recommendation-content" *ngIf="!recommendation.error && !recommendation.message">
+          <div class="recommendation-item" *ngIf="recommendation.nutritionAdvice">
+            <h5><i class="bi bi-egg-fried me-2"></i> Nutrition Advice:</h5>
+            <p class="recommendation-text">{{ recommendation.nutritionAdvice }}</p>
           </div>
-          <div *ngIf="recommendation.exerciseRecommendations">
-            <h5>Exercise Recommendations:</h5>
-            <p>{{ recommendation.exerciseRecommendations }}</p>
+          
+          <div class="recommendation-item" *ngIf="recommendation.exerciseRecommendations">
+            <h5><i class="bi bi-activity me-2"></i> Exercise Recommendations:</h5>
+            <p class="recommendation-text">{{ recommendation.exerciseRecommendations }}</p>
           </div>
-          <div *ngIf="recommendation.sampleMealPlan">
-            <h5>Sample Meal Plan:</h5>
-            <pre>{{ recommendation.sampleMealPlan }}</pre>
+          
+          <div class="recommendation-item" *ngIf="recommendation.sampleMealPlan">
+            <h5><i class="bi bi-egg me-2"></i> Sample Meal Plan:</h5>
+            <div class="meal-plan">
+              <pre>{{ recommendation.sampleMealPlan }}</pre>
+            </div>
+          </div>
+          
+          <!-- Fallback if no known fields -->
+          <div *ngIf="!recommendation.nutritionAdvice && !recommendation.exerciseRecommendations && !recommendation.sampleMealPlan">
+            <p>Here are some general recommendations:</p>
+            <ul>
+              <li>Eat a variety of nutrient-dense foods</li>
+              <li>Stay hydrated throughout the day</li>
+              <li>Balance macronutrients in each meal</li>
+              <li>Consider portion control</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
   </div>
-
   <!-- Diet Programs List Section -->
   <div class="programs-list-section">
     <h2 class="section-title">
@@ -142,7 +178,7 @@
     <div *ngIf="!isLoading && dietPrograms.length === 0" class="no-programs">
       <div class="alert alert-info">
         <i class="bi bi-info-circle-fill me-2"></i>
-        No diet programs available yet. Check back later!
+        No diet programs available yet. Login and Check back later!
       </div>
     </div>
 

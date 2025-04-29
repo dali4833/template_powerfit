@@ -47,6 +47,9 @@ import {MatIconModule} from "@angular/material/icon";
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from "@danielmoncada/angular-datetime-picker";
 import { ChatComponent } from './front-office/pages/chat/chat.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { NutritionistAIComponent } from './front-office/nutrition/nutritionist-ai/nutritionist-ai.component';
+import { FavoriterecipesComponent } from './front-office/nutrition/favoriterecipes/favoriterecipes.component';
+
 
 
 @NgModule({
@@ -76,7 +79,10 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MealPlanComponent,
     DietProgramComponent,
     TrainingSessionComponent,
-    ChatComponent
+    ChatComponent,
+    NutritionistAIComponent,
+    FavoriterecipesComponent,
+  
   ],
   imports: [
     ReactiveFormsModule,

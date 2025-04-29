@@ -34,6 +34,7 @@ export class DietProgramComponent implements OnInit {
     'LOW_CARB',
     'HIGH_PROTEIN'
   ];
+  currentUser: any;
   selectedGoal: string = '';
   recommendation: any;
   constructor(private dietProgramService: DietProgramService,
@@ -47,13 +48,29 @@ export class DietProgramComponent implements OnInit {
 //recomendation
 onSelectGoal() {
   if (this.selectedGoal) {
+    this.recommendation = null; // Reset avant nouvelle requête
+    this.isLoading = true;
+    
     this.nutritionService.getRecommendation(this.selectedGoal).subscribe(
       data => {
         this.recommendation = data;
-        console.log('Received recommendation:', data);
+        this.isLoading = false;
+        console.log('Recommendation data:', data);
+        
+        // Si l'API retourne une réponse mais vide
+        if (!data || (Object.keys(data).length === 0)) {
+          this.recommendation = {
+            message: 'No specific recommendations found for this goal. Here are some general tips...',
+            generalAdvice: 'Focus on balanced meals, stay hydrated, and maintain regular exercise.'
+          };
+        }
       },
       error => {
         console.error('Error fetching recommendation', error);
+        this.isLoading = false;
+        this.recommendation = {
+          error: 'Could not load recommendations. Please try again later.'
+        };
       }
     );
   }
@@ -186,7 +203,7 @@ printProgram(program: DietProgram): void {
       lineColor: [180, 210, 180]
     },
     headStyles: {
-      fillColor: [197, 224, 179], // Corrected to pistachio color
+      fillColor: [197, 224, 179], 
       textColor: [50, 70, 50],
       fontStyle: 'bold'
     },
@@ -207,11 +224,12 @@ printProgram(program: DietProgram): void {
 }
 
 //men service auth service bch nrecuperie user
-getCurrentUser(){
-  this.authService.getCurrentUser().subscribe((res)=>{
+getCurrentUser() {
+  this.authService.getCurrentUser().subscribe((res) => {
     console.log(res);
     this.roles = res?.user_type;
-  })
+    this.currentUser = res; // Store the current user
+  });
 }
 //pagination 
 pageSize = 3;

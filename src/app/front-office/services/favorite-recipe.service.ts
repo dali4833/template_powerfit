@@ -13,21 +13,21 @@ export class FavoriteRecipeService {
 
   // ajout
   addFavorite(email: string, recipeId: number) {
-    const params = {
+   /* const params = {
       email: email,
       recipeId: recipeId.toString()
       
-    };
+    };*/
 
-    return this.http.post(`${this.baseUrl}/addfav`, null, {
-      params,
+    return this.http.post(`${this.baseUrl}/addfav/${email}/${recipeId}`, null, {
+     /* params,*/
       headers: this.headerService.getHeader()  
     });
   }
 
   // Méthode pour récupérer les favoris d'un utilisateur
   getFavoritesByUser(userId: number) {
-    return this.http.get(`${this.baseUrl}/recipe/${userId}`, {
+    return this.http.get(`${this.baseUrl}/recipeget/${userId}`, {
       headers: this.headerService.getHeader() 
     });
   }
