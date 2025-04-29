@@ -214,6 +214,7 @@
         },
         error: (error) => {
           console.error('Error submitting review:', error);
+          alert("Only participants with approved bookings can review this session")
         }
       });
     }

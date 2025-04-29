@@ -40,9 +40,192 @@
     </table>
   </div>
 
-  <!-- Calendar Component -->
-  <div class="calendar-container mb-4">
-    <h3 class="mb-3">Training Schedule</h3>
-    <app-calendar [events]="trainingSessions"></app-calendar>
+  <!-- Tab Navigation -->
+  <ul class="nav nav-tabs mb-4" id="viewTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" [class.active]="activeTab === 'calendar'" id="calendar-tab" (click)="activeTab = 'calendar'" type="button" role="tab" aria-controls="calendar" aria-selected="true">
+        <i class="bi bi-calendar3"></i> Calendar View
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" [class.active]="activeTab === 'stats'" id="stats-tab" (click)="activeTab = 'stats'" type="button" role="tab" aria-controls="stats" aria-selected="false">
+        <i class="bi bi-bar-chart-fill"></i> Statistics Dashboard
+      </button>
+    </li>
+  </ul>
+  
+  <!-- Tab Content -->
+  <div class="tab-content" id="viewTabsContent">
+    <!-- Calendar Tab -->
+    <div class="tab-pane fade" [class.show]="activeTab === 'calendar'" [class.active]="activeTab === 'calendar'" id="calendar" role="tabpanel" aria-labelledby="calendar-tab">
+      <div class="calendar-container">
+        <h3 class="mb-3">Training Schedule</h3>
+        <app-calendar [events]="trainingSessions"></app-calendar>
+      </div>
+    </div>
+    
+    <!-- Stats Tab -->
+    <div class="tab-pane fade" [class.show]="activeTab === 'stats'" [class.active]="activeTab === 'stats'" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+      <div class="stats-container">
+        <h3 class="mb-3">Training Statistics Dashboard</h3>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4" *ngIf="stats">
+          <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3 h-100">
+              <div class="card-header">Total Bookings</div>
+              <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                <div class="stat-circle">
+                  <span class="stat-number">{{ stats.totalBookings || 0 }}</span>
+                </div>
+                <p class="card-text mt-3">Total number of bookings across all sessions</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card text-white bg-success mb-3 h-100">
+              <div class="card-header">Total Reviews</div>
+              <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                <div class="stat-circle">
+                  <span class="stat-number">{{ stats.totalReviews || 0 }}</span>
+                </div>
+                <p class="card-text mt-3">Total reviews received for training sessions</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card text-white bg-info mb-3 h-100">
+              <div class="card-header">Average Rating</div>
+              <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                <div class="rating-display">
+                  <span class="stat-number">{{ stats.averageRating | number:'1.1-1' || 0 }}</span>
+                  <span class="out-of">/5</span>
+                </div>
+                <div class="rating-stars mt-2">
+                  <i *ngFor="let star of [1,2,3,4,5]" class="bi" 
+                    [class.bi-star-fill]="star <= stats.averageRating"
+                    [class.bi-star-half]="star - 0.5 <= stats.averageRating && star > stats.averageRating"
+                    [class.bi-star]="star > stats.averageRating && star - 0.5 > stats.averageRating">
+                  </i>
+                </div>
+                <p class="card-text mt-3">Overall average rating across all sessions</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Custom Charts Section -->
+        <div class="row">
+          <!-- Bookings by Day Chart -->
+          <div class="col-md-6">
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5>Bookings by Day of Week</h5>
+              </div>
+              <div class="card-body">
+                <div class="custom-bar-chart">
+                  <div class="y-axis-labels">
+                    <div *ngFor="let value of getDayChartYAxis()" class="y-label">{{ value }}</div>
+                  </div>
+                  <div class="bar-container">
+                    <div *ngFor="let day of dayLabels; let i = index" class="chart-bar-wrapper">
+                      <div class="chart-bar" 
+                           [style.height.%]="getBarHeightPercentage(dayValues[i], maxDayValue)">
+                        <div class="bar-value">{{ dayValues[i] }}</div>
+                      </div>
+                      <div class="bar-label">{{ day }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Bookings by Hour Chart -->
+          <div class="col-md-6">
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5>Bookings by Hour</h5>
+              </div>
+              <div class="card-body">
+                <div class="custom-area-chart">
+                  <div class="y-axis-labels">
+                    <div *ngFor="let value of getHourChartYAxis()" class="y-label">{{ value }}</div>
+                  </div>
+                  <div class="area-chart-container">
+                    <svg width="100%" height="200" [attr.viewBox]="'0 0 100 100'" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stop-color="rgba(75, 192, 192, 0.7)" />
+                          <stop offset="100%" stop-color="rgba(75, 192, 192, 0)" />
+                        </linearGradient>
+                      </defs>
+                      
+                      <!-- Area -->
+                      <path [attr.d]="getAreaChartPath()" fill="url(#areaGradient)" />
+                      
+                      <!-- Line -->
+                      <path [attr.d]="getLineChartPath()" fill="none" stroke="rgba(75, 192, 192, 1)" stroke-width="1.5" />
+                      
+                      <!-- Points -->
+                      <g *ngFor="let hour of hourValues; let i = index">
+                        <circle 
+                          [attr.cx]="getPointX(i)" 
+                          [attr.cy]="getPointY(hour, maxHourValue)" 
+                          r="2" 
+                          fill="#fff" 
+                          stroke="rgba(75, 192, 192, 1)" 
+                          stroke-width="1.5">
+                          <title>{{ i }}:00 - {{ hour }} bookings</title>
+                        </circle>
+                      </g>
+                    </svg>
+                    
+                    <div class="x-axis-labels">
+                      <div *ngFor="let hour of getHourLabels(); let i = index" 
+                           class="x-label" 
+                           [style.left.%]="getXAxisPosition(hour)">
+                        {{ hour }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sessions Rating Comparison -->
+          <div class="col-12">
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5>Session Rating Comparison</h5>
+              </div>
+              <div class="card-body">
+                <div class="session-stats-container">
+                  <div *ngFor="let session of sessionStats" class="session-stat-item">
+                    <div class="session-name" [title]="session.description">
+                      {{ session.description | slice:0:20 }}{{ session.description.length > 20 ? '...' : '' }}
+                    </div>
+                    <div class="session-metrics">
+                      <div class="rating-bar-container">
+                        <div class="rating-value">{{ session.averageRating | number:'1.1-1' }}</div>
+                        <div class="rating-bar">
+                          <div class="rating-bar-fill" [style.width.%]="(session.averageRating / 5) * 100"></div>
+                        </div>
+                      </div>
+                      <div class="review-count-container">
+                        <div class="review-count">
+                          <i class="bi bi-chat-square-text"></i> {{ session.reviewCount }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

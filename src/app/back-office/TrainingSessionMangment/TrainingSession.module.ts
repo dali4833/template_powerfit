@@ -9,6 +9,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [
+    
     ListComponent,
     EditaddComponent,
     CalendarComponent

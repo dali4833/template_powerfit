@@ -6,31 +6,205 @@
         {{ errorMessage }}
     </div>
 
-    <div *ngIf="loading" class="text-center">
-        Loading...
+    <div *ngIf="loading" class="spinner-container">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading training sessions and reviews...</p>
     </div>
 
-    <table class="table table-striped" *ngIf="!loading && reviews.length > 0">
-        <thead>
-            <tr>
-                <th>Rating</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let review of reviews">
-                <td>{{ review.rating }}/5</td>
-                <td>{{ review.description }}</td>
-                <td>
-                    <button class="btn btn-sm btn-primary me-2" [routerLink]="[review.id, 'edit']">Edit</button>
-                    <button class="btn btn-sm btn-danger" (click)="deleteReview(review.id)">Delete</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Tab navigation -->
+    <ul class="nav nav-tabs mb-3" *ngIf="!loading">
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="activeView === 'list'" (click)="setActiveView('list')">
+                <i class="bi bi-list-ul me-1"></i>List View
+            </a>
+        </li>
+     
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="activeView === 'stats'" (click)="setActiveView('stats')">
+                <i class="bi bi-graph-up me-1"></i>Statistics
+            </a>
+        </li>
+    </ul>
 
-    <div *ngIf="!loading && reviews.length === 0" class="alert alert-info">
-        No reviews found. Click "Add New Review" to create one.
+    <!-- List View -->
+    <div *ngIf="activeView === 'list'" class="view-container">
+        <table class="table table-striped" *ngIf="!loading && reviews.length > 0">
+            <thead>
+                <tr>
+                    <th>Rating</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let review of reviews">
+                    <td>{{ review.rating }}/5</td>
+                    <td>{{ review.description }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2" [routerLink]="[review.id, 'edit']">Edit</button>
+                        <button class="btn btn-sm btn-danger" (click)="review.id && deleteReview(review.id)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div *ngIf="!loading && reviews.length === 0" class="alert alert-info">
+            No reviews found. Click "Add New Review" to create one.
+        </div>
+    </div>
+
+  
+
+    <!-- Stats View -->
+    <div *ngIf="activeView === 'stats'" class="view-container">
+        <!-- Review Statistics Section -->
+        <div *ngIf="!loading && sessionStats.length > 0" class="mt-1">
+            <h3>Training Session Reviews</h3>
+            
+            <!-- Bar Chart -->
+            <div class="bar-chart-container mt-3 mb-4">
+                <div class="bar-chart">
+                    <div *ngFor="let session of sessionStats" 
+                        class="bar-item" 
+                        [style.height.%]="session.totalReviews ? (session.totalReviews / (sessionStats | maxReviewValue)) * 100 : 10" 
+                        [ngClass]="{'active': session.expanded, 'no-reviews': session.totalReviews === 0}"
+                        (click)="toggleSession(session)">
+                        <div class="bar" [ngClass]="{'empty-bar': session.totalReviews === 0}">
+                            <div *ngIf="session.totalReviews > 0" class="bar-positive" [style.height.%]="(session.positiveReviews / session.totalReviews) * 100"></div>
+                            <div *ngIf="session.totalReviews > 0" class="bar-negative" [style.height.%]="(session.negativeReviews / session.totalReviews) * 100"></div>
+                        </div>
+                        <div class="bar-label" [title]="session.sessionDescription">{{session.sessionDescription}}</div>
+                    </div>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color positive"></div>
+                        <span>Positive Reviews (>2 rating)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color negative"></div>
+                        <span>Negative Reviews (≤2 rating)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color empty"></div>
+                        <span>No Reviews</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Review Ratings Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="custom-chart-container">
+                            <div class="chart-legend-top d-flex justify-content-center mb-3">
+                                <div *ngFor="let item of ratingLegend" class="legend-item mx-2 d-flex align-items-center">
+                                    <div class="legend-color" [style.background-color]="item.color"></div>
+                                    <span>{{ item.label }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="ratings-chart">
+                                <div class="y-axis">
+                                    <div class="y-label" *ngFor="let value of [0, 1, 2, 3, 4, 5]">
+                                      {{ Math.round((maxRatingCount / 5) * (5 - value)) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="chart-area">
+                                    <svg viewBox="0 0 500 300" class="ratings-svg">
+                                        <!-- Horizontal grid lines -->
+                                        <line *ngFor="let i of [0, 1, 2, 3, 4, 5]" 
+                                              [attr.y1]="50 + i * 40" 
+                                              [attr.y2]="50 + i * 40"
+                                              x1="40" 
+                                              x2="480"
+                                              stroke="#e0e0e0" 
+                                              stroke-width="1" />
+                                        
+                                        <!-- Bars for each rating -->
+                                        <g *ngFor="let data of ratingDistribution; let i = index">
+                                            <rect [attr.x]="70 + i * 80" 
+                                                  [attr.y]="250 - (data.count / maxRatingCount) * 200"
+                                                  width="60"
+                                                  [attr.height]="(data.count / maxRatingCount) * 200"
+                                                  [attr.fill]="getRatingColor(data.rating)"
+                                                  rx="5"
+                                                  ry="5">
+                                                <title>Rating {{data.rating}}: {{data.count}} reviews</title>
+                                            </rect>
+                                            <text [attr.x]="100 + i * 80" 
+                                                  [attr.y]="270"
+                                                  text-anchor="middle"
+                                                  fill="#495057">{{data.rating}}/5</text>
+                                            <text [attr.x]="100 + i * 80" 
+                                                  [attr.y]="245 - (data.count / maxRatingCount) * 200"
+                                                  text-anchor="middle"
+                                                  fill="#495057"
+                                                  font-weight="bold">{{data.count}}</text>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Session Cards -->
+            <div class="session-cards">
+                <div *ngFor="let session of sessionStats" class="card mb-3" 
+                    [ngClass]="{'expanded': session.expanded, 'no-reviews': session.totalReviews === 0}">
+                    <div class="card-header d-flex justify-content-between align-items-center" (click)="toggleSession(session)">
+                        <h5 class="mb-0">{{session.sessionDescription}}</h5>
+                        <div>
+                            <span class="badge bg-primary me-2">Total: {{session.totalReviews}}</span>
+                            <span *ngIf="session.totalReviews > 0" class="badge bg-success me-2">Positive: {{session.positiveReviews}}</span>
+                            <span *ngIf="session.totalReviews > 0" class="badge bg-danger me-2">Negative: {{session.negativeReviews}}</span>
+                            <span *ngIf="session.totalReviews === 0" class="badge bg-secondary">No Reviews</span>
+                            <i class="ms-3" [ngClass]="session.expanded ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></i>
+                        </div>
+                    </div>
+                    <div class="card-body" *ngIf="session.expanded">
+                        <div class="session-details mb-3">
+                            <p *ngIf="session.sessionDate"><strong>Session Date:</strong> {{session.sessionDate | date:'mediumDate'}}</p>
+                        </div>
+                        
+                        <div *ngIf="session.totalReviews === 0" class="alert alert-info">
+                            No reviews yet for this training session.
+                        </div>
+                        
+                        <div *ngIf="session.totalReviews > 0">
+                            <h6>Reviews ({{session.totalReviews}}):</h6>
+                            <div class="review-list">
+                                <div *ngFor="let review of session.reviews" class="review-item p-3 border-bottom">
+                                    <div class="d-flex justify-content-between">
+                                        <span [ngClass]="{
+                                            'rating-positive': review.rating > 2,
+                                            'rating-negative': review.rating <= 2
+                                        }">
+                                            <strong>Rating: {{review.rating}}/5</strong>
+                                        </span>
+                                        <span class="text-muted">{{review.createdAt | date:'medium'}}</span>
+                                    </div>
+                                    <p class="mt-2 mb-0">{{review.description}}</p>
+                                    <p class="text-muted small mt-1" *ngIf="review.user">By: {{review.user.name}}</p>
+                                    <div class="mt-2">
+                                        <button class="btn btn-sm btn-danger" (click)="review.id && deleteReview(review.id)">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div *ngIf="!loading && sessionStats.length === 0" class="alert alert-info">
+            No training sessions found. Please add training sessions first.
+        </div>
     </div>
 </div>
+

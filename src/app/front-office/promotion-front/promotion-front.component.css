@@ -1,0 +1,51 @@
+body {
+  font-family: 'Playfair Display', serif; /* Use a stylish serif font */
+}
+.slide-wrapper {
+  display: flex;
+  transition: transform 0.6s ease-in-out;
+}
+
+.slide {
+  min-width: 100%;
+  padding: 2rem;
+}
+
+button.btn-light {
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.container {
+  background: transparent; /* Ensure container background is transparent */
+}
+
+.promo-background {
+  position: relative; /* Position context for content */
+  height: 400px; /* Set height for the background */
+  display: flex; /* Use flexbox for side-by-side images */
+  overflow: hidden; /* Hide overflow */
+}
+
+.bg-image {
+  flex: 1; /* Each image takes equal space */
+  height: 100%; /* Full height of the container */
+  object-fit: cover; /* Cover to fill the area */
+  opacity: 0.2; /* Set opacity */
+  transition: opacity 0.3s; /* Smooth transition for hover effect */
+}
+
+.promo-content {
+  position: absolute; /* Position content in front */
+  color: white; /* Text color */
+  z-index: 1; /* Ensure content is above background */
+  text-align: center; /* Center text horizontally */
+  display: flex; /* Use flexbox to center vertically */
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  height: 100%; /* Full height of the promo background */
+  font-family: 'Oswald', sans-serif;
+}

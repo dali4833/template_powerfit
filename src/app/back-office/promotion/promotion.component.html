@@ -1,0 +1,107 @@
+
+<div class="p-4 code-to-copy">
+
+  <div class="d-flex justify-content-end mb-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicDetailsModal">
+      Add
+    </button>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-6 col-lg-4 col-xl-3" *ngFor="let promotion of promotions">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">{{ promotion.category }}</h5>
+          <p class="card-text">{{ promotion.description }}</p>
+          <p class="card-text">
+            <strong>Discount:</strong> {{ promotion.discountPercentage }}%
+          </p>
+          <p class="card-text">
+            <strong>Valid From:</strong> {{ promotion.startDate | date }} <br>
+            <strong>To:</strong> {{ promotion.endDate | date }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="basicDetailsModal" tabindex="-1" aria-labelledby="basicDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="basicDetailsModalLabel">Add Promotion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="onSubmit()" [formGroup]="promotionForm">
+            <div class="form-group">
+              <label for="categoryName">Category</label>
+              <select id="categoryName" formControlName="categoryName" class="form-control">
+                <option value="">Select a category</option>
+                <option *ngFor="let name of categoryNames" [value]="name">
+                  {{name}}
+                </option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label class="form-label text-body" for="promotion-description">Description</label>
+              <input
+                class="form-control"
+                type="text"
+                id="promotion-description"
+                placeholder="Description"
+                formControlName="description"
+              />
+            </div>
+            <div class="mb-2">
+              <label class="form-label text-body" for="promotion-discount">Discount Percentage</label>
+              <input
+                class="form-control"
+                type="number"
+                id="promotion-discount"
+                placeholder="Discount (%)"
+                formControlName="discountPercentage"
+              />
+            </div>
+            <div class="mb-2">
+              <label class="form-label text-body" for="promotion-start-date">Start Date</label>
+              <input
+                class="form-control"
+                type="date"
+                id="promotion-start-date"
+                formControlName="startDate"
+              />
+            </div>
+            <div class="mb-2">
+              <label class="form-label text-body" for="promotion-end-date">End Date</label>
+              <input
+                class="form-control"
+                type="date"
+                id="promotion-end-date"
+                formControlName="endDate"
+              />
+            </div>
+            <div class="mb-2">
+              <label class="form-label text-body" for="promotion-expiry-date">Expiry Date</label>
+              <input
+                class="form-control"
+                type="date"
+                id="promotion-expiry-date"
+                formControlName="expiryDate"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" [disabled]="promotionForm.invalid" >Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

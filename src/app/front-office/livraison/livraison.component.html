@@ -1,0 +1,119 @@
+<div class="container py-5">
+  <!-- Delivery Cards (dynamically generated from livraisons array) -->
+  <div *ngFor="let livraison of livraisons" class="delivery-card mb-4 p-4 rounded" style="background-color: #2a5c3e; border: 1px solid #3a6c4e;">
+    <div class="delivery-header d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex align-items-center">
+        <h5 class="mb-0 text-white">Livraison #{{livraison.idLivraison}}</h5>
+      </div>
+      <button class="btn btn-sm btn-outline-light"  data-bs-toggle="modal" [attr.data-bs-target]="'#livraisonModal' + livraison.idLivraison">
+        View Details
+      </button>
+    </div>
+
+    <div class="delivery-content text-white">
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-6">
+          <div class="delivery-info mb-2">
+            <div class="fs-5 fw-bold">{{livraison.address }}</div>
+            <div class="text-light small opacity-75">{{livraison.scheduleddate | date:'shortDate'}}</div>
+            <div class="fs-6">{{livraison.duration | date:'shortTime'}}</div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-6">
+          <div class="delivery-info mb-2">
+            <div class="text-light small opacity-75">Status</div>
+            <div>
+              <span class="badge"
+                    [ngClass]="{
+                      'bg-light text-dark': livraison.status === 'PENDING',
+                      'bg-info text-white': livraison.status === 'DISPATCHED',
+                      'bg-success text-white': livraison.status === 'DELIVERED'
+                    }">
+                {{livraison.status}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Delivery Button -->
+  <div class="text-center mt-4">
+    <button class="btn btn-primary" (click)="resetForm()" data-bs-toggle="modal" data-bs-target="#livraisonFormModal">
+      Add New Delivery
+    </button>
+  </div>
+</div>
+
+<!-- Modal for Livraison Details -->
+<div *ngFor="let livraison of livraisons" class="modal fade" [id]="'livraisonModal' + livraison.idLivraison" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delivery #{{livraison.idLivraison}} Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <p><strong>ID:</strong> {{livraison.idLivraison}}</p>
+          <p><strong>Address:</strong> {{livraison.address}}</p>
+          <p><strong>Duration:</strong> {{livraison.duration | date:'medium'}}</p>
+          <p><strong>Scheduled Date:</strong> {{livraison.scheduleddate | date:'medium'}}</p>
+          <p><strong>Status:</strong> {{livraison.status}}</p>
+        </div>
+
+        <div class="mt-4">
+          <h5>Delivery Location</h5>
+          <app-map [address]="livraison.address"></app-map> <!-- Changed this line -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <!--<button type="button" class="btn btn-danger" (click)="deleteLivraison(livraison.idLivraison)">Delete</button>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Livraison Form -->
+<div class="modal fade" id="livraisonFormModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{isEdit ? 'Edit' : 'Add New'}} Delivery</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="livraisonForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control" formControlName="address">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Duration</label>
+            <input type="datetime-local" class="form-control" formControlName="duration">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Scheduled Date</label>
+            <input type="datetime-local" class="form-control" formControlName="scheduleddate">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" formControlName="status">
+              <option value="PENDING">Pending</option>
+              <option value="DELIVERED">Delivered</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!livraisonForm.valid">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
