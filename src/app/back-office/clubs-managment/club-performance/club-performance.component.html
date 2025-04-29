@@ -1,0 +1,38 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2><i class="bx bx-bar-chart-alt-2"></i> Club Performance </h2>
+    </div>
+  
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      <i class="bx bx-error-circle"></i> {{ errorMessage }}
+    </div>
+  
+    <div *ngIf="performanceData">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <p class="fw-bold mb-2">
+            <i class="bx bx-info-circle text-primary"></i> Interpretation :
+            <span class="text-primary">{{ performanceData.interpretation }}</span>
+          </p>
+          <p class="fw-bold">
+            <i class="bx bx-refresh text-success"></i> Renewal Rate :
+            <span class="text-success">{{ performanceData.renewalRate | number:'1.0-2' }} %</span>
+          </p>
+        </div>
+      </div>
+  
+      <div *ngIf="performanceData.packPerformance" class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3"><i class="bx bx-box"></i> Packs :</h5>
+          <ul class="list-group">
+            <li *ngFor="let pack of performanceData.packPerformance"
+                class="list-group-item d-flex justify-content-between align-items-center">
+              <span class="fw-bold">{{ pack.packName }}</span>
+              <span class="badge bg-primary rounded-pill">{{ pack.subscriptionCount }} abonnements</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
