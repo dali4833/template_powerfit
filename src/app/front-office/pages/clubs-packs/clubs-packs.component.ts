@@ -4,8 +4,7 @@ import { AbonnementrequestsService } from 'src/app/back-office/abonnementrequest
 import { ClubService } from 'src/app/back-office/clubs-managment/services/club.service';
 import { PackService } from 'src/app/back-office/packs-managment/services/pack.service';
 import {TrophyService} from "../../../back-office/trophiesManagement/services/Trophy.service";
-import { ToastrService } from 'ngx-toastr';
-import { NgZone } from '@angular/core';
+
 
 declare var bootstrap: any;
 
@@ -52,8 +51,6 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
     private AbonnementRequest: AbonnementrequestsService,
     private AbonnementService: AbonnementService,
     private trophyService: TrophyService,
-    private toastr: ToastrService,
-    private ngZone: NgZone
   ) { }
 
   ngOnInit(): void {
@@ -62,9 +59,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
     const today = new Date();
     this.startDate = today.toISOString().split('T')[0];
     this.endDate = today.toISOString().split('T')[0];
-    this.ngZone.run(() => {
-      this.toastr.success('Test dans NgZone', 'Succès');
-    });
+
   }
 
   ngOnDestroy(): void {
@@ -76,7 +71,7 @@ export class ClubsPacksComponent implements OnInit, OnDestroy {
   }
 
   loadClubs(): void {
-    this.toastr.info('Ceci est une notification d\'information.', 'Information');
+   // this.toastr.info('Ceci est une notification d\'information.', 'Information');
     this.loading = true;
     this.ClubService.getClubs().subscribe({
       next: (clubs) => {

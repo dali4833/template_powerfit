@@ -4,7 +4,7 @@ import { Product } from './product.model';
 import { ProductStatistics } from '../models/product-statistics.model';
 import { CategoryService } from '../categorie/category.service';
 import { Category } from '../categorie/categorie.module';
-
+import { CommonModule } from '@angular/common';
 import {HttpHeaders} from "@angular/common/http";
 import {Subscription} from "rxjs";
 import {WebSocketNotificationService} from "../services/notification.service";

@@ -37,7 +37,7 @@ import { TrophiesComponent } from './front-office/pages/trophies/trophies.compon
 import { clubreqModule } from './back-office/clubrequests-managment/clubreq.module';
 import { ClubPerformanceComponent } from './back-office/clubs-managment/club-performance/club-performance.component';
 import {BrowserAnimationsModule, provideAnimations} from "@angular/platform-browser/animations";
-import {provideToastr, ToastrModule} from 'ngx-toastr';
+//import {provideToastr, ToastrModule} from 'ngx-toastr';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -102,7 +102,6 @@ import {NgChartsModule} from "ng2-charts";
     SidebarComponent,
     FooterBackComponent,
     TrainingSessionComponent,
-    ClubsPacksComponent,
     NutritionistComponent,
     MeetingComponent,
     MapComponent,
@@ -139,6 +138,7 @@ import {NgChartsModule} from "ng2-charts";
     FavoriterecipesComponent,
     ConfirmDeliveryComponent,
     PromotionComponent,
+    ClubsPacksComponent,
 
     LoadingSpinnerComponent,
     RegisterNutrusionistComponent,
@@ -147,23 +147,25 @@ import {NgChartsModule} from "ng2-charts";
     //ChatComponent
   ],
   imports: [
+
+
     NgChartsModule,
     ProductComponent,
     HttpClientModule,
     BrowserModule,
     clubreqModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right', // Positionner en bas à droite
-      timeOut: 3000, // Durée de la notification (en ms)
-      progressBar: true, // Ajouter une barre de progression
-      closeButton: true, // Ajouter un bouton de fermeture
-      preventDuplicates: true // Empêcher l'affichage de notifications en double
-    }),
+    // ToastrModule.forRoot({
+    //   positionClass: 'toast-bottom-right', // Positionner en bas à droite
+    //   timeOut: 3000, // Durée de la notification (en ms)
+    //   progressBar: true, // Ajouter une barre de progression
+    //   closeButton: true, // Ajouter un bouton de fermeture
+    //   preventDuplicates: true // Empêcher l'affichage de notifications en double
+    // }),
  
-  providers: [ provideAnimations(), // required animations providers
-    provideToastr(),],
-  bootstrap: [AppComponent]
+  // providers: [ provideAnimations(), // required animations providers
+  //   provideToastr(),],
+ // bootstrap: [AppComponent]
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
