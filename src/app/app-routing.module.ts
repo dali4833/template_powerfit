@@ -47,9 +47,9 @@ const routes: Routes = [
       { path: 'promotions' , component: PromotionComponent },
       { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
       { path: 'auth', component: AuthComponent },
-      { path: 'categories', component: CategorieComponent },
-      { path: 'products', component: ProductComponent },
-      { path: 'success', component: SuccessComponent },
+      { path: 'categories', component: CategorieComponent ,canActivate: [AuthGuard]},
+      { path: 'products', component: ProductComponent,canActivate: [AuthGuard]  },
+      { path: 'success', component: SuccessComponent,canActivate: [AuthGuard]  },
 
     ]
   },
