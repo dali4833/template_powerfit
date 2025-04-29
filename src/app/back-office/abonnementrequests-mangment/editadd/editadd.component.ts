@@ -15,6 +15,7 @@ export class EditaddComponent implements OnInit {
   users: any[] = [];
   packs: any[] = [];
 
+
   constructor(
     private fb: FormBuilder,
     private abonnementService: AbonnementrequestsService,
@@ -33,25 +34,31 @@ export class EditaddComponent implements OnInit {
 
   private loadPacks(): void {
     this.abonnementService.getpacks().subscribe({
-      next: (packs) => this.packs = packs,
-      error: (error) => {
+      next: (packs: any[]) => this.packs = packs,
+      error: (error: any) => {
         this.errorMessage = 'Failed to load packs';
         console.error(error);
       }
     });
   }
 
+
   onSubmit(): void {
     if (this.abonnementForm.valid) {
       const formValue = this.abonnementForm.value;
       const packId = formValue.packId?.id; // Get the pack id from the selected pack object
-      
+
       if (!packId) {
         this.errorMessage = 'Please select a valid pack';
         return;
       }
        console.log('Form Value:', packId);
-      this.abonnementService.createRequest(packId).subscribe({
+       const abonnementrequest: any = {
+        startDate: new Date(),
+        endDate: new Date(formValue.requestedDate),
+     
+       }
+      this.abonnementService.createRequest(abonnementrequest,packId).subscribe({
         next: () => {
           this.router.navigate(['/admin/abonnementrequests-management/']);
         },

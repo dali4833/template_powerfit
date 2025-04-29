@@ -1,0 +1,53 @@
+<div class="trophies-container">
+  <div class="header">
+    <h1>Achievement Trophies</h1>
+    <div class="controls">
+      <div class="points-badge">
+        <i class="fas fa-star"></i>
+        <span>{{ userPoints }} Points</span>
+
+      </div>
+      <button class="btn-view" (click)="showMyTrophies = !showMyTrophies">
+        <i class="fas" [ngClass]="showMyTrophies ? 'fa-trophy' : 'fa-list'"></i>
+        {{ showMyTrophies ? 'All Trophies' : 'My Trophies' }}
+      </button>
+      <button class="btn-sort" (click)="toggleSort()">
+        <i class="fas" [ngClass]="sortDirection === 'asc' ? 'fa-sort-amount-up' : 'fa-sort-amount-down'"></i>
+        Sort by Points
+      </button>
+    </div>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+
+  <div class="trophies-grid" *ngIf="!loading">
+    <div class="trophy-card" *ngFor="let trophy of filteredTrophies">
+      <div class="trophy-icon" [class.claimed]="isTrophyClaimed(trophy.id)">
+        <i class="fas fa-trophy"></i>
+      </div>
+      <div class="trophy-content">
+        <h3>{{ trophy.name }}</h3>
+        <p>{{ trophy.description }}</p>
+        <div class="points-required">
+          <i class="fas fa-star"></i>
+          {{ trophy.requiredPoints }} Points Required
+        </div>
+      </div>
+      <div class="trophy-status">
+        <ng-container *ngIf="isTrophyClaimed(trophy.id); else notClaimed">
+          <button class="btn-claimed" disabled>
+            <i class="fas fa-check-circle"></i>
+            Claimed
+          </button>
+        </ng-container>
+        <ng-template #notClaimed>
+          <div class="points-needed">
+            Need {{ getPointsNeeded(trophy.requiredPoints) }} more points
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

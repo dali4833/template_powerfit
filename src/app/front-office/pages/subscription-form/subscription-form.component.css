@@ -1,0 +1,13 @@
+.uk-container {
+  max-width: 500px;
+  margin: auto;
+}
+
+.uk-heading-line span {
+  font-size: 1.5rem;
+}
+
+.uk-button-primary {
+  background-color: #1e87f0;
+  color: white;
+}

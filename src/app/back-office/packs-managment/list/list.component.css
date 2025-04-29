@@ -1,0 +1,160 @@
+.statistics-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.podium-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 250px;
+  margin-top: 20px;
+  perspective: 1000px;
+}
+
+.podium-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.podium-step:hover {
+  transform: translateY(-10px);
+}
+
+.podium-base {
+  width: 100px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.podium-base::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.podium-title {
+  font-size: 14px;
+  text-align: center;
+  padding: 5px;
+  width: 100%;
+}
+
+.podium-value {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.first-place {
+  height: 200px;
+  z-index: 3;
+}
+
+.second-place {
+  height: 150px;
+  z-index: 2;
+}
+
+.third-place {
+  height: 120px;
+  z-index: 1;
+}
+
+.crown {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.popularity-container {
+  margin-top: 40px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.pack-ladder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.ladder-step {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.ladder-step:hover {
+  transform: translateY(-5px);
+}
+
+.ladder-header {
+  padding: 10px 15px;
+  color: white;
+  font-weight: 600;
+}
+
+.ladder-content {
+  padding: 15px;
+}
+
+.ladder-position {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.statistics-header, .popularity-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.stats-icon {
+  margin-right: 10px;
+  font-size: 1.5em;
+}
+
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}

@@ -1,8 +1,12 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 import { NutritionComponent } from './front-office/nutrition/nutrition.component';
 import { RecipeComponent } from './front-office/nutrition/recipe/recipe.component';
 import { MealPlanComponent } from './front-office/nutrition/meal-plan/meal-plan.component';
 import { DietProgramComponent } from './front-office/nutrition/diet-program/diet-program.component';
+
+
+
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './front-office/header/header.component';
@@ -22,12 +26,18 @@ import { AllTemplateBackComponentComponent } from './back-office/all-template-ba
 import { NavbarComponent } from './back-office/navbar/navbar.component';
 import { SidebarComponent } from './back-office/sidebar/sidebar.component';
 import { FooterBackComponent } from './back-office/footer-back/footer-back.component';
+import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
+import { ClubsPacksComponent } from './front-office/pages/clubs-packs/clubs-packs.component';
 import { ResetPasswordComponent } from './front-office/auth/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './front-office/auth/forgot-password/forgot-password.component';
 import { RegisterOwnerComponent } from './front-office/auth/register-owner/register-owner.component';
 import { AuthComponent } from './back-office/auth/auth.component';
 import { UsersComponent } from './back-office/users/users.component';
-import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
+import { TrophiesComponent } from './front-office/pages/trophies/trophies.component';
+import { clubreqModule } from './back-office/clubrequests-managment/clubreq.module';
+import { ClubPerformanceComponent } from './back-office/clubs-managment/club-performance/club-performance.component';
+//import {provideToastr, ToastrModule} from 'ngx-toastr';
+
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -37,10 +47,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+//import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ChatComponent } from './front-office/pages/chat/chat.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { NutritionistAIComponent } from './front-office/nutrition/nutritionist-ai/nutritionist-ai.component';
 import { FavoriterecipesComponent } from './front-office/nutrition/favoriterecipes/favoriterecipes.component';
+
 import { CategoriesComponent } from './front-office/categories/categories.component';
 import { NotificationComponent } from './front-office/notification/notification.component';
 import { CartCounterComponent } from './front-office/cart-counter/cart-counter.component';
@@ -52,6 +64,7 @@ import { LivraisonComponent } from './front-office/livraison/livraison.component
 import { PromotionFrontComponent } from './front-office/promotion-front/promotion-front.component';
 import { MapComponent } from './front-office/map/map.component';
 import { ConfirmDeliveryComponent } from './front-office/livraison/confirm-delivery/confirm-delivery.component';
+
 import { NutritionistComponent } from './front-office/nutritionist/nutritionist.component';
 import { MeetingComponent } from './front-office/nutritionist/meeting/meeting.component';
 import { MedicalfolderComponent } from './front-office/nutritionist/medicalfolder/medicalfolder.component';
@@ -89,6 +102,7 @@ import {NgChartsModule} from "ng2-charts";
     NavbarComponent,
     SidebarComponent,
     FooterBackComponent,
+    TrainingSessionComponent,
     NutritionistComponent,
     MeetingComponent,
     MapComponent,
@@ -108,11 +122,13 @@ import {NgChartsModule} from "ng2-charts";
     CartCounterComponent,
     FooterBackComponent,
     ResetPasswordComponent,
+    ClubPerformanceComponent,
     ForgotPasswordComponent,
     RegisterOwnerComponent,
     SuccessComponent,
     AuthComponent,
     UsersComponent,
+    TrophiesComponent,
     NutritionComponent,
     RecipeComponent,
     MealPlanComponent,
@@ -123,21 +139,21 @@ import {NgChartsModule} from "ng2-charts";
     FavoriterecipesComponent,
     ConfirmDeliveryComponent,
     PromotionComponent,
+    ClubsPacksComponent,
     LoadingSpinnerComponent,
     RegisterNutrusionistComponent,
     CategorieComponent,
-    ProductComponent,
-
+    ProductComponent
   ],
   imports: [
     ReactiveFormsModule,
     HttpClientModule,
     ReactiveFormsModule,
     NgChartsModule,
-
     HttpClientModule,
     FormsModule,
     BrowserModule,
+    clubreqModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
@@ -153,7 +169,8 @@ import {NgChartsModule} from "ng2-charts";
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    RouterModule,
+    RouterModule
+
 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

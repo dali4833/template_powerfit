@@ -38,3 +38,7 @@
   from { transform: translateY(0); opacity: 1; }
   to { transform: translateY(-100%); opacity: 0; }
 }
+.toast-container {
+  position: fixed;
+  z-index: 999999;
+}

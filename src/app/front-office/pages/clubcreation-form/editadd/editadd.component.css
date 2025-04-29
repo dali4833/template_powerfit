@@ -1,0 +1,28 @@
+.uk-container {
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  .uk-heading-line span {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .uk-button-primary {
+    background-color: #1e87f0;
+    color: white;
+  }
+  
+  .uk-button-secondary {
+    background-color: #f5f5f5;
+    color: #333;
+  }
+  
+  .uk-form-danger {
+    border-color: #e53935;
+  }
+  
+  .uk-text-danger {
+    font-size: 0.875rem;
+    color: #e53935;
+  }

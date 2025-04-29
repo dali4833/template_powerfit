@@ -1,55 +1,183 @@
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Clubs List</h2>
-        <button class="btn btn-primary" routerLink="/admin/clubs-management/new">Add New Club</button>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Clubs List</h2>
+    <div>
+      <button class="btn btn-outline-info me-2" (click)="toggleOccupancyChart()">
+        <i class="bx bx-pie-chart-alt-2"></i> 
+        {{ showOccupancyChart ? 'Hide' : 'Show' }} Occupancy Stats
+      </button>
+      <button class="btn btn-primary" routerLink="/admin/clubs-management/new">Add New Club</button>
     </div>
+  </div>
 
-    <div *ngIf="errorMessage" class="alert alert-danger">
-        {{ errorMessage }}
+  <!-- CSS Pie Chart Card -->
+  <div *ngIf="showOccupancyChart && occupancyData.length > 0" class="card shadow mb-4 chart-card">
+    <div class="card-header bg-gradient d-flex justify-content-between align-items-center">
+      <h5 class="card-title m-0"><i class="bx bx-chart"></i> Club Occupancy Statistics</h5>
+      <button class="btn btn-sm btn-light" (click)="toggleOccupancyChart()">
+        <i class="bx bx-x"></i>
+      </button>
     </div>
-    
-    <div *ngIf="loading" class="text-center">
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="pie-chart-container">
+            <svg class="pie-chart-svg" viewBox="-10 -10 120 120">
+              <!-- Background circle -->
+              <circle cx="50" cy="50" r="50" class="pie-chart-background"></circle>
+              
+              <!-- Pie segments -->
+              <g *ngFor="let item of occupancyData; let i = index">
+                <path 
+                  [attr.d]="describeArc(50, 50, 50, item.offset || 0, (item.offset || 0) + (item.degree || 0))"
+                  [attr.fill]="item.color"
+                  class="pie-segment-path"
+                  [class.active]="selectedSegment === i"
+                  (mouseenter)="setSelectedSegment(i)"
+                  (mouseleave)="setSelectedSegment(null)">
+                  <title>{{item.clubName}}: {{item.occupancyRate.toFixed(1)}}%</title>
+                </path>
+              </g>
+              
+              <!-- Inner circle with gradient -->
+              <circle cx="50" cy="50" r="35" class="pie-inner-circle"></circle>
+            </svg>
+            
+            <div class="chart-labels">
+              <div class="chart-title">Total Occupancy Distribution</div>
+            </div>
+          </div>
         </div>
+        
+        <div class="col-md-6">
+          <div class="legend-container">
+            <h6 class="mb-3">Club Occupancy Rates</h6>
+            <div class="legend-items">
+              <div *ngFor="let item of occupancyData; let i = index" 
+                   class="legend-item" 
+                   [class.highlighted]="selectedSegment === i"
+                   (mouseenter)="setSelectedSegment(i)"
+                   (mouseleave)="setSelectedSegment(null)">
+                <div class="legend-color" [style.backgroundColor]="item.color"></div>
+                <div class="legend-info">
+                  <div class="legend-label">{{ item.clubName || ('Club ' + item.clubId) }}</div>
+                  <div class="legend-value">{{ item.occupancyRate.toFixed(1) }}% occupancy</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="alert alert-info">
+            <i class="bx bx-info-circle"></i> This chart shows the occupancy rates for all clubs. Higher percentages indicate better utilization of club capacity.
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <table class="table mt-3" *ngIf="!loading && clubs.length > 0">
-        <thead>
-            <tr>
-                <th>capacity</th>
-                <th>Description</th>
-                <th>name</th>
-                <th>status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let club of clubs">
-                <td>{{club.capacity}}</td>
-                <td>{{club.name}}</td>
-                <td>{{club.description}}</td>
-                <td>{{club.status}}</td>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <select class="form-select me-2" [(ngModel)]="club.selectedSportId">
-                            <option [ngValue]="null">Select a sport</option>
-                            <option *ngFor="let sport of sports" [ngValue]="sport.id">{{sport.name}}</option>
-                        </select>
-                        <button class="btn btn-sm btn-success" 
-                                (click)="club.id && affecttosport(club.id, club.selectedSportId)"
-                                [disabled]="!club.selectedSportId">
-                            Affect To sport
-                        </button>
-                    </div>
-                    <button class="btn btn-sm btn-primary me-2" (click)="editClub(club.id!)">Edit</button>
-                    <button class="btn btn-sm btn-danger" (click)="club.id && deleteClub(club.id)">Delete</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
 
-    <div *ngIf="!loading && clubs.length === 0" class="alert alert-info">
-        No clubs found. Click "Add New club" to create one.
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
+  </div>
+
+  <table class="table mt-3" *ngIf="!loading && clubs.length > 0">
+    <thead>
+      <tr>
+        <th>Capacity</th>
+        <th>Description</th>
+        <th>Name</th>
+        <th>Sport</th>
+        <th>Status</th>
+        <th>Actions</th>
+        <th>Performance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let club of clubs">
+        <td>{{club.capacity}}</td>
+        <td>{{club.description}}</td>
+        <td>{{club.name}}</td>
+        <td>{{club.sports?.[0]?.name || 'N/A'}}</td>
+        <td>{{club.status}}</td>
+        <td>
+          <div class="d-flex align-items-center">
+            <select class="form-select me-2" [(ngModel)]="club.selectedSportId">
+              <option [ngValue]="null">Select a sport</option>
+              <option *ngFor="let sport of sports" [ngValue]="sport.id">{{sport.name}}</option>
+            </select>
+            <button class="btn btn-sm btn-success" 
+                    (click)="club.id && affecttosport(club.id, club.selectedSportId)"
+                    [disabled]="!club.selectedSportId">
+              Affect To Sport
+            </button>
+          </div>
+          <button class="btn btn-sm btn-primary me-2" (click)="editClub(club.id!)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="club.id && deleteClub(club.id)">Delete</button>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-info" (click)="club.id ? openPerformanceModal(club.id) : null">
+            View Performance
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && clubs.length === 0" class="alert alert-info">
+    No clubs found. Click "Add New Club" to create one.
+  </div>
+
+  <!-- Modal for displaying club performance -->
+  <div *ngIf="showPerformanceModal" class="modal fade show d-block" tabindex="-1" role="dialog" aria-labelledby="performanceModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="performanceModalLabel"><i class="bx bx-bar-chart-alt-2"></i> Club Performance</h5>
+          <button type="button" class="close" (click)="closePerformanceModal()" aria-label="Close">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            <i class="bx bx-error-circle"></i> {{ errorMessage }}
+          </div>
+          <div *ngIf="performanceData">
+            <div class="card shadow-sm mb-4">
+              <div class="card-body">
+                <p class="fw-bold mb-2">
+                  <i class="bx bx-info-circle text-primary"></i> Interpretation:
+                  <span class="text-primary">{{ performanceData.interpretation }}</span>
+                </p>
+                <p class="fw-bold">
+                  <i class="bx bx-refresh text-success"></i> Renewal Rate:
+                  <span class="text-success">{{ performanceData.renewalRate | number:'1.0-2' }} %</span>
+                </p>
+              </div>
+            </div>
+            <div *ngIf="performanceData.packPerformance" class="card shadow-sm">
+              <div class="card-body">
+                <h5 class="fw-bold mb-3"><i class="bx bx-box"></i> Packs:</h5>
+                <ul class="list-group">
+                  <li *ngFor="let pack of performanceData.packPerformance"
+                      class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">{{ pack.packName }}</span>
+                    <span class="badge bg-primary rounded-pill">{{ pack.subscriptionCount }} subscriptions</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

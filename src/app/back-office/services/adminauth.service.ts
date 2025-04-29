@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class AdminauthService {
   private apiUrl = 'http://localhost:8089/auth';
 
-  constructor(private http: HttpClient,private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
 // login(user: any): Observable<any> {
 //   return this.http.post(`${this.apiUrl}/generateToken`, user, {

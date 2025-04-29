@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClubrequestsService } from '../services/Clubrequests.service';
 import { ClubService } from '../../clubs-managment/services/club.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-req-editadd',
@@ -12,7 +12,9 @@ export class EditaddComponent implements OnInit {
   requestForm: FormGroup;
   isEditing = false;
   sportId: number | null = null;
-  errorMessage: string = '';
+  errorMessage = '';
+  documentFile: File | null = null;
+  imageFile: File | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -24,29 +26,57 @@ export class EditaddComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
       capacity: ['', [Validators.required]],
-      status: ['PENDING']
+      status: ['PENDING', [Validators.required]]
     });
   }
 
   ngOnInit(): void {
-  
+    this.route.queryParams.subscribe(params => {
+      this.sportId = params['sportId'] || null;
+    });
   }
 
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.documentFile = input.files[0];
+    }
+  }
 
+  onImageChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.imageFile = input.files[0];
+    }
+  }
 
   onSubmit(): void {
-    if (this.requestForm.valid) {
-      const sportData: any = this.requestForm.value;
-      
-      const action =  this.reqService.submitClubCreationRequest(sportData);
+    if (this.requestForm.valid && this.documentFile) {
+      const formData = new FormData();
 
-      action.subscribe({
-        next: () => this.router.navigate(['/admin/clubrequests-management/']),
-        error: (error) => {
-          this.errorMessage = `Failed to create request`;
+      const requestPayload = {
+        name: this.requestForm.value.name,
+        description: this.requestForm.value.description,
+        capacity: this.requestForm.value.capacity,
+        status: this.requestForm.value.status
+      };
+
+      formData.append('request', JSON.stringify(requestPayload));
+      formData.append('document', this.documentFile);
+
+      if (this.imageFile) {
+        formData.append('image', this.imageFile);
+      }
+
+      this.reqService.submitClubCreationRequest(formData).subscribe({
+        next: () => this.router.navigate(['/admin/clubrequests-management']),
+        error: (error: HttpErrorResponse) => {
+          this.errorMessage = `Échec de la création : ${error.error?.message || error.message}`;
           console.error(error);
         }
       });
+    } else {
+      this.errorMessage = 'Veuillez remplir tous les champs obligatoires, y compris le document.';
     }
   }
 }

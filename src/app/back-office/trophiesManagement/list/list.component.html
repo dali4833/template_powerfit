@@ -1,0 +1,47 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="trophy-title">Trophies Management</h2>
+        <button class="btn btn-create" routerLink="/admin/Trophy-management/new">
+            <i class="fas fa-plus-circle"></i> New Trophy
+        </button>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="loading" class="text-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div class="row g-4" *ngIf="!loading && Trophies.length > 0">
+        <div class="col-md-4" *ngFor="let trophy of Trophies">
+            <div class="trophy-card">
+                <div class="trophy-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="trophy-content">
+                    <h3>{{trophy.name}}</h3>
+                    <p>{{trophy.description}}</p>
+                    <div class="points-badge">
+                        {{trophy.requiredPoints}} Points Required
+                    </div>
+                </div>
+                <div class="trophy-actions">
+                    <button class="btn btn-edit" [routerLink]="['/admin/Trophy-management', trophy.id, 'edit']">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-delete" (click)="deleteTrophy(trophy.id)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!loading && Trophies.length === 0" class="alert alert-info">
+        No trophies found. Click "New Trophy" to create one.
+    </div>
+</div>

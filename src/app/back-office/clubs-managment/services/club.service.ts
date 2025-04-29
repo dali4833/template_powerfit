@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-
+import { AuthService } from 'src/app/front-office/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,67 +9,41 @@ export class ClubService {
   private apiUrl = `http://localhost:8089/clubs`;
   private cachedToken: string | null = null;
 
-  clubaccount = {
-    username: 'CLUB@email.com',
-    password: 'a',
-  };
 
-  adminaccount = {
-    username: 'ADMIN@email.com',
-    password: 'a',
-  };
 
-  useraccount = {
-    username: 'user1@email.com',
-    password: 'a',
-  };
 
-  coachaccount = {
-    username: 'COACH@email.com',
-    password: 'a',
-  };
+
 
   constructor(
     private http: HttpClient,
+    private authService: AuthService
   ) { }
 
-  private async getValidToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypassclub());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
 
   private async generateHeaders(): Promise<HttpHeaders> {
-    const token = await this.getValidToken();
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
   }
 
+
+
+
   getClubs(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.get<any[]>(`${this.apiUrl}/retrieve-all-clubs`, { headers })
       )
     );
   }
 
   getClub(id: number): Observable<any> {
-    return from(this.generateHeaders()).pipe(
-      switchMap(headers =>
-        this.http.get<any>(`${this.apiUrl}/retrieve-clubs/${id}`, { headers })
-      )
-    );
+    return this.http.get<any>(`http://localhost:8089/clubs/retrieve-club/${id}`);
   }
+
 
   createClub(club: any): Observable<any> {
     return from(this.generateHeaders()).pipe(
@@ -79,13 +53,20 @@ export class ClubService {
     );
   }
 
-  updateClub(club: any, id: number): Observable<any> {
+  updateClub(clubFormData: FormData, id: number): Observable<any> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers =>
-        this.http.put<any>(`${this.apiUrl}/update-club/${id}`, club, { headers })
-      )
+      switchMap(headers => {
+        const headersWithoutContentType = headers.delete('Content-Type');
+        return this.http.put<any>(`${this.apiUrl}/update-club/${id}`, clubFormData, {
+          headers: headersWithoutContentType
+        });
+      })
     );
   }
+  getClubImage(clubId: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${clubId}/image`, { responseType: 'blob' });
+  }
+
 
   deleteClub(id: number): Observable<void> {
     return from(this.generateHeaders()).pipe(
@@ -97,37 +78,58 @@ export class ClubService {
 
   affecterSportToClub(clubId: any, sportId: any): Observable<void> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.post<void>(`${this.apiUrl}/${clubId}/sports/${sportId}`, null, { headers })
       )
     );
   }
+  submitClubCreationRequest(formData: FormData): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers => {
+        const headersWithoutContentType = headers.delete('Content-Type');
+        return this.http.post<any>(
+          `${this.apiUrl}/submit-creation-request`,
+          formData,
+          { headers: headersWithoutContentType }
+        );
+      })
+    );
+  }
 
-  submitClubCreationRequest(body: any): Observable<any> {
+
+
+
+
+
+
+
+
+
+
+  getrecommandations(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.post<any>(`${this.apiUrl}/submit-creation-request`, body  ,  { headers })
+        this.http.get<any[]>(`${this.apiUrl}/recommended-ids`, { headers })
       )
     );
   }
 
-  bypassclub(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.clubaccount, { responseType: 'text' });
+
+  getclubownerclubs(): Observable<any[]> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/my-club`, { headers })
+      )
+    );
   }
 
-  bypassadmin(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.adminaccount, { responseType: 'text' });
+  getAllClubsOccupancyRate(): Observable<any[]> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/occupancy-rates`, { headers })
+      )
+    );
   }
 
-  bypassUser(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.useraccount, { responseType: 'text' });
-  }
 
-  bypasscoach(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.coachaccount, { responseType: 'text' });
-  }
 }

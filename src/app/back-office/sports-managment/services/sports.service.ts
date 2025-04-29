@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
+import { AuthService } from 'src/app/front-office/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,51 +10,28 @@ export class SportService {
   private apiUrl = `http://localhost:8089/sports`;
   private cachedToken: string | null = null;
 
-  clubaccount = {
-    username: 'CLUB@email.com',
-    password: 'a',
-  };
+ 
 
-  adminaccount = {
-    username: 'ADMIN@email.com',
-    password: 'a',
-  };
 
-  useraccount = {
-    username: 'user1@email.com',
-    password: 'a',
-  };
 
-  coachaccount = {
-    username: 'COACH@email.com',
-    password: 'a',
-  };
 
   constructor(
     private http: HttpClient,
+    private authService: AuthService
   ) { }
 
-  private async getValidToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypassadmin());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
 
   private async generateHeaders(): Promise<HttpHeaders> {
-    const token = await this.getValidToken();
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
   }
+
+
+
 
   getSports(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
@@ -95,23 +73,8 @@ export class SportService {
     );
   }
 
-  bypassclub(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.clubaccount, { responseType: 'text' });
-  }
+ 
 
-  bypassadmin(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.adminaccount, { responseType: 'text' });
-  }
 
-  bypassUser(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.useraccount, { responseType: 'text' });
-  }
-
-  bypasscoach(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.coachaccount, { responseType: 'text' });
-  }
+ 
 }

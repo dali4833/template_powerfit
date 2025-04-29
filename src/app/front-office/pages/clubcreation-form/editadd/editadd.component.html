@@ -1,0 +1,96 @@
+<div class="uk-container uk-margin-top">
+  <h2 class="uk-heading-line uk-text-center"><span>Add New Request</span></h2>
+
+  <!-- Message d'erreur -->
+  <div *ngIf="errorMessage" class="uk-alert-danger" uk-alert>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Formulaire -->
+  <form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="uk-form-stacked uk-margin-top">
+    <div class="uk-margin">
+      <label class="uk-form-label text-white" for="image">Club Image (JPEG/PNG)</label>
+      <input
+        type="file"
+        id="image"
+        class="uk-input"
+        (change)="onImageChange($event)"
+        accept="image/*">
+    </div>
+    <!-- Champ Name -->
+    <div class="uk-margin">
+      <label class="uk-form-label text-white" for="name">Name</label>
+      <input
+        type="text"
+        id="name"
+        class="uk-input"
+        formControlName="name"
+        [class.uk-form-danger]="requestForm.get('name')?.invalid && requestForm.get('name')?.touched">
+      <div class="uk-text-danger" *ngIf="requestForm.get('name')?.touched && requestForm.get('name')?.errors?.['required']">
+        Name is required
+      </div>
+      <div class="uk-text-danger" *ngIf="requestForm.get('name')?.touched && requestForm.get('name')?.errors?.['minlength']">
+        Name must be at least 3 characters
+      </div>
+    </div>
+
+    <!-- Champ Description -->
+    <div class="uk-margin">
+      <label class="uk-form-label text-white" for="description">Description</label>
+      <textarea
+        id="description"
+        class="uk-textarea"
+        formControlName="description"
+        rows="3"
+        [class.uk-form-danger]="requestForm.get('description')?.invalid && requestForm.get('description')?.touched">
+      </textarea>
+      <div class="uk-text-danger" *ngIf="requestForm.get('description')?.touched && requestForm.get('description')?.errors?.['required']">
+        Description is required
+      </div>
+      <div class="uk-text-danger" *ngIf="requestForm.get('description')?.touched && requestForm.get('description')?.errors?.['minlength']">
+        Description must be at least 10 characters
+      </div>
+    </div>
+
+    <!-- Champ Capacity -->
+    <div class="uk-margin">
+      <label class="uk-form-label text-white" for="capacity">Capacity</label>
+      <textarea
+        id="capacity"
+        class="uk-textarea"
+        formControlName="capacity"
+        rows="3"
+        [class.uk-form-danger]="requestForm.get('capacity')?.invalid && requestForm.get('capacity')?.touched">
+      </textarea>
+      <div class="uk-text-danger" *ngIf="requestForm.get('capacity')?.touched && requestForm.get('capacity')?.errors?.['required']">
+        Capacity is required
+      </div>
+    </div>
+
+    <!-- Champ Document -->
+    <div class="uk-margin">
+      <label class="uk-form-label text-white" for="document">Club Document (.PDF)*</label>
+      <input
+        type="file"
+        id="document"
+        (change)="onFileChange($event)"
+        class="uk-input">
+    </div>
+
+    <!-- Boutons -->
+    <div class="uk-margin-top">
+      <button
+        type="submit"
+        class="uk-button uk-button-primary uk-width-1-1"
+        [disabled]="!requestForm.valid || requestForm.pristine">
+        {{ isEditing ? 'Update' : 'Create' }}
+      </button>
+      <button
+        type="button"
+        class="uk-button uk-button-secondary uk-width-1-1 uk-margin-small-top"
+        routerLink="/Clubs">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-
+import { AuthService } from 'src/app/front-office/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,55 +9,29 @@ export class AbonnementService {
   private apiUrl = `http://localhost:8089/abonnements`;
   private cachedToken: string | null = null;
 
-  clubaccount = {
-    username: 'CLUB@email.com',
-    password: 'a',
-  };
 
-  adminaccount = {
-    username: 'ADMIN@email.com',
-    password: 'a',
-  };
-
-  useraccount = {
-    username: 'user1@email.com',
-    password: 'a',
-  };
-
-  coachaccount = {
-    username: 'COACH@email.com',
-    password: 'a',
-  };
 
   constructor(
     private http: HttpClient,
+    private authService: AuthService
   ) { }
 
-  private async getValidToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypassclub());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
 
   private async generateHeaders(): Promise<HttpHeaders> {
-    const token = await this.getValidToken();
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
   }
 
+
+
+
   getAbonnements(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.get<any[]>(`${this.apiUrl}/retrieve-all-abonnements`, { headers })
       )
     );
@@ -110,7 +84,7 @@ export class AbonnementService {
 
   getUsers(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.get<any[]>(`http://localhost:8089/auth/users`, { headers })
       )
     );
@@ -119,8 +93,56 @@ export class AbonnementService {
 
   getpacks(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.get<any[]>(`http://localhost:8089/packs/retrieve-all-packs`, { headers })
+      )
+    );
+  }
+
+
+  renewAbonnement(id: number, packDuration: number): Observable<any> {
+    const newEndDate = new Date();
+    newEndDate.setDate(newEndDate.getDate() + packDuration);
+
+    const formattedEndDate = newEndDate.toISOString().split('T')[0]; // Ensure format is YYYY-MM-DD
+
+    console.log('New End Date:', formattedEndDate);
+
+    return from(this.generateHeaders()).pipe(
+        switchMap(headers =>
+            this.http.put<any>(
+                `${this.apiUrl}/renew-abonnement/${id}?newEndDate=${formattedEndDate}`,
+                {}, // Empty body
+                { headers }
+            )
+        )
+    );
+  }
+
+
+
+
+
+  calculateRenewalRateForClub(id: number): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any>(`${this.apiUrl}/calculateRenewalRateForClub/${id}`, { headers })
+      )
+    );
+  }
+
+  analyzeClubPerformancee(id: number): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any>(`${this.apiUrl}/analyzeClubPerformance/${id}`, { headers })
+      )
+    );
+  }
+  analyzeClubPerformance(clubId: number): Observable<any> {
+    console.log('Sending clubId:', clubId);  // Vérifie que le clubId est bien passé
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any>(`${this.apiUrl}/analyzeClubPerformance/${clubId}`, { headers })
       )
     );
   }
@@ -130,23 +152,22 @@ export class AbonnementService {
 
 
 
-  bypassclub(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.clubaccount, { responseType: 'text' });
+
+
+
+  getUserAbonnementsHistory(): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+        return this.http.get<any>(`${this.apiUrl}/user-history`, { headers });
+      })
+    );
   }
 
-  bypassadmin(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.adminaccount, { responseType: 'text' });
-  }
 
-  bypassUser(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.useraccount, { responseType: 'text' });
-  }
 
-  bypasscoach(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.coachaccount, { responseType: 'text' });
-  }
+
+
 }

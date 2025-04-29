@@ -8,12 +8,12 @@ import { EditaddComponent } from './editadd/editadd.component';
 
 @NgModule({
   declarations: [ 
-    EditaddComponent,
     DetailsComponent,
     ListComponent,
+    EditaddComponent,
+   
    ],
   imports: [
-   
     CommonModule,
     SportsRoutingModule,
     ReactiveFormsModule,
@@ -23,6 +23,7 @@ import { EditaddComponent } from './editadd/editadd.component';
     DetailsComponent,
     ListComponent,
     EditaddComponent,
+
     SportsRoutingModule,
   ]
 })

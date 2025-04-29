@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-
+import { AuthService } from 'src/app/front-office/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,46 +9,21 @@ export class ClubrequestsService {
   private apiUrl = `http://localhost:8089/clubs`;
   private cachedToken: string | null = null;
 
-  clubaccount = {
-    username: 'CLUB@email.com',
-    password: 'a',
-  };
 
-  adminaccount = {
-    username: 'ADMIN@email.com',
-    password: 'a',
-  };
 
-  useraccount = {
-    username: 'user1@email.com',
-    password: 'a',
-  };
 
-  coachaccount = {
-    username: 'COACH@email.com',
-    password: 'a',
-  };
+
 
   constructor(
     private http: HttpClient,
+    private authService: AuthService
+
   ) { }
 
-  private async getValidToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypassadmin());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
 
   private async generateHeaders(): Promise<HttpHeaders> {
-    const token = await this.getValidToken();
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -56,6 +31,23 @@ export class ClubrequestsService {
   }
 
 
+ 
+
+
+
+  submitClubCreationRequest(formData: FormData): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers => {
+        const headersWithoutContentType = headers.delete('Content-Type');
+        return this.http.post<any>(
+          `${this.apiUrl}/submit-creation-request`,
+          formData,
+          { headers: headersWithoutContentType }
+        );
+      })
+    );
+  }
+  
 
   getPendingRequests(): Observable<any> {
     return from(this.generateHeaders()).pipe(
@@ -64,6 +56,17 @@ export class ClubrequestsService {
       )
     );
   }
+  getRequestDocument(requestId: number): Observable<Blob> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get(`${this.apiUrl}/admin/document/${requestId}`, {
+          headers,
+          responseType: 'blob' // très important pour recevoir des fichiers
+        })
+      )
+    );
+  }
+
 
   approveClubCreationRequest(requestId: any): Observable<void> {
     return from(this.generateHeaders()).pipe(
@@ -88,27 +91,6 @@ export class ClubrequestsService {
 
 
 
-  bypassclub(): Observable<string> {
-    console.log("bypassclub called");
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.clubaccount, { responseType: 'text' });
-  }
 
-  bypassadmin(): Observable<string> {
-    console.log("bypassadmin called");
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.adminaccount, { responseType: 'text' });
-  }
 
-  bypassUser(): Observable<string> {
-    console.log("bypassUser called");
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.useraccount, { responseType: 'text' });
-  }
-
-  bypasscoach(): Observable<string> {
-    console.log("bypasscoach called");
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.coachaccount, { responseType: 'text' });
-  }
 }
