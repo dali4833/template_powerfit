@@ -47,6 +47,11 @@ import {RouterModule} from "@angular/router";
 import { CategorieComponent } from './back-office/categorie/categorie.component';
 import { ProductComponent } from './back-office/product/product.component';
 import { SuccessComponent } from './front-office/success/success.component';
+import { PromotionComponent } from './back-office/promotion/promotion.component';
+import { LivraisonComponent } from './front-office/livraison/livraison.component';
+import { PromotionFrontComponent } from './front-office/promotion-front/promotion-front.component';
+import { MapComponent } from './front-office/map/map.component';
+import { ConfirmDeliveryComponent } from './front-office/livraison/confirm-delivery/confirm-delivery.component';
 
 
 @NgModule({
@@ -78,7 +83,12 @@ import { SuccessComponent } from './front-office/success/success.component';
     NotificationComponent,
     CategorieComponent,
     ProductComponent,
-    SuccessComponent
+    SuccessComponent,
+    PromotionComponent,
+    LivraisonComponent,
+    PromotionFrontComponent,
+    MapComponent,
+    ConfirmDeliveryComponent
   ],
   imports: [
     ReactiveFormsModule,
