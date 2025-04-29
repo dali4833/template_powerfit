@@ -88,10 +88,9 @@ const routes: Routes = [
       { path: 'trainingSession', component: TrainingSessionComponent },
       { path: 'chat', component: ChatComponent },
       { path: 'livraison', component: LivraisonComponent },
+      { path: 'promotionsfront', component: PromotionFrontComponent },
       {path: 'delivery-confirm/:livraisonId',
-        component: ConfirmDeliveryComponent},
-      { path: 'promotionsfront', component: PromotionFrontComponent }
-
+        component: ConfirmDeliveryComponent}
     ]
   },
   { path: '**', redirectTo: '/' }
