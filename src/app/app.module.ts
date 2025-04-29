@@ -77,6 +77,7 @@ import { BacknutritionistComponent } from './back-office/backnutritionist/backnu
 import { LoadingSpinnerComponent } from './front-office/loading-spinner/loading-spinner.component';
 import { RegisterNutrusionistComponent } from './front-office/auth/register-nutrusionist/register-nutrusionist.component';
 import { RouterModule } from '@angular/router';
+import {NgChartsModule} from "ng2-charts";
 
 @NgModule({
   declarations: [
@@ -97,6 +98,7 @@ import { RouterModule } from '@angular/router';
     FooterBackComponent,
     NutritionistComponent,
     MeetingComponent,
+    MapComponent,
     MedicalfolderComponent,
     NewMeetingComponent,
     UpdatemeetingComponent,
@@ -105,13 +107,17 @@ import { RouterModule } from '@angular/router';
     NewmedicalfolderComponent,
     SlotSelectorComponent,
     UpdatemedicalfolderComponent,
+    LivraisonComponent,
     BacknutritionistComponent,
-
-
+    PromotionFrontComponent,
+    CategoriesComponent,
+    NotificationComponent,
+    CartCounterComponent,
     FooterBackComponent,
     ResetPasswordComponent,
     ForgotPasswordComponent,
     RegisterOwnerComponent,
+    SuccessComponent,
     AuthComponent,
     UsersComponent,
     NutritionComponent,
@@ -122,9 +128,12 @@ import { RouterModule } from '@angular/router';
     ChatComponent,
     NutritionistAIComponent,
     FavoriterecipesComponent,
+    ConfirmDeliveryComponent,
+    PromotionComponent,
 
     LoadingSpinnerComponent,
     RegisterNutrusionistComponent,
+    CategorieComponent,
 
     //ChatComponent
   ],
@@ -133,6 +142,7 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     ReactiveFormsModule,
     NgChartsModule,
+    ProductComponent,
     HttpClientModule,
     FormsModule,
     BrowserModule,
@@ -152,6 +162,7 @@ import { RouterModule } from '@angular/router';
     MatIconModule,
     MatSnackBarModule,
     RouterModule,
+
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
