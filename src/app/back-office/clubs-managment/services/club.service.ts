@@ -51,7 +51,7 @@ export class ClubService {
   getClub(id: number): Observable<any> {
     return this.http.get<any>(`http://localhost:8089/clubs/retrieve-club/${id}`);
   }
-  
+
 
   createClub(club: any): Observable<any> {
     return from(this.generateHeaders()).pipe(
@@ -74,7 +74,7 @@ export class ClubService {
   getClubImage(clubId: number): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/${clubId}/image`, { responseType: 'blob' });
   }
-  
+
 
   deleteClub(id: number): Observable<void> {
     return from(this.generateHeaders()).pipe(
@@ -103,7 +103,7 @@ export class ClubService {
       })
     );
   }
-  
+
 
 
 
@@ -153,6 +153,6 @@ export class ClubService {
       useraccount, { responseType: 'text' });
   }
 
-  
+
 
 }

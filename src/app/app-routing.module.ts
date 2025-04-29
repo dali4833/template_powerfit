@@ -19,7 +19,6 @@ import { ClubsPacksComponent } from './front-office/pages/clubs-packs/clubs-pack
 import { TrophiesComponent } from './front-office/pages/trophies/trophies.component';
 import { ClubPerformanceComponent } from './back-office/clubs-managment/club-performance/club-performance.component'; // Assure-toi que le chemin est correct
 
-
 const routes: Routes = [
 
   {
@@ -31,6 +30,7 @@ const routes: Routes = [
       { path: 'abonnementrequests-management', loadChildren: () => import('./back-office/abonnementrequests-mangment/abonnReq.module').then(m => m.AbonnReqModule) },
       { path: 'abonnement-management', loadChildren: () => import('./back-office/abonnement-managment/Abonn.module').then(m => m.AbonnModule) },
       { path: 'Trophy-management', loadChildren: () => import('./back-office/trophiesManagement/Trophy.module').then(m => m.TrophyModule) },
+
 
 
 

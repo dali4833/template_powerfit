@@ -12,7 +12,7 @@ import { ClubPerformanceComponent } from './club-performance/club-performance.co
     ListComponent,
     DetailsComponent,
     EditaddComponent,
-    ClubPerformanceComponent
+    ClubPerformanceComponent,
   ],
   imports: [
     CommonModule,
