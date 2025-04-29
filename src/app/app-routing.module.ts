@@ -103,6 +103,7 @@ const routes: Routes = [
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'trainingSession', component: TrainingSessionComponent },
       { path: 'chat', component: ChatComponent },
+
       {
         path: 'userprofile',
         component: UserprofileComponent,
