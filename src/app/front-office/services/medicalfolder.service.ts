@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from, switchMap } from 'rxjs';
+import { AuthService } from 'src/app/front-office/services/auth.service';
 
 export interface MedicalFolder {
   id: number;
@@ -19,6 +20,7 @@ export interface MedicalFolder {
   createdAt: Date;
   updatedAt?: Date;
 }
+
 export interface Meeting {
   id: number;
   date: string;
@@ -38,55 +40,69 @@ export interface GenderStat {
 export class MedicalfolderService {
   private baseUrl = 'http://localhost:8089/dossier';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWJhQGdtYWlsLmNvbSIsImlhdCI6MTc0NTc3MTE3NiwiZXhwIjoxNzQ1ODc5MTc2fQ.y2hJcW7iyvNcrvhorKWbkYN2LWUDbfg-uW0TdSti9LM';
+  private async generateHeaders(): Promise<HttpHeaders> {
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
   }
 
   getAllDossiers(): Observable<MedicalFolder[]> {
-    return this.http.get<MedicalFolder[]>(`${this.baseUrl}/retrieve-all-dossiers`, {
-      headers: this.getAuthHeaders()
-    });
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<MedicalFolder[]>(`${this.baseUrl}/retrieve-all-dossiers`, { headers })
+      )
+    );
   }
 
   addDossier(dossier: MedicalFolder): Observable<MedicalFolder> {
-    console.log(this.getAuthHeaders);
-    return this.http.post<MedicalFolder>(`${this.baseUrl}/add-dossier`, dossier, {
-      headers: this.getAuthHeaders()
-    });
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.post<MedicalFolder>(`${this.baseUrl}/add-dossier`, dossier, { headers })
+      )
+    );
   }
 
   updateDossier(dossier: MedicalFolder): Observable<MedicalFolder> {
-    return this.http.put<MedicalFolder>(`${this.baseUrl}/update-dossier`, dossier, {
-      headers: this.getAuthHeaders()
-    });
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.put<MedicalFolder>(`${this.baseUrl}/update-dossier`, dossier, { headers })
+      )
+    );
   }
 
   deleteDossier(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/remove-dossier/${id}`, {
-      headers: this.getAuthHeaders()
-    });
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.delete<void>(`${this.baseUrl}/remove-dossier/${id}`, { headers })
+      )
+    );
   }
 
   getMedicalFolderById(id: number): Observable<MedicalFolder> {
-    return this.http.get<MedicalFolder>(`${this.baseUrl}/retrieve-dossier/${id}`, {
-      headers: this.getAuthHeaders()
-    });
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<MedicalFolder>(`${this.baseUrl}/retrieve-dossier/${id}`, { headers })
+      )
+    );
   }
 
   getGenderStats(): Observable<{ [key: string]: GenderStat }> {
-    return this.http.get<{ [key: string]: GenderStat }>(`${this.baseUrl}/gender-stats`, {
-      headers: this.getAuthHeaders()
-    });
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<{ [key: string]: GenderStat }>(`${this.baseUrl}/gender-stats`, { headers })
+      )
+    );
   }
 
   getMeetingsByFolderId(id: number): Observable<Meeting[]> {
-    return this.http.get<Meeting[]>(`${this.baseUrl}/${id}/meetings`, {
-      headers: this.getAuthHeaders()  
-    });
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<Meeting[]>(`${this.baseUrl}/${id}/meetings`, { headers })
+      )
+    );
   }
 }

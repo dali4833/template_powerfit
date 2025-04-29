@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from, switchMap } from 'rxjs';
+import { AuthService } from 'src/app/front-office/services/auth.service';
+
 
 export interface Meeting {
   id: number;
@@ -16,61 +18,79 @@ export interface Meeting {
 export class MeetingService {
   private apiUrl = 'http://localhost:8089/meeting';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private authService: AuthService) {}
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWJhQGdtYWlsLmNvbSIsImlhdCI6MTc0NTc3MTE3NiwiZXhwIjoxNzQ1ODc5MTc2fQ.y2hJcW7iyvNcrvhorKWbkYN2LWUDbfg-uW0TdSti9LM'; // ou mettre manuellement : 'Bearer eyJhbGci...'
+  private async generateHeaders(): Promise<HttpHeaders> {
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
+      'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
   }
 
-  getAllMeetings(): Observable<Meeting[]> {
-    console.log(this.getAuthHeaders());
-    return this.http.get<Meeting[]>(`${this.apiUrl}/retrieve-all-meeting`, {
-      headers: this.getAuthHeaders()
-    });
+  getAllMeetings(): Observable<any[]> {
+     return from(this.generateHeaders()).pipe(
+          switchMap(headers =>
+            this.http.get<any[]>(`${this.apiUrl}/retrieve-all-meeting`, { headers })
+          )
+        );
+        
   }
 
-  retrieveMeeting(meetingId: number): Observable<Meeting> {
-    return this.http.get<Meeting>(`${this.apiUrl}/retrieve-meeting/${meetingId}`, {
-      headers: this.getAuthHeaders()
-    });
+  retrieveMeeting(meetingId: number): Observable<any> {
+    
+  return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/retrieve-meeting/${ meetingId }`,{ headers } )
+      )
+    );
+    
   }
 
-  addMeeting(meeting: Meeting): Observable<Meeting> {
-    console.log(this.getAuthHeaders);
-    return this.http.post<Meeting>(`${this.apiUrl}/add-meeting`, meeting, {
-      headers: this.getAuthHeaders()
-    });
+  addMeeting(meeting: Meeting): Observable<any> {
+    
+
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.post<any>(`${this.apiUrl}/add-meeting`, meeting, { headers })
+      )
+    );
   }
 
   deleteMeeting(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/remove-meeting/${id}`, {
-      headers: this.getAuthHeaders()
-    });
+    
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.delete<void>(`${this.apiUrl}/remove-meeting/${id}`, { headers })
+      )
+    );
   }
 
   updateMeeting(meeting: Meeting): Observable<Meeting> {
-    return this.http.put<Meeting>(`${this.apiUrl}/update-meeting`, meeting, {
-      headers: this.getAuthHeaders()
-    });
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.put<Meeting>(`${this.apiUrl}/update-meeting`, meeting, { headers })
+      )
+    );
   }
-
   
-
   getMeetingReminders(): Observable<Meeting[]> {
-    return this.http.get<Meeting[]>(`${this.apiUrl}/reminders`, {
-      headers: this.getAuthHeaders()
-    });
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<Meeting[]>(`${this.apiUrl}/reminders`, { headers })
+      )
+    );
   }
-
+  
   getAvailableSlots(date: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/available-slots/${date}`, {
-      headers: this.getAuthHeaders()
-    });
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/available-slots/${date}`, { headers })
+      )
+    );
   }
-
+  
   
   
   
