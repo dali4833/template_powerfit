@@ -4,24 +4,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { StoreComponent } from "./front-office/store/store.component";
 import { ProductsComponent } from "./front-office/store/products/products.component";
 import { ProductDetailComponent } from "./front-office/store/product-detail/product-detail.component";
-import { HomeComponent } from "./front-office/home/home.component";
 import { LoginComponent } from './front-office/auth/login/login.component';
-import { RegisterComponent } from './front-office/auth/register/register.component';
-import { UserprofileComponent } from './front-office/userprofile/userprofile.component';
-import { AllTemplateFrontComponentComponent } from './front-office/all-template-front-component/all-template-front-component.component';
-import { AllTemplateBackComponentComponent } from './back-office/all-template-back-component/all-template-back-component.component';
 
 import { RecipeComponent } from './front-office/nutrition/recipe/recipe.component';
 import { MealPlanComponent } from './front-office/nutrition/meal-plan/meal-plan.component';
 import { DietProgramComponent } from './front-office/nutrition/diet-program/diet-program.component';
 import { NutritionComponent } from './front-office/nutrition/nutrition.component';
-import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
 
 
 import { NutritionistAIComponent } from './front-office/nutrition/nutritionist-ai/nutritionist-ai.component';
 import { FavoriterecipesComponent } from './front-office/nutrition/favoriterecipes/favoriterecipes.component';
 
-//import { ChatComponent } from './front-office/pages/chat/chat.component';
 import { ChatComponent } from './front-office/pages/chat/chat.component';
 import { ResetPasswordComponent } from './front-office/auth/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './front-office/auth/forgot-password/forgot-password.component';
@@ -62,6 +55,30 @@ import {CategorieComponent} from "./back-office/categorie/categorie.component";
 
 
 
+// {
+//   path: '', component: AllTemplateFrontComponentComponent, children: [ // Home route
+
+
+
+
+
+
+
+
+
+//     {
+//       path: '',
+//       loadChildren: () => import('./front-office/pages/clubcreation-form/clubreq.module').then(m => m.clubreqModule)
+//     },
+
+//     { path: 'performance/:clubId', component: ClubPerformanceComponent }
+
+
+
+
+
+//   ]
+// },
 
 
 const routes: Routes = [
