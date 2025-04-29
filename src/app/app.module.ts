@@ -36,10 +36,10 @@ import { UsersComponent } from './back-office/users/users.component';
 import { TrophiesComponent } from './front-office/pages/trophies/trophies.component';
 import { clubreqModule } from './back-office/clubrequests-managment/clubreq.module';
 import { ClubPerformanceComponent } from './back-office/clubs-managment/club-performance/club-performance.component';
-import {BrowserAnimationsModule, provideAnimations} from "@angular/platform-browser/animations";
 //import {provideToastr, ToastrModule} from 'ngx-toastr';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -47,6 +47,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+//import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ChatComponent } from './front-office/pages/chat/chat.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { NutritionistAIComponent } from './front-office/nutrition/nutritionist-ai/nutritionist-ai.component';
@@ -145,28 +146,19 @@ import {NgChartsModule} from "ng2-charts";
     ProductComponent
   ],
   imports: [
-
-
-    NgChartsModule,
-
+    ReactiveFormsModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    NgChartsModule,
+    HttpClientModule,
+    FormsModule,
     BrowserModule,
     clubreqModule,
     BrowserAnimationsModule,
-    // ToastrModule.forRoot({
-    //   positionClass: 'toast-bottom-right', // Positionner en bas à droite
-    //   timeOut: 3000, // Durée de la notification (en ms)
-    //   progressBar: true, // Ajouter une barre de progression
-    //   closeButton: true, // Ajouter un bouton de fermeture
-    //   preventDuplicates: true // Empêcher l'affichage de notifications en double
-    // }),
-
-    // providers: [ provideAnimations(), // required animations providers
-    //   provideToastr(),],
-    // bootstrap: [AppComponent]
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule,
     FullCalendarModule,
     DragDropModule,
     NgScrollbarModule,

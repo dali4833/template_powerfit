@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+/*import { Component, OnInit } from '@angular/core';
 import { ProductService } from './product.service';
 import { Product } from './product.model';
 import { ProductStatistics } from '../models/product-statistics.model';
@@ -7,8 +7,17 @@ import { Category } from '../categorie/categorie.module';
 import { CommonModule } from '@angular/common';
 import {HttpHeaders} from "@angular/common/http";
 import {Subscription} from "rxjs";
-import {WebSocketNotificationService} from "../services/notification.service";
+import {WebSocketNotificationService} from "../services/notification.service";*/
 // Note the capital 'S'
+import {Component, OnInit} from "@angular/core";
+import {Product} from "./product.model";
+import {ProductStatistics} from "../models/product-statistics.model";
+import {Subscription} from "rxjs";
+import {Category} from "../categorie/categorie.module";
+import {ProductService} from "./product.service";
+import {CategoryService} from "../categorie/category.service";
+import {WebSocketNotificationService} from "../services/notification.service";
+
 declare var bootstrap: any;
 
 @Component({

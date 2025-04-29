@@ -1,3 +1,11 @@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+  <div class="app-brand demo">
+    <a href="index.html" class="app-brand-link">
+      <span class="app-brand-logo demo">
+        <!-- SVG logo omitted for brevity -->
+      </span>
+      <span class="app-brand-text demo menu-text fw-bolder ms-2">PowerFit</span>
+    </a>
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme"
  style="height: 100%;"
 >
@@ -11,77 +19,77 @@
 
   <div class="menu-inner-shadow"></div>
 
-    <ul class="menu-inner py-1">
+  <ul class="menu-inner py-1">
+    <!-- Coach Section -->
+    <ng-container *ngIf="isCoach()">
+      <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Training Management</span>
+      </li>
+      <li class="menu-item">
+        <a routerLink="/dashboard/TrainingSession-management" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-dumbbell"></i>
+          <div data-i18n="Training Sessions">Training Sessions</div>
+        </a>
+      </li>
+    </ng-container>
+
+    <!-- Admin Section -->
+    <ng-container *ngIf="isAdmin()">
       <!-- Dashboard -->
-      <li class="menu-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{ exact: false }">
+      <li class="menu-item" [routerLinkActive]="['active']">
         <a routerLink="/dashboard" class="menu-link">
           <i class="menu-icon tf-icons bx bx-home-circle"></i>
-          <div data-i18n="Analytics">Dashboard</div>
+          <div data-i18n="Dashboard">Dashboard</div>
         </a>
       </li>
 
-  
-      <li class="menu-item">
-        <a routerLink="/admin/club-performance" class="menu-link">
-          <div data-i18n="Input Groups">Performance Club</div>
+      <!-- Users -->
+      <li class="menu-item" [routerLinkActive]="['active']">
+        <a routerLink="/dashboard/users" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-user-circle"></i>
+          <div data-i18n="Users">Users</div>
         </a>
       </li>
-      
 
-      <!-- Forms & Tables -->
-      <li class="menu-header small text-uppercase"><span class="menu-header-text">Gestion des Clubs  </span></li>
-      <!-- Forms -->
+      <!-- Training Sessions -->
+      <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Training Management</span>
+      </li>
       <li class="menu-item">
-        <ul >
-          <li class="menu-item">
-            <a routerLink="/admin/sports-management" class="menu-link">
-              <div data-i18n="Basic Inputs">Sports</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a routerLink="/admin/packs-management" class="menu-link">
-              <div data-i18n="Input Groups">Packs</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a routerLink="/admin/clubs-management" class="menu-link">
-              <div data-i18n="Input Groups">Clubs</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a routerLink="/admin/clubrequests-management" class="menu-link">
-              <div data-i18n="Input Groups">Club Requests</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a routerLink="/admin/abonnementrequests-management" class="menu-link">
-              <div data-i18n="Input Groups">Abonnement requests</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a routerLink="/admin/abonnement-management" class="menu-link">
-              <div data-i18n="Input Groups">Abonnement </div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a routerLink="/admin/Trophy-management" class="menu-link">
-              <div data-i18n="Input Groups">Trophies </div>
-            </a>
-          </li>
-        
-         
-        </ul>
-        <li class="menu-item" 
-        [routerLinkActive]="['active']"
-         [routerLinkActiveOptions]="{ exact: false }"
-         
-         >
-          <a routerLink="/dashboard/users" routerLinkActive="active" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-user-circle"></i>
-            <div data-i18n="Users">Users</div>
-          </a>
+        <a routerLink="/dashboard/TrainingSession-management" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-dumbbell"></i>
+          <div data-i18n="Training Sessions">Training Sessions</div>
+        </a>
       </li>
 
+      <!-- Promotions -->
+      <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Marketing</span>
+      </li>
+      <li class="menu-item">
+        <a routerLink="/dashboard/promotions" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-gift"></i>
+          <div data-i18n="Promotions">Promotions</div>
+        </a>
+      </li>
+
+      <!-- Product Management -->
+      <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Store Management</span>
+      </li>
+      <li class="menu-item">
+        <a routerLink="/dashboard/categories" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-category"></i>
+          <div data-i18n="Categories">Categories</div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a routerLink="/dashboard/products" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-package"></i>
+          <div data-i18n="Products">Products</div>
+        </a>
+      </li>
+    </ng-container>
       <!-- Layouts -->
       <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">

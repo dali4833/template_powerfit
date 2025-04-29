@@ -6,11 +6,16 @@ import { ProductsComponent } from "./front-office/store/products/products.compon
 import { ProductDetailComponent } from "./front-office/store/product-detail/product-detail.component";
 import { HomeComponent } from "./front-office/home/home.component";
 import { LoginComponent } from './front-office/auth/login/login.component';
+import { RegisterComponent } from './front-office/auth/register/register.component';
+import { UserprofileComponent } from './front-office/userprofile/userprofile.component';
+import { AllTemplateFrontComponentComponent } from './front-office/all-template-front-component/all-template-front-component.component';
+import { AllTemplateBackComponentComponent } from './back-office/all-template-back-component/all-template-back-component.component';
 
 import { RecipeComponent } from './front-office/nutrition/recipe/recipe.component';
 import { MealPlanComponent } from './front-office/nutrition/meal-plan/meal-plan.component';
 import { DietProgramComponent } from './front-office/nutrition/diet-program/diet-program.component';
 import { NutritionComponent } from './front-office/nutrition/nutrition.component';
+import { TrainingSessionComponent } from './front-office/pages/training-session/training-session.component';
 
 
 import { NutritionistAIComponent } from './front-office/nutrition/nutritionist-ai/nutritionist-ai.component';
@@ -34,7 +39,6 @@ import { ClubPerformanceComponent } from './back-office/clubs-managment/club-per
 import { RegisterNutrusionistComponent } from './front-office/auth/register-nutrusionist/register-nutrusionist.component';
 import { AuthGuard } from './guards/auth.guard';
 import {CategoriesComponent} from "./front-office/categories/categories.component";
-
 import { LivraisonComponent } from './front-office/livraison/livraison.component';
 import { PromotionFrontComponent } from './front-office/promotion-front/promotion-front.component';
 import {ConfirmDeliveryComponent} from "./front-office/livraison/confirm-delivery/confirm-delivery.component";
@@ -49,41 +53,18 @@ import { NewmedicalfolderComponent } from './front-office/nutritionist/medicalfo
 import { SlotSelectorComponent } from './front-office/nutritionist/meeting/slot-selector/slot-selector.component';
 import { UpdatemedicalfolderComponent } from './front-office/nutritionist/medicalfolder/updatemedicalfolder/updatemedicalfolder.component';
 import { BacknutritionistComponent } from './back-office/backnutritionist/backnutritionist.component';
+import {SuccessComponent} from "./front-office/success/success.component";
+import {ProductComponent} from "./back-office/product/product.component";
+import {CategorieComponent} from "./back-office/categorie/categorie.component";
+
+
+
+
+
+
 
 
 const routes: Routes = [
-
-
-
-
-
-  // {
-  //   path: '', component: AllTemplateFrontComponentComponent, children: [ // Home route
-
-
-
-
-
-
-
-
-
-  //     {
-  //       path: '',
-  //       loadChildren: () => import('./front-office/pages/clubcreation-form/clubreq.module').then(m => m.clubreqModule)
-  //     },
-
-  //     { path: 'performance/:clubId', component: ClubPerformanceComponent }
-
-
-
-
-
-  //   ]
-  // },
-  { path: '**', redirectTo: '/' },
-
-
   { path: 'admin/auth', component: AuthComponent },
   {
     path: 'dashboard',
@@ -100,8 +81,13 @@ const routes: Routes = [
       { path: 'TrainingSession-management', loadChildren: () => import('./back-office/TrainingSessionMangment/TrainingSession.module').then(m => m.TrainingSessionModule) },
       { path: 'Review-management', loadChildren: () => import('./back-office/ReviewManagment/Review.module').then(m => m.ReviewModule) },
       { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
+      { path: 'categories', component: CategorieComponent ,canActivate: [AuthGuard]},
+      { path: 'products', component: ProductComponent,canActivate: [AuthGuard]  },
+      { path: 'success', component: SuccessComponent,canActivate: [AuthGuard]  },
+
+      { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
       { path: 'Trophy-management', loadChildren: () => import('./back-office/trophiesManagement/Trophy.module').then(m => m.TrophyModule) },
-      {}
+
     ]
   },
   {
