@@ -34,10 +34,7 @@ import { ClubPerformanceComponent } from './back-office/clubs-managment/club-per
 import { RegisterNutrusionistComponent } from './front-office/auth/register-nutrusionist/register-nutrusionist.component';
 import { AuthGuard } from './guards/auth.guard';
 import {CategoriesComponent} from "./front-office/categories/categories.component";
-import {CategorieComponent} from "./back-office/categorie/categorie.component";
-import {ProductComponent} from "./back-office/product/product.component";
-import {SuccessComponent} from "./front-office/success/success.component";
-import {PromotionComponent} from "./back-office/promotion/promotion.component";
+
 import { LivraisonComponent } from './front-office/livraison/livraison.component';
 import { PromotionFrontComponent } from './front-office/promotion-front/promotion-front.component';
 import {ConfirmDeliveryComponent} from "./front-office/livraison/confirm-delivery/confirm-delivery.component";
@@ -59,7 +56,7 @@ const routes: Routes = [
 
 
 
-  
+
   // {
   //   path: '', component: AllTemplateFrontComponentComponent, children: [ // Home route
 
@@ -104,7 +101,7 @@ const routes: Routes = [
       { path: 'Review-management', loadChildren: () => import('./back-office/ReviewManagment/Review.module').then(m => m.ReviewModule) },
       { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
       { path: 'Trophy-management', loadChildren: () => import('./back-office/trophiesManagement/Trophy.module').then(m => m.TrophyModule) },
-
+      {}
     ]
   },
   {

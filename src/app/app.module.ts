@@ -139,18 +139,16 @@ import {NgChartsModule} from "ng2-charts";
     ConfirmDeliveryComponent,
     PromotionComponent,
     ClubsPacksComponent,
-
     LoadingSpinnerComponent,
     RegisterNutrusionistComponent,
     CategorieComponent,
-
-    //ChatComponent
+    ProductComponent
   ],
   imports: [
 
 
     NgChartsModule,
-    ProductComponent,
+
     HttpClientModule,
     BrowserModule,
     clubreqModule,
@@ -162,10 +160,10 @@ import {NgChartsModule} from "ng2-charts";
     //   closeButton: true, // Ajouter un bouton de fermeture
     //   preventDuplicates: true // Empêcher l'affichage de notifications en double
     // }),
- 
-  // providers: [ provideAnimations(), // required animations providers
-  //   provideToastr(),],
- // bootstrap: [AppComponent]
+
+    // providers: [ provideAnimations(), // required animations providers
+    //   provideToastr(),],
+    // bootstrap: [AppComponent]
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
@@ -179,7 +177,8 @@ import {NgChartsModule} from "ng2-charts";
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    RouterModule,
+    RouterModule
+
 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
