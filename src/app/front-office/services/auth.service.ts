@@ -112,19 +112,24 @@ export class AuthService {
 
     try {
       const payloadPart = token.split('.')[1];
-      const base64 = payloadPart.replace(/-/g, '+').replace(/_/g, '/'); // handle base64url
+      const base64 = payloadPart.replace(/-/g, '+').replace(/_/g, '/');
       const decodedPayload = atob(base64);
       const payload = JSON.parse(decodedPayload);
 
-      let role = null;
-      if (Array.isArray(payload.roles)) {
-        role = payload.roles[0]; // 👈 pick the first role
-      } else {
-        role = payload.roles;
+      console.log('Token payload:', payload);
+
+      if (payload.roles && Array.isArray(payload.roles)) {
+        // Check for ROLE_ADMIN first
+        if (payload.roles.includes('ROLE_ADMIN')) {
+          return 'ROLE_ADMIN';
+        }
+        // Then check for ROLE_COACH
+        if (payload.roles.includes('ROLE_COACH')) {
+          return 'ROLE_COACH';
+        }
       }
 
-      console.log('Role from token:', role);
-      return role || null;
+      return null;
     } catch (error) {
       console.error('Error decoding token:', error);
       return null;

@@ -21,7 +21,6 @@ import { TrainingSessionComponent } from './front-office/pages/training-session/
 import { NutritionistAIComponent } from './front-office/nutrition/nutritionist-ai/nutritionist-ai.component';
 import { FavoriterecipesComponent } from './front-office/nutrition/favoriterecipes/favoriterecipes.component';
 
-//import { ChatComponent } from './front-office/pages/chat/chat.component';
 import { ChatComponent } from './front-office/pages/chat/chat.component';
 import { ResetPasswordComponent } from './front-office/auth/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './front-office/auth/forgot-password/forgot-password.component';
@@ -31,10 +30,6 @@ import { UsersComponent } from './back-office/users/users.component';
 import { RegisterNutrusionistComponent } from './front-office/auth/register-nutrusionist/register-nutrusionist.component';
 import { AuthGuard } from './guards/auth.guard';
 import {CategoriesComponent} from "./front-office/categories/categories.component";
-import {CategorieComponent} from "./back-office/categorie/categorie.component";
-import {ProductComponent} from "./back-office/product/product.component";
-import {SuccessComponent} from "./front-office/success/success.component";
-import {PromotionComponent} from "./back-office/promotion/promotion.component";
 import { LivraisonComponent } from './front-office/livraison/livraison.component';
 import { PromotionFrontComponent } from './front-office/promotion-front/promotion-front.component';
 import {ConfirmDeliveryComponent} from "./front-office/livraison/confirm-delivery/confirm-delivery.component";
@@ -49,6 +44,9 @@ import { NewmedicalfolderComponent } from './front-office/nutritionist/medicalfo
 import { SlotSelectorComponent } from './front-office/nutritionist/meeting/slot-selector/slot-selector.component';
 import { UpdatemedicalfolderComponent } from './front-office/nutritionist/medicalfolder/updatemedicalfolder/updatemedicalfolder.component';
 import { BacknutritionistComponent } from './back-office/backnutritionist/backnutritionist.component';
+import {SuccessComponent} from "./front-office/success/success.component";
+import {ProductComponent} from "./back-office/product/product.component";
+import {CategorieComponent} from "./back-office/categorie/categorie.component";
 
 
 
@@ -73,7 +71,11 @@ const routes: Routes = [
       { path: 'abonnement-management', loadChildren: () => import('./back-office/abonnement-managment/Abonn.module').then(m => m.AbonnModule) },
       { path: 'TrainingSession-management', loadChildren: () => import('./back-office/TrainingSessionMangment/TrainingSession.module').then(m => m.TrainingSessionModule) },
       { path: 'Review-management', loadChildren: () => import('./back-office/ReviewManagment/Review.module').then(m => m.ReviewModule) },
-      { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) }
+      { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
+      { path: 'categories', component: CategorieComponent ,canActivate: [AuthGuard]},
+      { path: 'products', component: ProductComponent,canActivate: [AuthGuard]  },
+      { path: 'success', component: SuccessComponent,canActivate: [AuthGuard]  },
+
     ]
   },
   {
