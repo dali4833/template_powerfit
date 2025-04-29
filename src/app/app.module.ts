@@ -85,8 +85,8 @@ import { RouterModule } from '@angular/router';
     LivraisonComponent,
     PromotionFrontComponent,
     MapComponent,
-    ConfirmDeliveryComponent
-    SuccessComponent,
+    ConfirmDeliveryComponent,
+
     LoadingSpinnerComponent,
     RegisterNutrusionistComponent,
   ],
