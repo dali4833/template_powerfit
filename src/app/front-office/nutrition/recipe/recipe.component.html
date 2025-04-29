@@ -1,0 +1,440 @@
+<!-- 💫 Top 10 des Recettes -->
+<div class="container py-5">
+  <!-- Recipe Form Section -->
+<div *ngIf="roles === 'NUTRITIONIST'" class="recipe-form-section mt-4" id="recipe-form">
+  <div class="form-card p-4 border rounded shadow-sm" style="background-color: #f9f9f9; color: #000;">
+    <h3 class="form-title mb-4 text-success">
+      <i class="bi bi-egg-fried me-2"></i> 
+      {{ editMode ? 'Update Recipe' : 'Create New Recipe' }}
+    </h3>
+    
+    <form #recipeForm="ngForm" class="recipe-form">
+      <div class="row g-3">
+        <!-- Recipe Name -->
+        <div class="col-md-6">
+          <label for="name" class="form-label">
+            <i class="bi bi-card-heading me-1"></i> Recipe Name
+          </label>
+          <input type="text" id="name" class="form-control" 
+                 [(ngModel)]="newRecipe.name" name="name" 
+                 placeholder="e.g. Keto Avocado Salad" required />
+        </div>
+
+        <!-- Meal Type -->
+        <div class="col-md-6">
+          <label for="mealType" class="form-label">
+            <i class="bi bi-egg me-1"></i> Meal Type
+          </label>
+          <select id="mealType" class="form-select" 
+                  [(ngModel)]="newRecipe.mealType" name="mealType" required>
+            <option value="" disabled selected>Select meal type</option>
+            <option *ngFor="let type of mealTypes" [value]="type">{{type}}</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="col-12">
+          <label for="description" class="form-label">
+            <i class="bi bi-text-paragraph me-1"></i> Description
+          </label>
+          <textarea id="description" class="form-control" rows="2"
+                    [(ngModel)]="newRecipe.description" name="description"
+                    placeholder="Brief description of the recipe" required></textarea>
+        </div>
+
+        <!-- Ingredients -->
+        <div class="col-md-6">
+          <label for="ingredients" class="form-label">
+            <i class="bi bi-list-ul me-1"></i> Ingredients
+          </label>
+          <textarea id="ingredients" class="form-control" rows="4"
+                    [(ngModel)]="newRecipe.ingredients" name="ingredients"
+                    placeholder="List ingredients separated by commas or new lines" required></textarea>
+        </div>
+
+        <!-- Instructions -->
+        <div class="col-md-6">
+          <label for="instructions" class="form-label">
+            <i class="bi bi-list-check me-1"></i> Instructions
+          </label>
+          <textarea id="instructions" class="form-control" rows="4"
+                    [(ngModel)]="newRecipe.instructions" name="instructions"
+                    placeholder="Step-by-step preparation instructions" required></textarea>
+        </div>
+
+        <!-- Calories -->
+        <div class="col-md-4">
+          <label for="calories" class="form-label">
+            <i class="bi bi-fire me-1"></i> Calories
+          </label>
+          <div class="input-group">
+            <input type="number" id="calories" class="form-control" 
+                   [(ngModel)]="newRecipe.calories" name="calories" 
+                   placeholder="e.g. 350" required min="0" />
+            <span class="input-group-text">kcal</span>
+          </div>
+        </div>
+
+        <!-- Preparation Time -->
+        <div class="col-md-4">
+          <label for="preparationTime" class="form-label">
+            <i class="bi bi-clock me-1"></i> Preparation Time (minutes)
+          </label>
+          <input type="number" id="preparationTime" class="form-control" 
+                 [(ngModel)]="newRecipe.preparationTime" name="preparationTime"
+                 placeholder="e.g. 30" min="0" required />
+        </div>
+
+        <!-- YouTube URL -->
+        <div class="col-md-4">
+          <label for="youtubeUrl" class="form-label">
+            <i class="bi bi-youtube me-1"></i> YouTube URL (optional)
+          </label>
+          <input type="url" id="youtubeUrl" class="form-control" 
+                 [(ngModel)]="newRecipe.youtubeUrl" name="youtubeUrl" 
+                 placeholder="https://www.youtube.com/watch?v=..." />
+        </div>
+
+        <!-- Image URL -->
+        <div class="col-12">
+          <label for="image" class="form-label">
+            <i class="bi bi-image me-1"></i> Image URL
+          </label>
+          <input type="text" id="image" class="form-control" 
+                 [(ngModel)]="newRecipe.image" name="image" 
+                 placeholder="https://example.com/image.jpg" />
+        </div>
+
+        <!-- Form Actions -->
+        <div class="col-12 form-actions mt-3">
+          <button type="button" class="btn btn-success me-2" 
+                  (click)="editMode ? updateRecipe() : addRecipe()" 
+                  [disabled]="recipeForm.invalid || isSubmitting">
+            <i class="bi bi-save me-2"></i> 
+            {{ editMode ? 'Update Recipe' : 'Add Recipe' }}
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm ms-2"></span>
+          </button>
+          
+          <button type="button" class="btn btn-outline-secondary" 
+                  (click)="resetRecipeForm()">
+            <i class="bi bi-x-circle me-2"></i> 
+            {{ editMode ? 'Cancel' : 'Reset' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+  <h2 class="mb-4 fw-bold text-center text-primary">🌟 Top 10 recipes of the day</h2>
+  
+  <div class="row g-4" >
+    <div class="col-md-4" *ngFor="let recipe of paginatedRecipes; let i = index" >
+      <div class="card shadow   border-0 bg-white rounded-4">
+        <div class="position-relative">
+          <img
+            [src]="recipe.image || 'https://via.placeholder.com/300x200?text=No+Image'"
+            class="card-img-top rounded-top-4"
+            alt="{{ recipe.name }}"
+            style="height: 200px; object-fit: cover;"
+          />
+          <span class="position-absolute top-0 start-0 bg-warning text-dark px-3 py-1 rounded-bottom-end fw-semibold">
+            Top{{ i + 1 + (currentPage - 1) * recipesPerPage }}
+          </span>
+        </div>
+        
+        <div class="card-body text-dark" >
+          <h5 class="card-title fw-bold">{{ recipe.name }}</h5>
+          <p class="card-text text-muted small">{{ recipe.description }}</p>
+          <p class="fw-semibold">🔥 Calories: {{ recipe.calories }} kcal</p>
+          <p class="fw-semibold text-success">⏳ Duration: {{ getReadableDuration(recipe.preparationTime) }}</p>
+          <p class="fw-semibold text-info">🍽️ Ideal For : {{ recipe.mealType }}</p>
+          <p class="text-muted text-truncate" ><strong>main ingredients:</strong> {{ recipe.ingredients }}</p>
+
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <button class="btn btn-sm btn-outline-primary" (click)="toggleInstructions(recipe.idRecipe)">📖 Instructions</button>
+            <button class="btn btn-sm btn-outline-danger" [ngClass]="{ 'active': recipe.isFavorite }" (click)="toggleFavorite(recipe)">
+              ❤️ Favorite
+            </button>
+          </div>
+
+          <div *ngIf="expandedRecipeIds.includes(recipe.idRecipe)" class="mt-3 text-start">
+            <h6>Instructions :</h6>
+            <ul>
+              <li *ngFor="let instruction of getInstructionsAsList(recipe.instructions)">
+                {{ instruction }}.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-center mt-4">
+    <nav>
+      <ul class="pagination">
+        <li class="page-item " [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+        </li>
+        <li *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="currentPage === i + 1" class="page-item">
+          <a class="page-link bg-light text-success" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="changePage(currentPage + 1)">More</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<!-- 🔍 Section de Recherche -->
+<div class="container py-5">
+  <div class="container py-5">
+    <h2 class="mb-4 fw-bold text-center simple-move-text">🔎 Looking for a special one ?</h2>
+    
+    <div class="mb-4">
+      <input
+        type="text"
+        class="form-control form-control-lg"
+        placeholder="Search your recipe name or ingredient"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch(searchTerm)"
+      />
+    </div>
+  </div>
+  
+  <!-- 📚 Section Toutes les Recettes -->
+  <div class="container">
+    <h2 class="mb-4 fw-bold text-center simple-move-text">📋 All Recipes</h2>
+    
+    <!-- Contenu des recettes ici... -->
+  </div>
+  
+  <div *ngIf="filteredRecipes.length > 0; else noResults" class="row g-4" >
+    <div class="col-md-4" *ngFor="let recipe of filteredRecipes.slice(0, visibleRecipesCount)">
+
+      <div class="card shadow  border-0 bg-light rounded-4" style="min-height: 620px;">
+        
+        <!-- 🖼️ Image added here -->
+        <img
+          [src]="recipe.image || 'https://via.placeholder.com/300x200?text=No+Image'"
+          class="card-img-top rounded-top-4"
+          alt="{{ recipe.name }}"
+          style="height: 200px; object-fit: cover;"
+        />
+
+        <div class="card-body text-dark">
+          <h5 class="card-title fw-bold">{{ recipe.name }}</h5>
+          <p class="card-text text-muted">{{ recipe.description }}</p>
+          <p><strong>Calories:</strong> {{ recipe.calories }} kcal</p>
+          <p><strong>Duration:</strong> {{ getReadableDuration(recipe.preparationTime) }}</p>
+          <p><strong>Meal Type:</strong> {{ recipe.mealType }}</p>
+          
+          <a *ngIf="recipe.youtubeUrl" [href]="recipe.youtubeUrl" target="_blank">
+            Watch a video ?
+          </a>
+          
+
+         <!-- Bouton Instructions aligné à gauche -->
+<div class="d-flex justify-content-start">
+  <button class="btn btn-sm btn-outline-primary mt-2" (click)="toggleInstructions(recipe.idRecipe)">
+    🍳 {{ expandedRecipeIds.includes(recipe.idRecipe) ? 'Hide' : 'Show' }} Instructions
+  </button>
+</div>
+
+<!-- Instructions -->
+<div *ngIf="expandedRecipeIds.includes(recipe.idRecipe)" class="mt-2">
+  <ul class="list-group list-group-flush">
+    <li *ngFor="let step of getInstructionsAsList(recipe.instructions)" class="list-group-item bg-light">
+      👉 {{ step }}
+    </li>
+  </ul>
+</div>
+
+
+          
+          <p><strong>Main Ingredients:</strong> {{ recipe.ingredients }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end mt-3" *ngIf="visibleRecipesCount < filteredRecipes.length">
+    <button class="btn see-more-button-pistache text-bg-light text-success" (click)="loadMore()">👀 See More</button>
+  </div>
+  <ng-template #noResults>
+    <p class="text-center text-muted">No recipes found.</p>
+  </ng-template>
+</div>
+
+
+ <div *ngFor="let recipe of paginatedNutritionRecipes">
+<button class="btn btn-sm btn-outline-primary" (click)="openNutritionModal(recipe.id)">
+  🔎 Details
+</button>
+</div>
+<!-- Modal Bootstrap (place-le une seule fois dans ta template) -->
+<div class="modal fade" tabindex="-1" [ngClass]="{'show d-block': showNutritionModal}" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ nutritionDetail?.title }}</h5>
+        <button type="button" class="btn-close" (click)="closeNutritionModal()"></button>
+      </div>
+      <div class="modal-body" *ngIf="nutritionDetail">
+        <img [src]="nutritionDetail.image" class="img-fluid mb-3" alt="{{ nutritionDetail.title }}">
+        <p><strong>Ready in:</strong> {{ nutritionDetail.readyInMinutes }} min</p>
+        <p><strong>Servings:</strong> {{ nutritionDetail.servings }}</p>
+        <h6>Summary:</h6>
+        <div [innerHTML]="nutritionDetail.summary"></div>
+        <h6>Ingredients:</h6>
+        <ul>
+          <li *ngFor="let ing of nutritionDetail.extendedIngredients">
+            {{ ing.original }}
+          </li>
+        </ul>
+        <h6>Instructions:</h6>
+        <div [innerHTML]="nutritionDetail.instructions"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeNutritionModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Search Bar -->
+<div class="search-container mb-5">
+  <div class="search-bar">
+    <i class="search-icon">🔍</i>
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search recipes by name or ingredient..."
+      [(ngModel)]="searchTermNutrition"
+      (input)="onSearchNutritionRecipe(searchTermNutrition)"
+    />
+  </div>
+</div>
+
+<!-- Recipe Cards Grid -->
+<div class="recipe-grid">
+  <div *ngFor="let recipe of paginatedNutritionRecipes" class="recipe-card">
+    <div class="card-image" [style.backgroundImage]="'url(' + recipe.image + ')'">
+      <div class="card-badge">{{recipe.readyInMinutes}} min</div>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">{{recipe.title}}</h3>
+      <div class="card-meta">
+        <span class="servings">🍽️ {{recipe.servings}} servings</span>
+      </div>
+      <button class="card-action-btn" (click)="openNutritionModal(recipe.id)">
+        View Details
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Nutrition Modal -->
+<div class="custom-modal" [ngClass]="{'visible': showNutritionModal}">
+  <div class="modal-overlay" (click)="closeNutritionModal()"></div>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>{{ nutritionDetail?.title }}</h2>
+      <button class="close-btn" (click)="closeNutritionModal()">&times;</button>
+    </div>
+    
+    <div class="modal-body" *ngIf="nutritionDetail">
+      <div class="recipe-hero">
+        <img [src]="nutritionDetail.image" alt="{{ nutritionDetail.title }}" class="hero-image">
+        <div class="recipe-stats">
+          <div class="stat-item">
+            <span class="stat-icon">⏱️</span>
+            <span>{{ nutritionDetail.readyInMinutes }} min</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">🍽️</span>
+            <span>{{ nutritionDetail.servings }} servings</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="recipe-content">
+        <section class="recipe-section">
+          <h3>About This Recipe</h3>
+          <div class="summary" [innerHTML]="nutritionDetail.summary"></div>
+        </section>
+        
+        <div class="columns-container">
+          <section class="recipe-section ingredients">
+            <h3>Ingredients</h3>
+            <ul class="ingredient-list">
+              <li *ngFor="let ing of nutritionDetail.extendedIngredients">
+                <span class="ingredient-checkbox">□</span>
+                {{ ing.original }}
+              </li>
+            </ul>
+          </section>
+          
+          <section class="recipe-section instructions">
+            <h3>Instructions</h3>
+            <div class="instruction-steps" [innerHTML]="nutritionDetail.instructions"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn-close-modal" (click)="closeNutritionModal()">Close Recipe</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🥗 Recettes Nutritionnelles -->
+<div class="container py-5" *ngIf="nutritionRecipes.length > 0">
+ <h2 class="mb-4 fw-bold text-center text-primary">🥗 Nutrition Recipes</h2>
+
+ <div class="row g-4">
+   <div class="col-md-4" *ngFor="let recipe of nutritionRecipes">
+     <div class="card shadow border-0 bg-light rounded-4 overflow-hidden">
+       <div class="position-relative">
+         <img
+           [src]="recipe.image || 'https://via.placeholder.com/300x200?text=No+Image'"
+           class="card-img-top rounded-4"
+           alt="{{ recipe.title }}"
+           style="height: 200px; object-fit: cover;"
+         />
+       </div>
+
+       <div class="card-body text-dark p-3">
+         <h5 class="card-title fw-bold text-primary">{{ recipe.title }}</h5>
+         <p class="card-text text-muted small">{{ recipe.summary | slice:0:100 }}...</p>
+         <p class="fw-semibold">🔥 <span class="text-danger">Calories:</span> {{ recipe.calories }} kcal</p>
+         <p class="fw-semibold text-success">⏳ <span class="text-info">Duration:</span> {{ recipe.readyInMinutes }} minutes</p>
+         <p class="fw-semibold">🍴 <span class="text-info">Meal Type:</span> {{ recipe.mealType }}</p>
+
+         <!-- Bouton Détails pour chaque recette, centré sous les informations -->
+         <div class="d-flex justify-content-center mt-3">
+           <button class="btn btn-sm btn-outline-primary" (click)="toggleInstructions(recipe.id)">
+             📖 Show Instructions
+           </button>
+         </div>
+
+         <!-- Affichage des instructions de la recette sous la carte -->
+         <div *ngIf="expandedRecipeIds.includes(recipe.id)" class="mt-3 text-start">
+           <h6 class="fw-semibold">Instructions:</h6>
+           <ul>
+             <li *ngFor="let instruction of getInstructionsAsList(recipe.instructions)">
+               <span class="badge bg-warning me-2">Step</span> {{ instruction }}
+             </li>
+           </ul>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+
+ <div *ngIf="nutritionRecipes.length === 0" class="text-center text-muted mt-4">
+   <p>No nutrition recipes available.</p>
+ </div>
+</div> 

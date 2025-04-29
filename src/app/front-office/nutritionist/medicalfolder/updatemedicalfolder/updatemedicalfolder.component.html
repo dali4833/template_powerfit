@@ -1,0 +1,73 @@
+<div class="update-form-container" *ngIf="form">
+    <h2>Update Medical Folder</h2>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="patientName">Patient Name</label>
+        <input type="text" id="patientName" formControlName="patientName" class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="patientEmail">Email</label>
+        <input type="email" id="patientEmail" formControlName="patientEmail" class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="patientPhone">Phone</label>
+        <input type="text" id="patientPhone" formControlName="patientPhone" class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="birthDate">Birth Date</label>
+        <input type="date" id="birthDate" formControlName="birthDate" class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" formControlName="gender" class="form-control">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="reasonForVisit">Reason for Visit</label>
+        <input type="text" id="reasonForVisit" formControlName="reasonForVisit" class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="notes">Notes</label>
+        <textarea id="notes" formControlName="notes" class="form-control" rows="3"></textarea>
+      </div>
+  
+      <div class="form-group">
+        <label for="weight">Weight (kg)</label>
+        <input type="number" id="weight" formControlName="weight" class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="height">Height (cm)</label>
+        <input type="number" id="height" formControlName="height" class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="bmi">BMI</label>
+        <input type="number" id="bmi" formControlName="bmi" class="form-control" readonly />
+      </div>
+  
+      <div class="form-group">
+        <label for="allergies">Allergies</label>
+        <input type="text" id="allergies" formControlName="allergies" class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="medicalHistory">Medical History</label>
+        <textarea id="medicalHistory" formControlName="medicalHistory" class="form-control" rows="3"></textarea>
+      </div>
+  
+      <div class="form-buttons">
+        <button type="submit" class="btn btn-success" [disabled]="form.invalid">Update</button>
+        <button type="button" class="btn btn-secondary" routerLink="/nutritionist/medicalfolder">Cancel</button>
+      </div>
+    </form>
+  </div>
+  

@@ -1,0 +1,22 @@
+<div class="show-meeting-container" *ngIf="meetingData">
+    <h2>Meeting Details</h2>
+    <div class="meeting-details">
+      <p><strong>Patient:</strong> {{ meetingData.patientName }}</p>
+      <p><strong>Date:</strong> {{ meetingData.date }}</p>
+      
+      <p><strong>Status:</strong>
+        <span class="status-badge {{ meetingData.status.toLowerCase() }}">
+          {{ meetingData.status }}
+        </span>
+      </p>
+      <p><strong>Notes:</strong> {{ meetingData.notes }}</p>
+    </div>
+    <button class="btn-back" routerLink="/nutritionist/meeting">
+      ← Back to Meetings
+    </button>
+  </div>
+  
+  <div *ngIf="!meetingData">
+    <p>Loading meeting details...</p>
+  </div>
+  

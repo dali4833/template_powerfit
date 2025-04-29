@@ -1,0 +1,291 @@
+/* Général */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #d9dcc5, #f4f2ee);
+    color: #2c3e36;
+  }
+  
+  /* Conteneur principal */
+  .dashboard-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #bfcab3, #e9ebd6);
+  }
+  
+  /* Contenu principal */
+  .main-content {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    box-shadow: 0 12px 28px rgba(44, 62, 54, 0.12);
+    padding: 40px;
+    width: 100%;
+    max-width: 1100px;
+    transition: all 0.3s ease;
+    border: 1px solid #a8b88b;
+  }
+  
+  /* En-tête */
+  .main-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .main-header h1 {
+    font-size: 34px;
+    color: #2c3e36;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  
+  .main-header::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    margin: 0 auto;
+    border-radius: 2px;
+    background: linear-gradient(to right, #3d5a40, #a8b88b);
+  }
+  
+  /* Tableau des dossiers */
+  .folder-table {
+    overflow: hidden;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 6px 12px rgba(44, 62, 54, 0.05);
+  }
+  
+  .folder-table table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  
+  .folder-table th,
+  .folder-table td {
+    padding: 18px 24px;
+    text-align: left;
+    font-size: 15px;
+    color: black; /* Texte noir */
+  }
+  
+  .folder-table th {
+    background: linear-gradient(to right, #2c3e36, #3d5a40);
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Ligne au survol */
+  .folder-table tbody tr:hover {
+    background-color: #e4ebda;
+    transform: scale(1.01);
+    transition: all 0.3s ease;
+  }
+  
+  /* Centrage des actions */
+  .folder-table td.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px 24px;
+  }
+  
+  /* Boutons */
+  .action-btn {
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+    color: white;
+  }
+  
+  .action-btn.view {
+    background-color: #3d5a40;
+    margin-right: 10px;
+  }
+  
+  .action-btn.add {
+    background-color: #3d5a40;
+    color: white;
+  }
+  
+  .action-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  }
+  
+  .action-btn i {
+    font-size: 16px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .main-content {
+      padding: 25px;
+    }
+  
+    .folder-table th,
+    .folder-table td {
+      padding: 14px 12px;
+    }
+  
+    .folder-table td.actions {
+      padding: 14px 12px;
+    }
+  
+    .action-btn {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+  }
+  /* Sidebar */
+.sidebar {
+    width: 220px;
+    background: #2c3e36;
+    border-radius: 20px;
+    padding: 30px 20px;
+    color: white;
+    margin-right: 30px;
+    height: 100%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 40px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar li {
+    padding: 14px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .sidebar li:hover,
+  .sidebar li.active {
+    background-color: #3d5a40;
+    transform: translateX(4px);
+  }
+  
+  /* Container with Sidebar */
+  .dashboard-container {
+    display: flex;
+    gap: 20px;
+    padding: 40px 20px;
+  }
+  .gender-stats-flex {
+    display: flex;
+    gap: 2rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+    max-width: 250px;
+  }
+  
+  .stat-card {
+    background: #e8f5e9;
+    border-left: 6px solid #4d6820;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .stat-card.female {
+    border-left-color: #3d5a40;
+  }
+  
+  .stat-card.male {
+    border-left-color: #3d5a40;
+  }
+  
+  .stat-card h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #388e7a;
+  }
+  
+  .stat-card p {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+    color: #388e7a;
+  }
+  
+  .chart-container {
+    flex: 2;
+    max-width: 500px;
+    text-align: center;
+  }
+  
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  .chart-container h2 {
+    color: #1c2908;        /* un vert foncé */
+    font-size: 1.5rem;     /* taille un peu plus grande */
+    text-align: center;    /* centré au‑dessus du camembert */
+    margin-bottom: 1rem;   /* espacement sous le titre */
+  }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 6px;
+  }
+  
+  .pagination button {
+    padding: 6px 12px;
+    border: none;
+    background-color: #e0e0e0;
+    color: #333;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .pagination button.active {
+    background-color: #072918;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  

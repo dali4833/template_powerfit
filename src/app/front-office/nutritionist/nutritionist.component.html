@@ -1,0 +1,19 @@
+<div class="dashboard-container" *ngIf="!currentChildRoute">
+  <main class="main-content">
+    
+
+    <section class="container">
+      <div class="card" (click)="goTo('meeting')">
+        <h2>Meetings</h2>
+        <p>Meetings Management</p>
+      </div>
+
+      <div class="card" (click)="goTo('medicalfolder')">
+        <h2>Medical Folders</h2>
+        <p>Medical Folder Management</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<router-outlet></router-outlet>

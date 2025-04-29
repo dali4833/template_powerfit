@@ -15,6 +15,14 @@
       email: string;
     };
   }
+  interface Coach {
+    id: number;
+    name: string;
+    email: string;
+    averageRating: number;
+    reviewCount: number;
+  }
+
   interface Booking {
     id: number;
     status: 'PENDING' | 'APPROVED' | 'REJECTED'; // Match the enum from the backend
@@ -39,12 +47,13 @@
     maxParticipants: number;
     currentParticipants: number;
     sport: string;
+    meetLink: string;
     isBooked: boolean;
     bookingId?: number;
     isElapsed?: boolean;
-    bookings?: any[]; // Add bookings property to store session bookings
-    status?: 'PENDING' | 'APPROVED' | 'REJECTED'; // Add status property to match Booking status
-
+    bookings?: any[]; //
+    status?: 'PENDING' | 'APPROVED' | 'REJECTED';
+    canReview?: boolean;
     reviews?: Review[];
     selectedReviews?: Review[];
   }
@@ -60,6 +69,9 @@
     selectedSession: TrainingSession | null = null;
     selectedRating = 0;
     reviewText = '';
+    recommendedCoaches: Coach[] = [];
+    currentPage: number = 1;
+    itemsPerPage: number = 3;
 
     constructor(
       private trainingSessionService: TrainingSessionService,
@@ -69,6 +81,7 @@
 
     ngOnInit(): void {
       this.loadTrainingSessions();
+      this.loadRecommendedCoaches();
     }
 
     loadTrainingSessions(): void {
@@ -100,11 +113,12 @@
         this.bookingService.getBookings(session.id).subscribe({
           next: (bookings: Booking[]) => {
             session.bookings = bookings; // Store bookings and their statuses
-            const userBooking = bookings.find((b: Booking) => b.trainingSession.id === session.id);
+            const userBooking = bookings.find((b: Booking) => b.trainingSession.id === session.id );
             if (userBooking) {
               session.isBooked = true;
               session.bookingId = userBooking.id;
-              session.status = userBooking.status; // Assign the status to the session
+              session.status = userBooking.status;
+              session.canReview = session.isElapsed && userBooking.status === 'APPROVED';
             }
           },
           error: (error) => console.error('Error loading bookings:', error)
@@ -200,6 +214,7 @@
         },
         error: (error) => {
           console.error('Error submitting review:', error);
+          alert("Only participants with approved bookings can review this session")
         }
       });
     }
@@ -213,6 +228,58 @@
       if (modal) {
         modal.hide();
       }
+    }
+
+    loadRecommendedCoaches(): void {  // Step 3: Fetch the recommended coaches
+      this.trainingSessionService.getRecommendedCoaches().subscribe({
+        next: (coaches) => {
+          this.recommendedCoaches = coaches;  // Store the recommended coaches
+        },
+        error: (error) => {
+          console.error('Error loading recommended coaches:', error);
+        }
+      });
+    }
+
+    get totalPages(): number {
+      return Math.ceil(this.trainingSessions.length / this.itemsPerPage);
+    }
+
+    previousPage(): void {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    }
+
+    nextPage(): void {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    }
+
+    setPage(page: number): void {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page;
+      }
+    }
+
+    getPages(): number[] {
+      const maxVisiblePages = 5;
+      let startPage = 1;
+      let endPage = this.totalPages;
+
+      if (this.totalPages > maxVisiblePages) {
+        const halfVisible = Math.floor(maxVisiblePages / 2);
+        startPage = Math.max(1, this.currentPage - halfVisible);
+        endPage = startPage + maxVisiblePages - 1;
+
+        if (endPage > this.totalPages) {
+          endPage = this.totalPages;
+          startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+      }
+
+      return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
     }
   }
 

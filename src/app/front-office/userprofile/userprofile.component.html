@@ -1,5 +1,144 @@
-<div class="container text-center mt-5">
-    <h2>User Profile</h2>
-    <p>{{ profileMessage }}</p>
+<div class="container mt-5">
+  <!-- User Profile Card -->
+  <div class="card shadow-lg mb-4">
+    <div class="card-header bg-primary text-white text-center">
+      <h4>User Profile</h4>
+    </div>
+    <div class="card-body">
+    <!-- Dynamic User View -->
+<div *ngIf="role !== 'ROLE_OWNER'; else ownerView">
+  <div class="row align-items-center">
+    <div class="col-md-4 text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" 
+           class="img-fluid rounded-circle mb-3" 
+           style="max-width: 150px;" 
+           alt="Profile Image">
+      <h5 class="fw-bold text-capitalize">{{ email.split('@')[0] }}</h5>
+      <p class="text-muted">
+        🏷️ 
+        {{ profileMessage }}
+      </p>
+    </div>
+    <div class="col-md-8">
+      <h5 class="mb-3">Welcome back, {{ profileMessage }}!</h5>
+
+      <ng-container [ngSwitch]="role">
+        <!-- Coach Content -->
+        <div *ngSwitchCase="'ROLE_COACH'">
+          <p class="lead">
+            We’re excited to have you on board. As a valued coach, your leadership, training, and guidance play a key role in shaping our athletes' futures.
+          </p>
+          <strong>💡 Quick Tips:</strong>
+          <ul>
+            <li>Stay connected with your club admin for class scheduling.</li>
+            <li>Check your email for system notifications or updates.</li>
+            <li>Feel free to contact support if you need access to more tools.</li>
+          </ul>
+        </div>
+
+        <!-- Nutritionist Content -->
+        <div *ngSwitchCase="'ROLE_NUTRUSIONIST'">
+          <p class="lead">
+            Thank you for supporting our athletes’ health and nutrition goals. Your expertise ensures they stay fueled and ready for success!
+          </p>
+          <strong>🥗 Tips for Nutritionists:</strong>
+          <ul>
+            <li>Track athlete dietary needs regularly.</li>
+            <li>Coordinate with coaches for performance planning.</li>
+            <li>Provide personalized meal plans when needed.</li>
+          </ul>
+        </div>
+
+        <!-- User Content -->
+        <div *ngSwitchCase="'ROLE_USER'">
+          <p class="lead">
+            Welcome! Your journey toward better fitness and personal growth starts here. We're happy to have you join our community.
+          </p>
+          <strong>📋 Tips for Users:</strong>
+          <ul>
+            <li>Join classes and training programs available at your club.</li>
+            <li>Reach out to your coach or nutritionist for advice.</li>
+            <li>Stay active and track your progress regularly.</li>
+          </ul>
+        </div>
+
+        <!-- Default Content -->
+        <div *ngSwitchDefault>
+          <p class="lead">
+            Welcome to your dashboard!
+          </p>
+        </div>
+      </ng-container>
+
+      <p class="mt-4 text-secondary">
+        Need help updating your profile or changing your password? Reach out to the support team.
+      </p>
+    </div>
   </div>
-  
+</div>
+
+      <!-- Owner View -->
+      <ng-template #ownerView>
+        <div class="row">
+          <div class="col-md-4 text-center">
+            <img src="https://www.citypng.com/public/uploads/preview/png-gym-fitness-club-white-logo-701751694772435eyocdiu3vn.png" class="img-fluid rounded-circle mb-3" alt="User Image">
+            <h5>{{ username }}</h5>
+            <p class="text-muted">🏢 Club Owner</p>
+          </div>
+          <div class="col-md-8">
+            <h5>Club Profile</h5>
+            <p><strong>Club Name:</strong> {{ clubName || 'No club associated' }}</p>
+            <p><strong>Club ID:</strong> {{ clubId }}</p>
+
+            <h6 class="mt-4">About the Club</h6>
+            <p><strong>Mission:</strong> Our club is dedicated to promoting health, fitness, and community. We support all levels of athletes through expert coaching and state-of-the-art facilities.</p>
+            <p><strong>Services:</strong> Personal training, group classes, youth programs, and more.</p>
+            <p><strong>Facilities:</strong> Gym, studio rooms, locker area, outdoor fields.</p>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Add Coach Section Only for Owner -->
+  <div *ngIf="role === 'ROLE_OWNER'">
+    <div class="text-center mb-4">
+      <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#addCoachForm" aria-expanded="false" aria-controls="addCoachForm">
+        ➕ Add a Coach
+      </button>
+    </div>
+
+    <div class="collapse" id="addCoachForm">
+      <div class="card shadow-lg">
+        <div class="card-header bg-success text-white">
+          <h5>Add a New Coach</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="coachForm" (ngSubmit)="addCoach()">
+            <div class="mb-3">
+              <label for="name" class="form-label">Coach Name</label>
+              <input type="text" id="name" formControlName="name" class="form-control" placeholder="John Doe">
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Coach Email</label>
+              <input type="email" id="email" formControlName="email" class="form-control" placeholder="coach@example.com">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Generated Password</label>
+              <div class="input-group">
+                <input type="text" class="form-control" [value]="generatedPassword" readonly>
+                <button class="btn btn-outline-secondary" type="button" (click)="generatePassword()">🔑 Generate Password</button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" [disabled]="coachForm.invalid || !generatedPassword">
+              ➕ Add Coach
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

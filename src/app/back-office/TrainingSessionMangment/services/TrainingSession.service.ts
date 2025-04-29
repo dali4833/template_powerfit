@@ -1,54 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, from, switchMap } from 'rxjs';
+import { AuthService } from '../../../front-office/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrainingSessionService {
   private apiUrl = `http://localhost:8089/training-sessions`;
-  private cachedToken: string | null = null;
-
-  clubaccount = {
-    username: 'CLUB@email.com',
-    password: 'a',
-  };
-
-  adminaccount = {
-    username: 'ADMIN@email.com',
-    password: 'a',
-  };
-
-  useraccount = {
-    username: 'test@hotmail.fr',
-    password: 'password123',
-  };
-
-  coachaccount = {
-    username: 'COACH@email.com',
-    password: 'a',
-  };
 
   constructor(
     private http: HttpClient,
-  ) { }
-
-  private async getValidToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypasscoach());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
+    private authService: AuthService
+  ) {}
 
   private async generateHeaders(): Promise<HttpHeaders> {
-    const token = await this.getValidToken();
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -57,8 +25,25 @@ export class TrainingSessionService {
 
   getTrainingSessions(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.get<any[]>(`${this.apiUrl}/retrieve-all-TrainingSessions`, { headers })
+      )
+    );
+  }
+
+  getTrainingSessionsByCoach(): Observable<any[]> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/coach/sessions`, { headers })
+      )
+    );
+  }
+
+
+  getRecommendedCoaches(): Observable<any[]> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/recommended`, { headers })
       )
     );
   }
@@ -71,18 +56,18 @@ export class TrainingSessionService {
     );
   }
 
-  createTrainingSession(object: any): Observable<any> {
+  createTrainingSession(session: any): Observable<any> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.post<any>(`${this.apiUrl}/add-TrainingSession`, object, { headers })
+        this.http.post<any>(`${this.apiUrl}/add-TrainingSession`, session, { headers })
       )
     );
   }
 
-  updateTrainingSession(object: any): Observable<any> {
+  updateTrainingSession(session: any): Observable<any> {
     return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.put<any>(`${this.apiUrl}/update-TrainingSession`, object, { headers })
+        this.http.put<any>(`${this.apiUrl}/update-TrainingSession`, session, { headers })
       )
     );
   }
@@ -95,23 +80,24 @@ export class TrainingSessionService {
     );
   }
 
-  bypassclub(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.clubaccount, { responseType: 'text' });
+  getEventsInRange(start: Date, end: Date): Observable<any[]> {
+    const params = new HttpParams()
+      .set('start', start.toISOString().split('T')[0])
+      .set('end', end.toISOString().split('T')[0]);
+
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/coach/sessions/range`, { headers, params })
+      )
+    );
   }
 
-  bypassadmin(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.adminaccount, { responseType: 'text' });
-  }
 
-  bypassUser(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.useraccount, { responseType: 'text' });
-  }
-
-  bypasscoach(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.coachaccount, { responseType: 'text' });
+  getstats(): Observable<any> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<void>(`http://localhost:8089/statistics/stats`, { headers })
+      )
+    );
   }
 }

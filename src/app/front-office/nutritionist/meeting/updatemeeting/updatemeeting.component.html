@@ -1,0 +1,38 @@
+<div class="form-container">
+  <h2>Update Meeting</h2>
+
+  <!-- ✅ Ajout du formGroup ici -->
+  <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()">
+
+    <div class="form-group">
+      <label for="patientName">Patient Name</label>
+      <input id="patientName" type="text" formControlName="patientName" placeholder="e.g. Sarah Ben Youssef" required />
+    </div>
+
+    <div class="form-group">
+      <label for="meetingDate">Date & Time</label>
+      <!-- Champ DateTime local pour la date et l'heure -->
+      <input id="meetingDate" type="datetime-local" formControlName="date" required />
+    </div>
+
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select id="status" formControlName="status" required>
+        <option value="" disabled selected>Select Status</option>
+        <option value="confirmed">Confirmed</option>
+        
+        <option value="canceled">Canceled</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="notes">Notes</label>
+      <textarea id="notes" formControlName="notes" rows="4" placeholder="Add any important notes..."></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="!meetingForm.valid" style="margin-right: 10px;">Update</button>
+    </div>
+
+  </form>
+</div>

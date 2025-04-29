@@ -1,0 +1,41 @@
+<div *ngIf="livraison" class="container mt-4">
+  <h2>Confirm Delivery Acceptance</h2>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Delivery Details</h5>
+      <p class="card-text"><strong>Address:</strong> {{ livraison.address }}</p>
+      <p class="card-text"><strong>Scheduled Date:</strong> {{ livraison.scheduleddate | date }}</p>
+    </div>
+  </div>
+
+  <form [formGroup]="confirmForm" (ngSubmit)="accepted = true; onSubmit()">
+    <div class="mb-3">
+      <label for="driverName" class="form-label">Your Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="driverName"
+        formControlName="driverName"
+        placeholder="Enter your full name"
+      >
+      <div *ngIf="confirmForm.get('driverName')?.invalid && confirmForm.get('driverName')?.touched"
+           class="text-danger">
+        Name is required
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="btn btn-success"
+      [disabled]="confirmForm.invalid"
+    >
+      <span class="spinner-border spinner-border-sm me-2" *ngIf="confirmForm.pending" role="status" aria-hidden="true"></span>
+      {{ confirmForm.pending ? 'Submitting...' : 'Confirm Acceptance' }}
+    </button>
+  </form>
+
+  <div *ngIf="accepted" class="alert alert-success mt-4" role="alert">
+    🎉 Delivery accepted successfully!
+  </div>
+</div>

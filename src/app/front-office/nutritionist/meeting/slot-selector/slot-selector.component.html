@@ -1,0 +1,32 @@
+<div class="container">
+    <h2>Select a Time Slot</h2>
+  
+    <!-- Date Picker -->
+    <div class="date-picker">
+      <label for="date">Date:</label>
+      <input type="date" [(ngModel)]="selectedDate" (change)="onDateChange()" />
+    </div>
+  
+    <!-- Slots Grid -->
+    <div class="slots-grid">
+      <button *ngFor="let slot of slots"
+              class="slot-btn"
+              [ngClass]="{
+                'available': slot.available,
+                'occupied': !slot.available,
+                
+              }"
+              [disabled]="!slot.available"
+              (click)="selectSlot(slot.time)">
+        {{ slot.time }}
+      </button>
+    </div>
+  
+    <!-- Legend -->
+    <div class="legend">
+      
+      <div><span class="legend-box available"></span> Available</div>
+      <div><span class="legend-box occupied"></span> Booked</div>
+    </div>
+  </div>
+  

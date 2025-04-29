@@ -1,0 +1,129 @@
+<div *ngIf="medicalFolderData; else loading" class="dossier-container">
+  <!-- Patient Header -->
+  <header class="patient-header">
+    <div class="patient-info">
+      <div class="patient-details">
+        <h1>{{ medicalFolderData.patientName }}</h1>
+        <div class="meta-info">
+          <span><i class="fas fa-birthday-cake"></i> {{ medicalFolderData.birthDate | date:'MM/dd/yyyy' }}</span>
+          <span><i class="fas fa-venus-mars"></i> {{ medicalFolderData.gender }}</span>
+          <span><i class="fas fa-phone"></i> {{ medicalFolderData.patientPhone }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="patient-actions">
+
+      <button class="btn btn-add-meeting" (click)="goToAddMeeting()">
+        Add Meeting
+      </button>
+      
+      <button *ngIf="medicalFolderData?.id" class="btn btn-modifier" (click)="goToUpdate(medicalFolderData.id)">
+        <i class="fas fa-edit"></i> Update
+      </button>
+      
+      <button class="btn btn-ajouter" (click)="selectedMedicalFolderId = medicalFolderData.id">
+        <i class="fas fa-trash"></i> Delete
+      </button>
+      
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="dossier-content">
+    <!-- Nutrition Info -->
+    <nav class="dossier-nav">
+      <div class="info-urgence">
+        <div class="urgence-content">
+          <p><strong>Allergies :</strong> {{ medicalFolderData.allergies }}</p>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Dossier Section -->
+    <main class="dossier-main">
+      <section id="summary" class="dossier-section active">
+        <div class="section-header">
+          <h2>Nutritional Monitoring</h2>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">{{ medicalFolderData.weight }} kg</div>
+            <div class="stat-label">Weight (kg)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">{{ medicalFolderData.height }} cm</div>
+            <div class="stat-label">Height (cm)</div>
+          </div>
+          <div class="stat-card" *ngIf="medicalFolderData.bmi !== undefined">
+            <div class="stat-value">{{ medicalFolderData.bmi }}</div>
+            <div class="stat-label">BMI</div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h2>Notes</h2>
+        </div>
+        <p>{{ medicalFolderData.notes }}</p>
+      </section>
+    </main>
+  </div>
+<!-- Nouvelle Section pour afficher les meetings -->
+<section class="meetings-section">
+  <div class="section-header">
+    <h2>Meetings</h2>
+  </div>
+
+  <!-- Si des meetings sont présents, on les affiche -->
+  <div *ngIf="meetings.length > 0; else noMeetings">
+    <table class="meetings-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let meeting of meetings">
+          <td>{{ meeting.date | date:'short' }}</td>
+          
+          
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Si aucun meeting, afficher un message -->
+  <ng-template #noMeetings>
+    <p>No meetings found for this folder.</p>
+  </ng-template>
+</section>
+  <button class="btn-back" routerLink="/nutritionist/medicalfolder">
+    ← Back to Medical Folders
+  </button>
+
+  
+
+  <!-- Confirmation Modal -->
+  <div
+    class="modal-overlay"
+    *ngIf="selectedMedicalFolderId !== null"
+    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+           background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1050;">
+    <div class="modal-content" style="background: #2c2c2c; color: white; padding: 20px; border-radius: 10px; width: 400px;">
+      <h5>Confirm Deletion</h5>
+      <p>Are you sure you want to delete this medical folder?</p>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn btn-secondary" (click)="selectedMedicalFolderId = null">Cancel</button>
+        <button class="btn btn-danger" (click)="deleteMedicalFolder(selectedMedicalFolderId!)">Delete</button>
+      </div>
+    </div>
+  </div>
+  <!-- Fin de la modale -->
+</div>
+
+<!-- Template de chargement -->
+<ng-template #loading>
+  <p>Chargement du dossier médical...</p>
+</ng-template>

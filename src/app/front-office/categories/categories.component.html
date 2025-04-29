@@ -1,0 +1,23 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-4" *ngFor="let category of categories"> <!-- Loop through categories here -->
+      <div class="hikashop_container">
+        <div class="hikashop_subcontainer thumbnail">
+          <div class="hikashop-category-image-title uk-margin-small uk-child-width-1-1 uk-grid-small" data-uk-grid="">
+            <div class="hikashop_category_image-container">
+              <a [routerLink]="['/store/categories', category.id]" class="uk-link-reset" [title]="category.name">
+                <img class="hikashop_product_listing_image" [src]="category.imageUrl" [alt]="category.name">
+                <div class="overlay">
+                  <div class="text">Shop Now</div>
+                </div>
+                <h3>{{ category.name }}</h3> <!-- Move h3 here, inside the link -->
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- End of category loop -->
+  </div>
+</div>
+

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/front-office/services/auth.service';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService,
+
   ) {}
 
 
@@ -32,21 +35,24 @@ export class LoginComponent implements OnInit {
       alert('Please fill in all required fields');
       return;
     }
-  
+    this.loadingService.show();  // <- Show loading
+
     const credentials = this.loginForm.value;
   
     this.authService.login(credentials).subscribe({
       next: () => {
-        alert('Login successful!');
         this.router.navigate(['/userprofile']);
+        this.loadingService.hide();  // <- Hide loading
+
       },
       error: (err) => {
         console.error(err);
-        alert('Login failed: ' + (err.error?.message || 'Invalid credentials'));
+        const errorMsg = err.error?.message || 'Login failed. Please try again.';
+        alert('Login failed: ' + errorMsg);
+        this.loadingService.hide();  // <- Hide loading
+
       },
     });
-    
-    
   }
   
 }

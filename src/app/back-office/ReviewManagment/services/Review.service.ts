@@ -1,54 +1,26 @@
+// review.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
+import { Observable, from, switchMap } from 'rxjs';
+import {AuthService} from "../../../front-office/services/auth.service";
+ // Import AuthService
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReviewService {
   private apiUrl = `http://localhost:8089/training-sessions`;
-  private cachedToken: string | null = null;
-
-  clubaccount = {
-    username: 'CLUB@email.com',
-    password: 'a',
-  };
-
-  adminaccount = {
-    username: 'ADMIN@email.com',
-    password: 'a',
-  };
-
-  useraccount = {
-    username: 'test@hotmail.fr',
-    password: 'password123',
-  };
-
-  coachaccount = {
-    username: 'COACH@email.com',
-    password: 'a',
-  };
 
   constructor(
     private http: HttpClient,
+    private authService: AuthService // Inject AuthService
   ) { }
 
-  private async getValidToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypassUser());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
-
   private async generateHeaders(): Promise<HttpHeaders> {
-    const token = await this.getValidToken();
+    const token = this.authService.getToken();
+    if (!token) {
+      throw new Error('No token available. User is not logged in.');
+    }
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -57,7 +29,7 @@ export class ReviewService {
 
   getReviews(sessionId: number): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
-      switchMap(headers => 
+      switchMap(headers =>
         this.http.get<any[]>(`${this.apiUrl}/${sessionId}/reviews/all`, { headers })
       )
     );
@@ -95,23 +67,13 @@ export class ReviewService {
     );
   }
 
-  bypassclub(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.clubaccount, { responseType: 'text' });
-  }
 
-  bypassadmin(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.adminaccount, { responseType: 'text' });
-  }
 
-  bypassUser(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.useraccount, { responseType: 'text' });
-  }
-
-  bypasscoach(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      this.coachaccount, { responseType: 'text' });
+  getReviewsByCoachId(): Observable<any[]> {
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
+        this.http.get<any[]>(`${this.apiUrl}/reviews`, { headers })
+      )
+    );
   }
 }

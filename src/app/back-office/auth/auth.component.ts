@@ -21,7 +21,7 @@ export class AuthComponent {
         const decodedToken: any = jwtDecode(token);
 
         // Check if the token has roles and includes ROLE_ADMIN
-        if (decodedToken && decodedToken.roles?.includes('ROLE_ADMIN')) {
+        if (decodedToken && decodedToken.roles?.includes('ROLE_ADMIN','ROLE_COACH')) {
           this.router.navigate(['/dashboard']); // Navigate to admin dashboard
         } else {
           alert('Access denied: You are not an admin');

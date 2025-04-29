@@ -25,9 +25,6 @@ export class EditaddComponent implements OnInit {
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       sport: ['', Validators.required],
-      hmsRoomId: [''],
-      hmsRoomCode: [''],
-      hmsRoomLink: ['']
     });
   }
 
@@ -52,8 +49,8 @@ export class EditaddComponent implements OnInit {
   onSubmit(): void {
     if (this.sessionForm.valid) {
       const sessionData = this.sessionForm.value;
-      sessionData.id = this.sessionId; 
-     
+      sessionData.id = this.sessionId;
+
       const observable = this.isEditing && this.sessionId
         ? this.trainingSessionService.updateTrainingSession(sessionData)
         : this.trainingSessionService.createTrainingSession(sessionData);
