@@ -27,7 +27,7 @@ import { RegisterOwnerComponent } from './front-office/auth/register-owner/regis
 import { AuthComponent } from './back-office/auth/auth.component';
 import { UsersComponent } from './back-office/users/users.component';
 import { TrophiesComponent } from './front-office/pages/trophies/trophies.component';
-import { clubreqModule } from './front-office/pages/clubcreation-form/clubreq.module';
+import { clubreqModule } from './back-office/clubrequests-managment/clubreq.module';
 import { ClubPerformanceComponent } from './back-office/clubs-managment/club-performance/club-performance.component';
 import {BrowserAnimationsModule, provideAnimations} from "@angular/platform-browser/animations";
 import {provideToastr, ToastrModule} from 'ngx-toastr';
@@ -53,6 +53,7 @@ import {provideToastr, ToastrModule} from 'ngx-toastr';
     TrainingSessionComponent,
     ClubsPacksComponent,
     ResetPasswordComponent,
+    ClubPerformanceComponent,
     ForgotPasswordComponent,
     RegisterOwnerComponent,
     AuthComponent,

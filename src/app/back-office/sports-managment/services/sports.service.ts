@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-import { adminaccount } from './bypass';
+import { AuthService } from 'src/app/front-office/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,29 +17,21 @@ export class SportService {
 
   constructor(
     private http: HttpClient,
+    private authService: AuthService
   ) { }
 
-  private async getValidToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypassadmin());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
 
   private async generateHeaders(): Promise<HttpHeaders> {
-    const token = await this.getValidToken();
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
   }
+
+
+
 
   getSports(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
@@ -83,10 +75,6 @@ export class SportService {
 
  
 
-  bypassadmin(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      adminaccount, { responseType: 'text' });
-  }
 
  
 }

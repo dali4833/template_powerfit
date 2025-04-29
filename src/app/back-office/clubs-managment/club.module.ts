@@ -5,14 +5,14 @@ import { ListComponent } from './list/list.component';
 import { DetailsComponent } from './details/details.component';
 import { ClubRoutingModule } from './club-routing.module';
 import { EditaddComponent } from './editadd/editadd.component';
-import { ClubPerformanceComponent } from './club-performance/club-performance.component';
+//import { ClubPerformanceComponent } from './club-performance/club-performance.component';
 
 @NgModule({
   declarations: [
     ListComponent,
     DetailsComponent,
     EditaddComponent,
-    ClubPerformanceComponent,
+   // ClubPerformanceComponent,
   ],
   imports: [
     CommonModule,
@@ -25,7 +25,7 @@ import { ClubPerformanceComponent } from './club-performance/club-performance.co
     ListComponent,
     EditaddComponent,
     ClubRoutingModule,
-    ClubPerformanceComponent
+   // ClubPerformanceComponent
 
   ]
 })

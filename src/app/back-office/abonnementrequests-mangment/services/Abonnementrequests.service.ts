@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap } from 'rxjs';
-import { lastValueFrom } from 'rxjs';
-import { useraccount , clubaccount } from '../../sports-managment/services/bypass';
+import { AuthService } from 'src/app/front-office/services/auth.service';
 interface request {
   startDate: string;
   endDate: string;
@@ -18,32 +17,28 @@ export class AbonnementrequestsService {
   private cachedToken: string | null = null;
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient ,
+              private authService: AuthService
 
-  private async getValidToken(account: any): Promise<string> {
-    if (this.cachedToken) return this.cachedToken;
 
-    try {
-      const token = await lastValueFrom(this.http.post<string>(
-        'http://localhost:8089/auth/generateToken',
-        account,
-        { responseType: 'text' as 'json' }
-      ));
-      this.cachedToken = token;
-      return token;
-    } catch (error) {
-      console.error('Token retrieval failed:', error);
-      throw error;
-    }
-  }
 
-  private async generateHeaders(account: any): Promise<HttpHeaders> {
-    const token = await this.getValidToken(account);
+  ) { }
+
+
+
+
+  private async generateHeaders(): Promise<HttpHeaders> {
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
   }
+
+
+
+
 
 
   // Pour USER
@@ -53,7 +48,7 @@ export class AbonnementrequestsService {
         observer.error(new Error('Invalid duration for subscription.'));
       });
     }
-    return from(this.getValidToken(useraccount)).pipe(
+    return from(this.generateHeaders()).pipe(
       switchMap(token => {
         const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
         return this.http.post<any>(`${this.apiUrl}/request/${packId}`, object, { headers });
@@ -62,26 +57,16 @@ export class AbonnementrequestsService {
   }
 
 
-  //
-  // createRequestWithDates(packId: number, startDate: string, endDate: string): Observable<any> {
-  //   const params = { packId: packId.toString(), startDate, endDate };
-  //   return from(this.generateHeaders(useraccount)).pipe(
-  //     switchMap(headers =>
-  //       this.http.post<any>(`${this.apiUrl}/abonnement-request`, {}, { headers, params })
-  //     )
-  //   );
-  // }
-
   // Pour CLUB OWNER
   getRequests(): Observable<any[]> {
-    return from(this.generateHeaders(clubaccount)).pipe(
+    return from(this.generateHeaders()).pipe(
       switchMap(headers =>
         this.http.get<any[]>(`${this.apiUrl}/club-owner/requests`, { headers })
       )
     );
   }
   getpacks(): Observable<any[]> {
-    return from(this.generateHeaders(useraccount)).pipe(
+    return from(this.generateHeaders()).pipe(
       switchMap(headers =>
         this.http.get<any[]>('http://localhost:8089/packs', { headers }) // ⚠️ adapte l'URL si besoin
       )
@@ -90,7 +75,7 @@ export class AbonnementrequestsService {
 
 
   approveRequest(requestId: number): Observable<any> {
-    return from(this.generateHeaders(clubaccount)).pipe(
+    return from(this.generateHeaders()).pipe(
       switchMap(headers =>
         this.http.put<any>(`${this.apiUrl}/approve/${requestId}`, {}, { headers })
       )

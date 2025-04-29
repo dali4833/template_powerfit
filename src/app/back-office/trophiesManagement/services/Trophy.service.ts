@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-import { adminaccount, useraccount } from './bypass';
+import { Observable, from, switchMap } from 'rxjs';
+import { AuthService } from 'src/app/front-office/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,31 +10,14 @@ export class TrophyService {
   private apiUrl = `http://localhost:8089/trophies`;
   private cachedToken: string | null = null;
 
-
-
-
-
-
   constructor(
     private http: HttpClient,
+    private authService: AuthService
   ) { }
 
-  private async getValidToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypassadmin());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
-
   private async generateHeaders(): Promise<HttpHeaders> {
-    const token = await this.getValidToken();
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -89,67 +72,23 @@ export class TrophyService {
     );
   }
 
-  //get valid user token
-  private async getValidUserToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypassuser());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
-
-
-
-
-
-
-
   getUserPoints(): Observable<any> {
-    return from(this.getValidUserToken()).pipe(
+    return from(this.generateHeaders()).pipe(
       switchMap(headers =>
-        this.http.get<any>(`${this.apiUrl}/my-trophies`, {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${headers}`
-          })
-        })
+        this.http.get<any>(`${this.apiUrl}/my-trophies`, { headers })
       )
     );
   }
+
   assignTrophyToUser(): Observable<any> {
-    return from(this.getValidUserToken()).pipe(
-      switchMap(token =>
+    return from(this.generateHeaders()).pipe(
+      switchMap(headers =>
         this.http.post<any>(
           `http://localhost:8089/trophies/assignTrophy`,
-          {}, // Body vide
-          {
-            headers: new HttpHeaders({
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            })
-          }
+          {}, // Empty body
+          { headers }
         )
       )
     );
   }
-
-
-
-  bypassadmin(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      adminaccount, { responseType: 'text' });
-  }
-
-  bypassuser(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      useraccount, { responseType: 'text' });
-  }
-
-
 }

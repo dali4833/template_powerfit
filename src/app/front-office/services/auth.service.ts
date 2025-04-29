@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
-
+import { HttpHeaders } from '@angular/common/http';
 
 
 @Injectable({
@@ -16,7 +16,7 @@ export class AuthService {
 // src/app/services/auth.service.ts
 login(user: any): Observable<any> {
   return this.http.post(`${this.apiUrl}/generateToken`, user, {
-    responseType: 'text'  // <--- This is important!
+    responseType: 'text' 
   }).pipe(
     tap((token: string) => {
       localStorage.setItem('token', token);
@@ -75,6 +75,16 @@ login(user: any): Observable<any> {
       responseType: 'text'
     });
   }
-  
+
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+  getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
 
 }

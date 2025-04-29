@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, lastValueFrom } from 'rxjs';
-import { clubaccount , useraccount } from '../../sports-managment/services/bypass';
+import { AuthService } from 'src/app/front-office/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,37 +11,23 @@ export class AbonnementService {
 
 
 
-  bypassclub(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      clubaccount, { responseType: 'text' });
-  }
-
-
   constructor(
     private http: HttpClient,
+    private authService: AuthService
   ) { }
 
-  private async getValidToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.bypassclub());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
 
   private async generateHeaders(): Promise<HttpHeaders> {
-    const token = await this.getValidToken();
+    const token = this.authService.getToken();
+    if (!token) throw new Error('No token found. Please log in.');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
   }
+
+
+
 
   getAbonnements(): Observable<any[]> {
     return from(this.generateHeaders()).pipe(
@@ -165,30 +151,12 @@ export class AbonnementService {
 
 
 
-  getvalidusertoken(): Observable<string> {
-    return this.http.post(`http://localhost:8089/auth/generateToken`,
-      useraccount, { responseType: 'text' });
-  }
-  private async getValidUserToken(): Promise<string> {
-    if (this.cachedToken) {
-      return this.cachedToken;
-    }
-
-    try {
-      this.cachedToken = await lastValueFrom(this.getvalidusertoken());
-      return this.cachedToken;
-    } catch (error) {
-      console.error('Failed to get token:', error);
-      throw error;
-    }
-  }
-
 
 
 
 
   getUserAbonnementsHistory(): Observable<any> {
-    return from(this.getValidUserToken()).pipe(
+    return from(this.generateHeaders()).pipe(
       switchMap(token => {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`

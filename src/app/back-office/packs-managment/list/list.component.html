@@ -8,6 +8,124 @@
         {{ errorMessage }}
     </div>
 
+    <!-- Pack Statistics - Podium Visualization -->
+    <div class="card statistics-container mb-4">
+        <div class="statistics-header">
+            <i class="stats-icon bi bi-bar-chart-fill"></i>
+            <h3>Pack Statistics</h3>
+        </div>
+        
+        <div *ngIf="statisticsLoading" class="text-center py-5">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading statistics...</span>
+            </div>
+        </div>
+        
+        <div *ngIf="!statisticsLoading && statistics" class="row">
+            <div class="col-md-8">
+                <div class="podium-container">
+                    <!-- Second Place -->
+                    <div class="podium-step" *ngIf="statistics.allPacks && statistics.allPacks.length > 1">
+                        <div class="podium-base second-place" [style.backgroundColor]="getPositionColor(1)">
+                            <div class="crown">🥈</div>
+                            <div class="podium-title">{{ statistics.allPacks[1].name }}</div>
+                            <div class="podium-value">{{ statistics.allPacks[1].subscriptionCount }} subs</div>
+                        </div>
+                    </div>
+                    
+                    <!-- First Place (Most Popular) -->
+                    <div class="podium-step" *ngIf="statistics.mostPopularPack">
+                        <div class="podium-base first-place" [style.backgroundColor]="getPositionColor(0)">
+                            <div class="crown">👑</div>
+                            <div class="podium-title">{{ statistics.mostPopularPack }}</div>
+                            <div class="podium-value">{{ statistics.maxAbonnements }} subs</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Third Place -->
+                    <div class="podium-step" *ngIf="statistics.allPacks && statistics.allPacks.length > 2">
+                        <div class="podium-base third-place" [style.backgroundColor]="getPositionColor(2)">
+                            <div class="crown">🥉</div>
+                            <div class="podium-title">{{ statistics.allPacks[2].name }}</div>
+                            <div class="podium-value">{{ statistics.allPacks[2].subscriptionCount }} subs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Summary</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Total Subscriptions:</span>
+                                <strong>{{ statistics.totalAbonnements }}</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Average Subscriptions:</span>
+                                <strong>{{ statistics.averageAbonnements | number:'1.2-2' }}</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Most Popular:</span>
+                                <strong>{{ statistics.mostPopularPack }}</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Least Popular:</span>
+                                <strong>{{ statistics.leastPopularPack }}</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popularity Ladder -->
+    <div class="card popularity-container mb-4">
+        <div class="popularity-header">
+            <i class="stats-icon bi bi-trophy-fill"></i>
+            <h3>Popularity Ladder</h3>
+        </div>
+        
+        <div *ngIf="popularityLoading" class="text-center py-5">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading popularity data...</span>
+            </div>
+        </div>
+        
+        <div *ngIf="!popularityLoading && popularPacks.length > 0" class="pack-ladder">
+            <div *ngFor="let pack of popularPacks; let i = index" class="ladder-step">
+                <div class="ladder-header position-relative" [style.backgroundColor]="getPositionColor(i)">
+                    <h5 class="mb-0">{{ pack.name }}</h5>
+                    <span class="ladder-position">#{{ i + 1 }}</span>
+                </div>
+                <div class="ladder-content">
+                    <div class="mb-2">
+                        <strong>Price:</strong> ${{ pack.price }}
+                    </div>
+                    <div class="mb-2">
+                        <strong>Duration:</strong> {{ pack.duration }} days
+                    </div>
+                    <div class="mb-3">
+                        <strong>Subscriptions:</strong> {{ pack.subscriptionCount }}
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" 
+                             [style.width.%]="(pack.subscriptionCount / statistics?.maxAbonnements * 100) || 0"
+                             [style.backgroundColor]="getPositionColor(i)">
+                            {{ (pack.subscriptionCount / statistics?.maxAbonnements * 100) || 0 | number:'1.0-0' }}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div *ngIf="!popularityLoading && popularPacks.length === 0" class="text-center py-4">
+            <p>No popularity data available.</p>
+        </div>
+    </div>
+
     <div *ngIf="loading" class="text-center">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -31,15 +149,17 @@
                 <td>
                     <button class="btn btn-sm btn-primary me-2" (click)="editPack(pack.id!)">Edit</button>
                     <button class="btn btn-sm btn-danger me-2" (click)="pack.id && deletePack(pack.id)">Delete</button>
-                  <div *ngIf="pack.club; else affectButton">
-                    <span class="badge bg-success">Affected to {{ pack.club.name }}</span>
-                  </div>
-                  <ng-template #affectButton>
-                    <button class="btn btn-sm btn-info" (click)="$event.preventDefault(); openAffectModal(pack)">
-                      Affect to Club
-                    </button>
-                  </ng-template>
-
+                    <!-- Check if pack has a club attached -->
+                    <div *ngIf="pack.club && pack.club.name; else affectButton">
+                        <span class="badge bg-success">Affected to {{ pack.club.name }}</span>
+                    </div>
+                    <ng-template #affectButton>
+                        <button 
+                          *ngIf="!pack.hasClub"
+                        class="btn btn-sm btn-info" (click)="$event.preventDefault(); openAffectModal(pack)">
+                            Affect to Club
+                        </button>
+                    </ng-template>
                 </td>
             </tr>
         </tbody>
@@ -54,15 +174,27 @@
                     <button type="button" class="btn-close" (click)="closeModal()"></button>
                 </div>
                 <div class="modal-body">
-                    <select class="form-select" [(ngModel)]="selectedClubId">
-                        <option value="">Select a club</option>
-                        <option *ngFor="let club of clubs" [value]="club.id">{{club.name}}</option>
-                    </select>
+                    <!-- Add debugging info (can be removed in production) -->
+                    <div *ngIf="clubs === null || clubs === undefined" class="alert alert-warning">
+                        Clubs data is not initialized
+                    </div>
+                    
+                    <div *ngIf="clubs && clubs.length === 0" class="alert alert-info">
+                        No clubs available to assign this pack.
+                    </div>
+                    
+                    <div *ngIf="clubs && clubs.length > 0">
+                        <select class="form-select" [(ngModel)]="selectedClubId">
+                            <option value="">Select a club</option>
+                            <option *ngFor="let club of clubs" [value]="club.id">{{club.name}}</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
                     <button type="button" class="btn btn-primary" (click)="confirmAffectToClub()"
-                            [disabled]="!selectedClubId">Confirm</button>
+                            
+                          >Confirm</button>
                 </div>
             </div>
         </div>
