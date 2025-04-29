@@ -226,6 +226,58 @@
                       </div>
                     </li>
                     <li data-position="right" class="nav-item dropdown">
+                      <!-- Lien principal avec routerLink -->
+                      <a routerLink="/nutrition"
+                         class="nav-link dropdown-toggle"
+                         data-toggle="dropdown"
+                         routerLinkActive="active">
+                        Nutrition
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="pagesDropdown">
+                      <!-- Sous-menu -->
+                      <li>
+                        <!-- Diet Program -->
+                        <a routerLink="/nutrition/diet-program"
+                           class="dropdown-item"
+                           routerLinkActive="active">
+                          Diet Program
+                        </a>
+                      </li>
+                      <li>
+                        <!-- Meal Plan (route par défaut) -->
+                        <a routerLink="/nutrition/meal-plan"
+                           class="dropdown-item"
+                           routerLinkActive="active">
+                          Meal Plan
+                        </a>
+                      </li>
+                      <li>
+                        <!-- Recipe -->
+                        <a routerLink="/nutrition/recipe"
+                           class="dropdown-item"
+                           routerLinkActive="active">
+                          Recipe
+                        </a>
+                      </li>
+                      <li>
+                        <!-- Recipe -->
+                        <a routerLink="/nutrition/nutritionistAI"
+                           class="dropdown-item"
+                           routerLinkActive="active">
+                          AI Nutritionist
+                        </a>
+                      </li>
+                      <li>
+                        <!-- Recipe -->
+                        <a routerLink="/nutrition/favorite"
+                           class="dropdown-item"
+                           routerLinkActive="active">
+                          Check your Favorite Recipes
+                        </a>
+                      </li>
+                    </ul>
+                    </li>
+                    <li data-position="right" class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button">
                         <span class="nav-title">Training Sessions</span>
                       </a>
@@ -332,6 +384,30 @@
                     <li data-position="right" class="nav-item nav-item-level-1 dropdown">
                       <a class="nav-link dropdown-toggle" href="#" id="signupDropdown" role="button">
                         <span class="nav-title">Signup</span>
+                    <li data-position="right" class="nav-item nav-item-id-149 nav-item-level-1 no-dropdown-icon">
+                      <!--menu link starts-->
+                      <a href="index.php/timetable.html" title="Timetable"
+                        class="as-menu-item nav-link-item-id-149 nav-link item-link-component item-level-1"
+                        data-drop-action="hover">
+                        <span class="nav-title">
+                          Timetable </span>
+                      </a>
+                      <!--menu link ends-->
+                    </li>
+
+
+
+
+                    <!-- register as a club owner -->
+
+                    <li data-position="right"
+                      class="nav-item nav-item-id-101 nav-item-level-1 nav-item-default nav-item-current nav-item-active no-dropdown-icon">
+                      <!--menu link starts-->
+                      <a routerLink="/register" title="signup"
+                        class="as-menu-item nav-link-item-id-126 nav-link megamenu-item-link item-link-component item-level-1"
+                        data-drop-action="hover">
+                        <span class="nav-title">
+                          sign up as club </span>
                       </a>
                       <ul class="dropdown-menu" aria-labelledby="signupDropdown">
                         <li>
@@ -761,4 +837,3 @@
     </div>
   </div>
 </section>
-

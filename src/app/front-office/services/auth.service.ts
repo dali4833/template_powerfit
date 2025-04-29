@@ -25,6 +25,16 @@ export class AuthService {
       })
     );
   }
+//login(user: any): Observable<any> {
+  //return this.http.post(`${this.apiUrl}/generateToken`, user, {
+  //  responseType: 'text'  // <--- This is important!
+ // }).pipe(
+  //  tap((token: string) => {
+   //   localStorage.setItem('token', token);
+    //  console.log('JWT Token saved:', token);
+   // })
+//  );
+//}
 
 
   register(user: any): Observable<any> {
@@ -40,6 +50,7 @@ export class AuthService {
     this.router.navigate(['/login']);
 
   }
+
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
@@ -122,7 +133,7 @@ export class AuthService {
 
 
   forgotPassword(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/forgot-password`, {email}, {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email }, {
       responseType: 'text'
     });
   }

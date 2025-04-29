@@ -1,0 +1,226 @@
+<div class="container py-4 text-bg-light">
+  <!-- Alert Messages - Modern Floating Alerts -->
+  <div class="alert-container">
+    <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show floating-alert">
+      <div class="d-flex align-items-center">
+        <i class="bi bi-check-circle-fill me-3 fs-4"></i>
+        <div>{{ successMessage }}</div>
+      </div>
+      <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show floating-alert">
+      <div class="d-flex align-items-center">
+        <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+        <div>{{ errorMessage }}</div>
+      </div>
+      <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+    </div>
+  </div>
+
+  <!-- Nutritionist Form Section - Modern Card -->
+  <div *ngIf="roles === 'NUTRITIONIST'" class="card theme-card mb-4 border border-dark">
+    <div class="card-header theme-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3 class="mb-0 text-dark">
+          <i class="bi bi-journal-plus me-2 text-dark"></i>
+          {{ editMode ? 'Update Meal Plan' : 'Create New Meal Plan' }}
+        </h3>
+        <span class="badge bg-white theme-badge-text">{{ editMode ? 'Editing Mode' : 'New Entry' }}</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <form #form="ngForm" (ngSubmit)="editMode ? updateMealPlan() : addMealPlan()">
+        <div class="row g-3">
+          <!-- Day of Week -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Day of Week</label>
+            <select class="form-select theme-input" [(ngModel)]="newMeal.dayOfWeek" name="dayOfWeek" required>
+              <option *ngFor="let day of daysOfWeek" [value]="day">{{ day }}</option>
+            </select>
+          </div>
+
+          <!-- Meal Type -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Meal Type</label>
+            <select class="form-select theme-input" [(ngModel)]="newMeal.mealType" name="mealType" required>
+              <option *ngFor="let type of mealTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+
+          <!-- Meal Order -->
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">Meal Order</label>
+            <input type="number" class="form-control theme-input" [(ngModel)]="newMeal.mealOrder" 
+                   name="mealOrder" placeholder="Order (1-6)" min="1" max="6">
+          </div>
+
+          <!-- Description -->
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Description</label>
+            <input type="text" class="form-control theme-input" [(ngModel)]="newMeal.description" 
+                   name="description" placeholder="Enter meal description" required>
+          </div>
+
+          <!-- Diet Program -->
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Diet Program</label>
+            <select class="form-select theme-input" [(ngModel)]="newMeal.dietProgramId" name="dietProgramId">
+              <option value="">Select a program</option>
+              <option *ngFor="let program of dietPrograms" [value]="program.idDiet">{{ program.name }}</option>
+            </select>
+          </div>
+
+          <!-- Recipe -->
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Recipe</label>
+            <select class="form-select theme-input" [(ngModel)]="newMeal.recipeId" name="recipeId">
+              <option value="">Select a recipe</option>
+              <option *ngFor="let recipe of recipes" [value]="recipe.idRecipe">{{ recipe.name }}</option>
+            </select>
+          </div>
+
+          <!-- User Information -->
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">User ID</label>
+            <input type="number" class="form-control theme-input" [(ngModel)]="newMeal.userId" 
+                   name="userId" placeholder="User ID" required>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">User Email</label>
+            <input type="email" class="form-control theme-input" [(ngModel)]="newMeal.userEmail" 
+                   name="userEmail" placeholder="Email (optional)">
+          </div>
+
+          <!-- Form Actions -->
+          <div class="col-12 d-flex justify-content-end gap-3 mt-4">
+            <button *ngIf="editMode" type="button" class="btn btn-lg btn-outline-secondary rounded-pill" 
+                    (click)="resetForm()">
+              <i class="bi bi-x-lg me-1"></i> Cancel
+            </button>
+            <button type="submit" class="btn btn-lg theme-btn rounded-pill px-4 text-success" 
+                    [disabled]="form.invalid" [class.theme-btn-edit]="editMode">
+              <i class="bi bi-save me-1"></i> {{ editMode ? 'Update Plan' : 'Create Plan' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Meal Plans List - Modern Table Card -->
+  <div class="card theme-card border border-dark">
+    <div class="card-header theme-header-light">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3 class="mb-0 text-dark"><i class="bi bi-list-check me-2 text-dark"></i> Meal Plans</h3>
+        <span class="badge theme-badge rounded-pill">{{ mealPlans.length }} total</span>
+      </div>
+    </div>
+    
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="card-body text-center py-5 border border-dark">
+      <div class="spinner-grow theme-spinner" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3 theme-text-secondary">Loading meal plans...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && mealPlans.length === 0" class="card-body text-center py-5">
+      <div class="empty-state">
+        <i class="bi bi-journal-x theme-text-muted" style="font-size: 4rem;"></i>
+        <h4 class="mt-3 theme-text-muted">No meal plans found</h4>
+        <p class="theme-text-secondary">Start by creating your first meal plan</p>
+        <button *ngIf="roles === 'NUTRITIONIST'" class="btn theme-btn rounded-pill px-4 mt-2">
+          <i class="bi bi-plus-lg me-1"></i> Create Plan
+        </button>
+      </div>
+    </div>
+
+    <!-- Meal Plans Grid -->
+    <div *ngIf="!isLoading && mealPlans.length > 0" class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0 theme-table">
+          <thead class="theme-table-header">
+            <tr>
+              <th class="ps-4">Day</th>
+              <th>Type</th>
+              <th>Order</th>
+              <th>Description</th>
+              <th>Program</th>
+              <th>Recipe</th>
+              <th *ngIf="roles === 'NUTRITIONIST'" class="text-end pe-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let meal of paginatedMeals()" class="align-middle theme-table-row">
+              <td class="ps-4">
+                <span class="day-badge">{{ meal.dayOfWeek | slice:0:3 }}</span>
+              </td>
+              <td>
+                <span class="badge theme-badge-light">{{ meal.mealType || '-' }}</span>
+              </td>
+              <td>
+                <span class="badge theme-badge-info">{{ meal.mealOrder || '-' }}</span>
+              </td>
+              <td>
+                <div class="fw-semibold">{{ meal.description }}</div>
+              </td>
+             
+              <td>
+                <span *ngIf="meal.dietProgram" class="badge theme-badge-info">
+                  {{ meal.dietProgram.name }}
+                </span>
+                <span *ngIf="!meal.dietProgram" class="theme-text-muted">-</span>
+              </td>
+              <td>
+                <span *ngIf="meal.recipe" class="badge theme-badge-success">
+                  {{ meal.recipe.name }}
+                </span>
+                <span *ngIf="!meal.recipe" class="theme-text-muted">-</span>
+              </td>
+              <td *ngIf="roles === 'NUTRITIONIST'" class="text-end pe-4">
+                <div class="btn-group btn-group-sm" role="group">
+                  <button class="btn btn-outline-primary rounded-start-pill theme-btn-outline" (click)="editMealPlan(meal)">
+                    <i class="bi bi-pencil"></i> Edit
+                  </button>
+                  <button class="btn btn-outline-danger rounded-end-pill" (click)="confirmDelete(meal.idMealPlan)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="totalPages > 1" class="card-footer d-flex justify-content-between align-items-center theme-footer">
+        <div class="theme-text-secondary">
+          Showing <strong>{{ getFirstItemIndex() }}-{{ getLastItemIndex() }}</strong> 
+          of <strong>{{ mealPlans.length }}</strong> plans
+        </div>
+        <nav>
+          <ul class="pagination mb-0">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button class="page-link rounded-start-pill theme-pagination" (click)="prevPage()">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+            </li>
+            
+            <li *ngFor="let page of getPagesArray()" class="page-item" 
+                [class.active]="page === currentPage">
+              <button class="page-link theme-pagination" (click)="goToPage(page)">{{ page }}</button>
+            </li>
+            
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button class="page-link rounded-end-pill theme-pagination" (click)="nextPage()">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
