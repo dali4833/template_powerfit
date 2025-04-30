@@ -17,7 +17,7 @@ export class WebSocketNotificationService {
   }
 
   initializeWebSocketConnection() {
-    const socket = new SockJS('http://localhost:8080/ws');
+    const socket = new SockJS('http://localhost:8089/ws');
 
     this.stompClient = new Client({
       webSocketFactory: () => socket as WebSocket,
