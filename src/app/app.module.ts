@@ -143,7 +143,7 @@ import {NgChartsModule} from "ng2-charts";
     LoadingSpinnerComponent,
     RegisterNutrusionistComponent,
     CategorieComponent,
-    ProductComponent
+    ProductComponent,
   ],
   imports: [
     ReactiveFormsModule,
@@ -169,7 +169,7 @@ import {NgChartsModule} from "ng2-charts";
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    RouterModule
+    RouterModule,
 
 
   ],

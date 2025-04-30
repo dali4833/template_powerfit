@@ -18,7 +18,7 @@ export class RegisterOwnerComponent {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]], 
+      password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
       terms: [false, Validators.requiredTrue]
     });
@@ -28,14 +28,14 @@ export class RegisterOwnerComponent {
       alert('Please fill out the form correctly');
       return;
     }
-  
+
     const { name, email, password, confirmPassword } = this.registerForm.value;
-  
+
     if (password !== confirmPassword) {
       alert('Passwords do not match');
       return;
     }
-  
+
     this.router.navigate(['/login']);
 
 
@@ -44,7 +44,7 @@ export class RegisterOwnerComponent {
       email,
       password,
       roles: 'ROLE_OWNER',
-      user_type: 'ClubOwner'
+      user_type: 'CLUB_OWNER'
     };
     this.authService.register(user).subscribe({
       next: (response: any) => {
@@ -56,9 +56,9 @@ export class RegisterOwnerComponent {
         alert('Error: ' + (err.error?.message || 'Registration failed!'));
       }
     });
-    
-    
-    
+
+
+
   }
 
 

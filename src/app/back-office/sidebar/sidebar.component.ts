@@ -14,18 +14,6 @@ export class SidebarComponent {
     console.log('Sidebar role (Coach check):', role);
     return role === 'ROLE_COACH';
   }
-  collapsed: boolean = false;
-
-  menuItems = [
-    {
-
-      name: 'Nutrionnist', label: 'Nutrionnist', link: '/admin/nutrionnist', icon: 'bx bx-home-circle', submenu: []
-    },
-
-  ];
-  toggleSidebar() {
-    this.collapsed = !this.collapsed;
-  }
 
   isAdmin(): boolean {
     const role = this.authService.getRoleFromToken();
@@ -33,9 +21,4 @@ export class SidebarComponent {
     return role === 'ROLE_ADMIN';
   }
 
-  hasRole(): boolean {
-    const roles = this.authService.getRoleFromToken();
-    console.log('Current role:', roles);
-    return roles !== null;
-  }
 }

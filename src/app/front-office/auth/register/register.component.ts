@@ -16,12 +16,12 @@ export class RegisterComponent {
     private authService: AuthService,
     private router: Router,
         private loadingService: LoadingService,
-    
+
   ) {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]], 
+      password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
       terms: [false, Validators.requiredTrue]
     });
@@ -31,24 +31,24 @@ export class RegisterComponent {
       alert('Please fill out the form correctly');
       return;
     }
-  
+
     const { name, email, password, confirmPassword } = this.registerForm.value;
-  
+
     if (password !== confirmPassword) {
       alert('Passwords do not match');
       return;
     }
-  
+
     const user = {
       name,
       email,
       password,
       roles: 'ROLE_USER',
-      user_type: 'NUTRITIONIST'
+      user_type: 'UserInfo'
     };
-  
+
     this.loadingService.show(); // 🔄 Show loading
-  
+
     this.authService.register(user).subscribe({
       next: (response: any) => {
         alert(response); // e.g., "User Added Successfully"
@@ -62,5 +62,5 @@ export class RegisterComponent {
       }
     });
   }
-  
+
 }
