@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-userprofile',
   templateUrl: './userprofile.component.html'
-
 })
 export class UserprofileComponent implements OnInit {
   profileMessage: string = '';
@@ -33,12 +32,12 @@ export class UserprofileComponent implements OnInit {
     } else {
       console.error('Failed to get role from token.');
     }
-  
+
     this.authService.getUserProfileBsic().subscribe({
       next: (res: any) => {
         this.email = res.email || '';
         this.username = res.username || '';
-  
+
         switch (this.role) {
           case 'ROLE_COACH':
             this.isNutritionist = true;

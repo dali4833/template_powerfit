@@ -13,7 +13,7 @@
         <th>Date</th>
         <th>Start Time</th>
         <th>End Time</th>
-        <th>Sport</th>
+<!--        <th>Sport</th>-->
         <th>Meet Link</th>
         <th>Actions</th>
       </tr>
@@ -24,7 +24,7 @@
         <td>{{ session.date | date }}</td>
         <td>{{ session.startTime }}</td>
         <td>{{ session.endTime }}</td>
-        <td>{{ session.sport }}</td>
+<!--        <td>{{ session.sport }}</td>-->
         <td>
           <a href="{{ session.meetLink }}" target="_blank" *ngIf="session.meetLink; else noLink">
             {{ session.meetLink }}
@@ -53,7 +53,7 @@
       </button>
     </li>
   </ul>
-  
+
   <!-- Tab Content -->
   <div class="tab-content" id="viewTabsContent">
     <!-- Calendar Tab -->
@@ -63,12 +63,12 @@
         <app-calendar [events]="trainingSessions"></app-calendar>
       </div>
     </div>
-    
+
     <!-- Stats Tab -->
     <div class="tab-pane fade" [class.show]="activeTab === 'stats'" [class.active]="activeTab === 'stats'" id="stats" role="tabpanel" aria-labelledby="stats-tab">
       <div class="stats-container">
         <h3 class="mb-3">Training Statistics Dashboard</h3>
-        
+
         <!-- Stats Cards -->
         <div class="row mb-4" *ngIf="stats">
           <div class="col-md-4">
@@ -102,7 +102,7 @@
                   <span class="out-of">/5</span>
                 </div>
                 <div class="rating-stars mt-2">
-                  <i *ngFor="let star of [1,2,3,4,5]" class="bi" 
+                  <i *ngFor="let star of [1,2,3,4,5]" class="bi"
                     [class.bi-star-fill]="star <= stats.averageRating"
                     [class.bi-star-half]="star - 0.5 <= stats.averageRating && star > stats.averageRating"
                     [class.bi-star]="star > stats.averageRating && star - 0.5 > stats.averageRating">
@@ -113,7 +113,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Custom Charts Section -->
         <div class="row">
           <!-- Bookings by Day Chart -->
@@ -129,7 +129,7 @@
                   </div>
                   <div class="bar-container">
                     <div *ngFor="let day of dayLabels; let i = index" class="chart-bar-wrapper">
-                      <div class="chart-bar" 
+                      <div class="chart-bar"
                            [style.height.%]="getBarHeightPercentage(dayValues[i], maxDayValue)">
                         <div class="bar-value">{{ dayValues[i] }}</div>
                       </div>
@@ -140,7 +140,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Bookings by Hour Chart -->
           <div class="col-md-6">
             <div class="card mb-4">
@@ -160,30 +160,30 @@
                           <stop offset="100%" stop-color="rgba(75, 192, 192, 0)" />
                         </linearGradient>
                       </defs>
-                      
+
                       <!-- Area -->
                       <path [attr.d]="getAreaChartPath()" fill="url(#areaGradient)" />
-                      
+
                       <!-- Line -->
                       <path [attr.d]="getLineChartPath()" fill="none" stroke="rgba(75, 192, 192, 1)" stroke-width="1.5" />
-                      
+
                       <!-- Points -->
                       <g *ngFor="let hour of hourValues; let i = index">
-                        <circle 
-                          [attr.cx]="getPointX(i)" 
-                          [attr.cy]="getPointY(hour, maxHourValue)" 
-                          r="2" 
-                          fill="#fff" 
-                          stroke="rgba(75, 192, 192, 1)" 
+                        <circle
+                          [attr.cx]="getPointX(i)"
+                          [attr.cy]="getPointY(hour, maxHourValue)"
+                          r="2"
+                          fill="#fff"
+                          stroke="rgba(75, 192, 192, 1)"
                           stroke-width="1.5">
                           <title>{{ i }}:00 - {{ hour }} bookings</title>
                         </circle>
                       </g>
                     </svg>
-                    
+
                     <div class="x-axis-labels">
-                      <div *ngFor="let hour of getHourLabels(); let i = index" 
-                           class="x-label" 
+                      <div *ngFor="let hour of getHourLabels(); let i = index"
+                           class="x-label"
                            [style.left.%]="getXAxisPosition(hour)">
                         {{ hour }}
                       </div>
@@ -193,7 +193,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Sessions Rating Comparison -->
           <div class="col-12">
             <div class="card mb-4">

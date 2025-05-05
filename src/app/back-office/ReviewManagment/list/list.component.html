@@ -20,7 +20,7 @@
                 <i class="bi bi-list-ul me-1"></i>List View
             </a>
         </li>
-     
+
         <li class="nav-item">
             <a class="nav-link" [class.active]="activeView === 'stats'" (click)="setActiveView('stats')">
                 <i class="bi bi-graph-up me-1"></i>Statistics
@@ -55,20 +55,20 @@
         </div>
     </div>
 
-  
+
 
     <!-- Stats View -->
     <div *ngIf="activeView === 'stats'" class="view-container">
         <!-- Review Statistics Section -->
         <div *ngIf="!loading && sessionStats.length > 0" class="mt-1">
             <h3>Training Session Reviews</h3>
-            
+
             <!-- Bar Chart -->
             <div class="bar-chart-container mt-3 mb-4">
                 <div class="bar-chart">
-                    <div *ngFor="let session of sessionStats" 
-                        class="bar-item" 
-                        [style.height.%]="session.totalReviews ? (session.totalReviews / (sessionStats | maxReviewValue)) * 100 : 10" 
+                    <div *ngFor="let session of sessionStats"
+                        class="bar-item"
+                        [style.height.%]="session.totalReviews ? (session.totalReviews / (sessionStats | maxReviewValue)) * 100 : 10"
                         [ngClass]="{'active': session.expanded, 'no-reviews': session.totalReviews === 0}"
                         (click)="toggleSession(session)">
                         <div class="bar" [ngClass]="{'empty-bar': session.totalReviews === 0}">
@@ -106,28 +106,28 @@
                                     <span>{{ item.label }}</span>
                                 </div>
                             </div>
-                            
+
                             <div class="ratings-chart">
                                 <div class="y-axis">
                                     <div class="y-label" *ngFor="let value of [0, 1, 2, 3, 4, 5]">
                                       {{ Math.round((maxRatingCount / 5) * (5 - value)) }}
                                     </div>
                                 </div>
-                                
+
                                 <div class="chart-area">
                                     <svg viewBox="0 0 500 300" class="ratings-svg">
                                         <!-- Horizontal grid lines -->
-                                        <line *ngFor="let i of [0, 1, 2, 3, 4, 5]" 
-                                              [attr.y1]="50 + i * 40" 
+                                        <line *ngFor="let i of [0, 1, 2, 3, 4, 5]"
+                                              [attr.y1]="50 + i * 40"
                                               [attr.y2]="50 + i * 40"
-                                              x1="40" 
+                                              x1="40"
                                               x2="480"
-                                              stroke="#e0e0e0" 
+                                              stroke="#e0e0e0"
                                               stroke-width="1" />
-                                        
+
                                         <!-- Bars for each rating -->
                                         <g *ngFor="let data of ratingDistribution; let i = index">
-                                            <rect [attr.x]="70 + i * 80" 
+                                            <rect [attr.x]="70 + i * 80"
                                                   [attr.y]="250 - (data.count / maxRatingCount) * 200"
                                                   width="60"
                                                   [attr.height]="(data.count / maxRatingCount) * 200"
@@ -136,11 +136,11 @@
                                                   ry="5">
                                                 <title>Rating {{data.rating}}: {{data.count}} reviews</title>
                                             </rect>
-                                            <text [attr.x]="100 + i * 80" 
+                                            <text [attr.x]="100 + i * 80"
                                                   [attr.y]="270"
                                                   text-anchor="middle"
                                                   fill="#495057">{{data.rating}}/5</text>
-                                            <text [attr.x]="100 + i * 80" 
+                                            <text [attr.x]="100 + i * 80"
                                                   [attr.y]="245 - (data.count / maxRatingCount) * 200"
                                                   text-anchor="middle"
                                                   fill="#495057"
@@ -155,7 +155,7 @@
             </div>
             <!-- Session Cards -->
             <div class="session-cards">
-                <div *ngFor="let session of sessionStats" class="card mb-3" 
+                <div *ngFor="let session of sessionStats" class="card mb-3"
                     [ngClass]="{'expanded': session.expanded, 'no-reviews': session.totalReviews === 0}">
                     <div class="card-header d-flex justify-content-between align-items-center" (click)="toggleSession(session)">
                         <h5 class="mb-0">{{session.sessionDescription}}</h5>
@@ -171,11 +171,11 @@
                         <div class="session-details mb-3">
                             <p *ngIf="session.sessionDate"><strong>Session Date:</strong> {{session.sessionDate | date:'mediumDate'}}</p>
                         </div>
-                        
+
                         <div *ngIf="session.totalReviews === 0" class="alert alert-info">
                             No reviews yet for this training session.
                         </div>
-                        
+
                         <div *ngIf="session.totalReviews > 0">
                             <h6>Reviews ({{session.totalReviews}}):</h6>
                             <div class="review-list">
@@ -201,7 +201,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div *ngIf="!loading && sessionStats.length === 0" class="alert alert-info">
             No training sessions found. Please add training sessions first.
         </div>

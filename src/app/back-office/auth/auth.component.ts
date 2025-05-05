@@ -22,7 +22,7 @@ export class AuthComponent {
 
         // Check if the token has roles and includes ROLE_ADMIN or ROLE_COACH
         if (decodedToken && (decodedToken.roles?.includes('ROLE_ADMIN') || decodedToken.roles?.includes('ROLE_COACH'))) {
-          this.router.navigate(['/dashboard']); // Navigate to dashboard
+          this.router.navigate(['/admin']); // Navigate to dashboard
         } else {
           alert('Access denied: You are not authorized');
         }

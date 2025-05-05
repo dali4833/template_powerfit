@@ -4,14 +4,14 @@ import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8089/auth';
 
-  constructor(private http: HttpClient, private router: Router) {
-  }
+  constructor(private http: HttpClient,private router: Router) {}
 
 // src/app/services/auth.service.ts
   login(user: any): Observable<any> {
@@ -24,16 +24,7 @@ export class AuthService {
       })
     );
   }
-//login(user: any): Observable<any> {
-  //return this.http.post(`${this.apiUrl}/generateToken`, user, {
-  //  responseType: 'text'  // <--- This is important!
- // }).pipe(
-  //  tap((token: string) => {
-   //   localStorage.setItem('token', token);
-    //  console.log('JWT Token saved:', token);
-   // })
-//  );
-//}
+
 
 
   register(user: any): Observable<any> {
@@ -48,12 +39,13 @@ export class AuthService {
     //navigate to login page
     this.router.navigate(['/login']);
 
-  }
 
+  }
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
+
 
   getUserProfile(): Observable<any> {
     const token = localStorage.getItem('token');
@@ -102,6 +94,7 @@ export class AuthService {
   }
 
 
+
   getRoleFromToken(): string | null {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -111,24 +104,19 @@ export class AuthService {
 
     try {
       const payloadPart = token.split('.')[1];
-      const base64 = payloadPart.replace(/-/g, '+').replace(/_/g, '/');
+      const base64 = payloadPart.replace(/-/g, '+').replace(/_/g, '/'); // handle base64url
       const decodedPayload = atob(base64);
       const payload = JSON.parse(decodedPayload);
 
-      console.log('Token payload:', payload);
-
-      if (payload.roles && Array.isArray(payload.roles)) {
-        // Check for ROLE_ADMIN first
-        if (payload.roles.includes('ROLE_ADMIN')) {
-          return 'ROLE_ADMIN';
-        }
-        // Then check for ROLE_COACH
-        if (payload.roles.includes('ROLE_COACH')) {
-          return 'ROLE_COACH';
-        }
+      let role = null;
+      if (Array.isArray(payload.roles)) {
+        role = payload.roles[0]; // 👈 pick the first role
+      } else {
+        role = payload.roles;
       }
 
-      return null;
+      console.log('Role from token:', role);
+      return role || null;
     } catch (error) {
       console.error('Error decoding token:', error);
       return null;
@@ -136,9 +124,30 @@ export class AuthService {
   }
 
 
+
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/forgot-password`, { email }, {
       responseType: 'text'
+    });
+  }
+
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post(`${this.apiUrl}/reset-password`, {
+      token,
+      newPassword
+    }, {
+      responseType: 'text'
+    });
+  }
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
     });
   }
 
@@ -152,26 +161,10 @@ export class AuthService {
     });
   }
 
-
-  resetPassword(token: string, newPassword: string) {
-    return this.http.post(`${this.apiUrl}/reset-password`, {
-      token,
-      newPassword
-    }, {
-      responseType: 'text'
-    });
-  }
-
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  }
-
-  getAuthHeaders(): HttpHeaders {
-    const token = this.getToken();
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
 }
+
+
+
+
 
 

@@ -84,6 +84,10 @@ import { LoadingSpinnerComponent } from './front-office/loading-spinner/loading-
 import { RegisterNutrusionistComponent } from './front-office/auth/register-nutrusionist/register-nutrusionist.component';
 import { RouterModule } from '@angular/router';
 import {NgChartsModule} from "ng2-charts";
+import {SportsModule} from "./back-office/sports-managment/sports.module";
+import {
+  ExerciceRecommendationComponent
+} from "./front-office/exercice-recommendation/exercice-recommendation/exercice-recommendation.component";
 
 @NgModule({
   declarations: [
@@ -144,6 +148,7 @@ import {NgChartsModule} from "ng2-charts";
     RegisterNutrusionistComponent,
     CategorieComponent,
     ProductComponent,
+    ExerciceRecommendationComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -170,6 +175,7 @@ import {NgChartsModule} from "ng2-charts";
     MatIconModule,
     MatSnackBarModule,
     RouterModule,
+    SportsModule
 
 
   ],

@@ -1,22 +1,121 @@
-<div class="card" style="margin: 20px;">
-  <h5 class="card-header d-flex justify-content-between align-items-center" style="margin-bottom: 10px;">
-    Users
-    <div style="margin-left: 15px;">
-      <label class="form-check-label" for="sortSessions">
-        Sort by most active
-        <input
-          type="checkbox"
-          class="form-check-input"
-          id="sortSessions"
-          (change)="onFilterChange($event)"
-        />
-        
-      </label>
+<div class="container-fluid">
+  <!-- Statistics Cards -->
+  <div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Users</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{totalUsers}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-users fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </h5>
-  <div class="table-responsive text-nowrap">
-    <table class="table">
-      <thead class="table-light">
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active Users</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{activeUsers}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-user-check fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Blocked Users</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{blockedUsers}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-user-lock fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Avg Sessions/User</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{averageSessions | number:'1.0-1'}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Most Active User Card -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Most Active User</h6>
+        </div>
+        <div class="card-body" *ngIf="mostActiveUser">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Name:</strong> {{mostActiveUser.name}}</p>
+              <p><strong>Email:</strong> {{mostActiveUser.email}}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Total Sessions:</strong> {{mostActiveUser.sessions}}</p>
+              <p><strong>Status:</strong>
+                <span class="badge" [ngClass]="{
+                  'bg-label-success': mostActiveUser.enabled && !mostActiveUser.isBlocked,
+                  'bg-label-warning': mostActiveUser.enabled && mostActiveUser.isBlocked,
+                  'bg-label-danger': !mostActiveUser.enabled
+                }">
+                  {{ mostActiveUser.isBlocked ? 'Blocked' : (mostActiveUser.enabled ? 'Active' : 'Inactive') }}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card" style="margin: 20px;">
+    <h5 class="card-header d-flex justify-content-between align-items-center" style="margin-bottom: 10px;">
+      Users
+      <div style="margin-left: 15px;">
+        <label class="form-check-label" for="sortSessions">
+          Sort by most active
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="sortSessions"
+            (change)="onFilterChange($event)"
+          />
+
+        </label>
+      </div>
+    </h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table">
+        <thead class="table-light">
         <tr>
           <th>username</th>
           <th>Email</th>
@@ -25,29 +124,29 @@
           <th>Nb sessions</th>
           <th>Actions</th>
         </tr>
-      </thead>
-      <tbody class="table-border-bottom-0">
+        </thead>
+        <tbody class="table-border-bottom-0">
         <tr *ngFor="let user of filteredUsers">
           <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ user.name }}</strong></td>
           <td>{{ user.email }}</td>
           <td>{{ user.roles }}</td>
           <td>
-            <span class="badge me-1" [ngClass]="{
-              'bg-label-success': user.enabled && !user.isBlocked,
-              'bg-label-warning': user.enabled && user.isBlocked,
-              'bg-label-danger': !user.enabled
-            }">
-              {{ user.isBlocked ? 'Blocked' : (user.enabled ? 'Active' : 'Inactive') }}
-            </span>
+              <span class="badge me-1" [ngClass]="{
+                'bg-label-success': user.enabled && !user.isBlocked,
+                'bg-label-warning': user.enabled && user.isBlocked,
+                'bg-label-danger': !user.enabled
+              }">
+                {{ user.isBlocked ? 'Blocked' : (user.enabled ? 'Active' : 'Inactive') }}
+              </span>
           </td>
-          
+
           <td>{{ user.sessions }}</td>
           <td>
             <div class="dropdown">
-              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" (click)="toggleDropdown(user.id)">
                 <i class="bx bx-dots-vertical-rounded"></i>
               </button>
-              <div class="dropdown-menu">
+              <div class="dropdown-menu" [class.show]="isDropdownOpen(user.id)">
                 <a class="dropdown-item" (click)="deleteUser(user.id)">
                   <i class="bx bx-trash me-1"></i> Delete
                 </a>
@@ -59,7 +158,44 @@
             </div>
           </td>
         </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row mt-4">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">User Roles Distribution</h6>
+      </div>
+      <div class="card-body">
+        <div style="height: 300px; width: 100%;">
+          <canvas baseChart
+                  [data]="rolesChartData"
+                  [type]="rolesChartType"
+                  [options]="chartOptions">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Top 5 Users by Sessions</h6>
+      </div>
+      <div class="card-body">
+        <div style="height: 300px; width: 100%;">
+          <canvas baseChart
+                  [data]="sessionsChartData"
+                  [type]="sessionsChartType"
+                  [options]="chartOptions">
+          </canvas>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

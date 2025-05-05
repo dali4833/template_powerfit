@@ -49,6 +49,10 @@ import { BacknutritionistComponent } from './back-office/backnutritionist/backnu
 import {SuccessComponent} from "./front-office/success/success.component";
 import {ProductComponent} from "./back-office/product/product.component";
 import {CategorieComponent} from "./back-office/categorie/categorie.component";
+import {PromotionComponent} from "./back-office/promotion/promotion.component";
+import {
+  ExerciceRecommendationComponent
+} from "./front-office/exercice-recommendation/exercice-recommendation/exercice-recommendation.component";
 
 
 
@@ -84,7 +88,7 @@ import {CategorieComponent} from "./back-office/categorie/categorie.component";
 const routes: Routes = [
   { path: 'admin/auth', component: AuthComponent },
   {
-    path: 'dashboard',
+    path: 'admin',
     component: AllTemplateBackComponentComponent,
     canActivate: [AuthGuard],
     children: [
@@ -101,10 +105,10 @@ const routes: Routes = [
       { path: 'categories', component: CategorieComponent ,canActivate: [AuthGuard]},
       { path: 'products', component: ProductComponent,canActivate: [AuthGuard]  },
       { path: 'success', component: SuccessComponent,canActivate: [AuthGuard]  },
-
       { path: 'Booking-management', loadChildren: () => import('./back-office/BookingManagment/booking.module').then(m => m.BookingModule) },
       { path: 'Trophy-management', loadChildren: () => import('./back-office/trophiesManagement/Trophy.module').then(m => m.TrophyModule) },
-
+      { path:'nutritionist',component: BacknutritionistComponent},
+      { path: 'promotions',component: PromotionComponent}
     ]
   },
   {
@@ -165,6 +169,7 @@ const routes: Routes = [
         ]
       },
       { path: 'trainingSession', component: TrainingSessionComponent },
+      {path: "recommend-exercice", component: ExerciceRecommendationComponent},
       { path: 'chat', component: ChatComponent },
       { path: 'livraison', component: LivraisonComponent },
       { path: 'promotionsfront', component: PromotionFrontComponent },
@@ -195,6 +200,7 @@ const routes: Routes = [
       }
     ]
   },
+
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 

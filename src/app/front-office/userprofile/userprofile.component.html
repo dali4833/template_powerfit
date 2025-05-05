@@ -9,13 +9,13 @@
 <div *ngIf="role !== 'ROLE_OWNER'; else ownerView">
   <div class="row align-items-center">
     <div class="col-md-4 text-center">
-      <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" 
-           class="img-fluid rounded-circle mb-3" 
-           style="max-width: 150px;" 
+      <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png"
+           class="img-fluid rounded-circle mb-3"
+           style="max-width: 150px;"
            alt="Profile Image">
       <h5 class="fw-bold text-capitalize">{{ email.split('@')[0] }}</h5>
       <p class="text-muted">
-        🏷️ 
+        🏷️
         {{ profileMessage }}
       </p>
     </div>

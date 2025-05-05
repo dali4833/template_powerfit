@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr" data-navigation-type="default" data-navbar-horizontal-shape="default">
 
-  
+
 <!-- Mirrored from prium.github.io/phoenix/v1.20.1/pages/authentication/simple/sign-up.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 03 Apr 2025 10:05:24 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
@@ -80,12 +80,16 @@
                   <label class="form-label" for="name">Name</label>
                   <input class="form-control" id="name" formControlName="name" type="text" placeholder="Name" />
                 </div>
-              
+
                 <div class="mb-3 text-start">
                   <label class="form-label" for="email">Email address</label>
                   <input class="form-control" id="email" formControlName="email" type="email" placeholder="name@example.com" />
                 </div>
-              
+              <div class="mb-3 text-start">
+                <label class="form-label" for="address">Address</label>
+                <input class="form-control" id="address" formControlName="address" type="address" placeholder="132ave de rue" />
+              </div>
+
                 <div class="row g-3 mb-3">
                   <div class="col-sm-6">
                     <label class="form-label" for="password">Password</label>
@@ -93,25 +97,25 @@
                     <div *ngIf="registerForm.get('password')?.errors?.['minlength'] && registerForm.get('password')?.touched" class="text-danger">
                       Password must be at least 8 characters long.
                     </div>
-                    
+
                   </div>
                   <div class="col-sm-6">
                     <label class="form-label" for="confirmPassword">Confirm Password</label>
                     <input class="form-control" id="confirmPassword" formControlName="confirmPassword" type="password" placeholder="Confirm Password" />
                   </div>
                 </div>
-              
+
                 <div class="form-check mb-3">
                   <input class="form-check-input" id="termsService" type="checkbox" formControlName="terms" />
                   <label class="form-label fs-9" for="termsService">
                     I accept the <a href="#">terms</a> and <a href="#">privacy policy</a>
                   </label>
                 </div>
-              
+
                 <button class="btn btn-primary w-100 mb-3" type="submit">Sign up</button>
                 <div class="text-center"><a class="fs-9 fw-bold" routerLink="/login">Sign in to an existing account</a></div>
               </form>
-              
+
           </div>
         </div>
       </div>

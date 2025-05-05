@@ -54,6 +54,7 @@ export class EditaddComponent implements OnInit {
     if (this.requestForm.valid && this.documentFile) {
       const formData = new FormData();
 
+      // Prepare the request data
       const requestPayload = {
         name: this.requestForm.value.name,
         description: this.requestForm.value.description,
@@ -61,13 +62,18 @@ export class EditaddComponent implements OnInit {
         status: this.requestForm.value.status
       };
 
+      // Append JSON data to FormData
       formData.append('request', JSON.stringify(requestPayload));
+
+      // Append the document file
       formData.append('document', this.documentFile);
 
+      // Append the image file if present
       if (this.imageFile) {
         formData.append('image', this.imageFile);
       }
 
+      // Send the form data using the service
       this.reqService.submitClubCreationRequest(formData).subscribe({
         next: () => this.router.navigate(['/admin/clubrequests-management']),
         error: (error: HttpErrorResponse) => {
