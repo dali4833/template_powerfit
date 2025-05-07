@@ -1,0 +1,93 @@
+<!-- exercise-recommender.component.html -->
+<div class="container">
+  <div class="geometric-shape shape-1"></div>
+  <div class="geometric-shape shape-2"></div>
+
+  <h2 class="generative-text">AI Exercise Recommender</h2>
+  <p class="subtitle">Powered by Advanced Machine Learning</p>
+
+  <form (ngSubmit)="getRecommendations()" class="recommender-form">
+    <div class="form-group">
+      <label for="target">Target Muscle:</label>
+      <input type="text" id="target" [(ngModel)]="formData.target" name="target" required class="form-control" placeholder="e.g., chest, legs, core">
+    </div>
+
+    <div class="form-group">
+      <label for="level">Fitness Level:</label>
+      <input type="text" id="level" [(ngModel)]="formData.level" name="level" required class="form-control" placeholder="e.g., beginner, intermediate, advanced">
+    </div>
+
+    <div class="form-group">
+      <label for="equipment">Equipment:</label>
+      <input type="text" id="equipment" [(ngModel)]="formData.equipment" name="equipment" required class="form-control" placeholder="e.g., dumbbells, bodyweight, resistance bands">
+    </div>
+
+    <button type="submit" [disabled]="isLoading" class="btn-submit">
+      <span *ngIf="!isLoading">Generate Recommendations</span>
+      <span *ngIf="isLoading">Processing<span class="loading-text"></span></span>
+    </button>
+  </form>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Loading animation -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-spinner"></div>
+    
+    <div class="processing-steps">
+      <div class="processing-step"></div>
+      <div class="processing-step"></div>
+      <div class="processing-step"></div>
+    </div>
+
+    <div class="loading-message">
+      <p class="generative-text">Initializing AI Analysis<span class="loading-text"></span></p>
+    </div>
+    
+    <div class="loading-message">
+      <p class="generative-text">Processing Your Fitness Profile<span class="loading-text"></span></p>
+    </div>
+    
+    <div class="loading-message">
+      <p class="generative-text">Analyzing Exercise Database<span class="loading-text"></span></p>
+    </div>
+    
+    <div class="loading-message">
+      <p class="generative-text">Generating Personalized Recommendations<span class="loading-text"></span></p>
+    </div>
+    
+    <div class="loading-message">
+      <p class="generative-text">Optimizing for Your Goals<span class="loading-text"></span></p>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div *ngIf="recommendations.length > 0" class="results-container">
+    <h3 class="generative-text">Your Personalized Exercise Recommendations</h3>
+    <p class="subtitle">AI-optimized for your specific needs</p>
+
+    <div class="exercise-card" *ngFor="let exercise of recommendations">
+      <h4>{{ exercise.name }}</h4>
+      <p><strong>Body Part:</strong> {{ exercise.bodyPart }}</p>
+      <div class="image-container">
+        <img 
+          *ngIf="exercise.gifUrl" 
+          [src]="exercise.gifUrl" 
+          alt="{{ exercise.name }} demo" 
+          class="exercise-gif"
+          [class.loading]="!exercise.imageLoaded"
+          (load)="exercise.imageLoaded = true"
+        >
+        <div *ngIf="!exercise.imageLoaded" class="image-placeholder">
+          <div class="loading-spinner"></div>
+        </div>
+      </div>
+      <div class="instructions">
+        <h5>Instructions:</h5>
+        <p>{{ exercise.instructions }}</p>
+      </div>
+    </div>
+  </div>
+</div>
