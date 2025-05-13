@@ -6,7 +6,7 @@ import { Observable, lastValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class SubscriptionService {
-  private apiUrl = 'http://localhost:8089/abonnement-requests';
+  private apiUrl = `${environment.apiUrl}/abonnement-requests';
   private cachedToken: string | null = null;
 
   private useraccount = {
@@ -43,7 +43,7 @@ export class SubscriptionService {
 
     try {
       const token = await lastValueFrom(this.http.post<string>(
-        'http://localhost:8089/auth/generateToken',
+        `${environment.apiUrl}/auth/generateToken',
         account,
         { responseType: 'text' as 'json' }
       ));

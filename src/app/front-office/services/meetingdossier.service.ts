@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {environment} from "../../../environments/environment";
 
 export interface MeetingRequest {
   patientName: string;
@@ -13,7 +14,7 @@ export interface MeetingRequest {
   providedIn: 'root'
 })
 export class MeetingdossierService {
-  private apiUrl = 'http://localhost:8089/meeting';
+  private apiUrl = `${environment.apiUrl}/meeting`;
 
   constructor(private http: HttpClient) {}
 

@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MealPlan } from '../nutrition/models/MealPlan';
 import { HeaderService } from './header.service';
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MealPlanService {
-  private apiUrl = 'http://localhost:8089/mealplan';
+  private apiUrl = `${environment.apiUrl}/mealplan`;
 
   constructor(private http: HttpClient, private headerService: HeaderService) {}
 
@@ -33,15 +34,15 @@ export class MealPlanService {
       dayOfWeek: mealPlan.dayOfWeek,
       description: mealPlan.description,
       userId: mealPlan.userId,
-      mealType: mealPlan.mealType,      
-      mealOrder: mealPlan.mealOrder,     
-      userEmail: mealPlan.userEmail,     
+      mealType: mealPlan.mealType,
+      mealOrder: mealPlan.mealOrder,
+      userEmail: mealPlan.userEmail,
       dietProgramId: mealPlan.dietProgramId,
       recipeId: mealPlan.recipeId
     };
-    
+
     return this.http.post<MealPlan>(
-      `${this.apiUrl}/create`, 
+      `${this.apiUrl}/create`,
       requestBody,
       { headers: this.headerService.getHeader() }
     );
@@ -59,14 +60,14 @@ export class MealPlanService {
       dietProgramId: mealPlan.dietProgramId,
       recipeId: mealPlan.recipeId
     };
-    
+
     return this.http.put<MealPlan>(
-      `${this.apiUrl}/update-mealplan/${id}`,  
+      `${this.apiUrl}/update-mealplan/${id}`,
       requestBody,
       { headers: this.headerService.getHeader() }
     );
   }
-  
+
   // Delete meal plan
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/remove-mealPlan/${id}`, {
@@ -86,9 +87,9 @@ export class MealPlanService {
       dietProgramId: mp.dietProgramId,
       recipeId: mp.recipeId
     }));
-    
+
     return this.http.post<MealPlan[]>(
-      `${this.apiUrl}/add-manyMealPlans`, 
+      `${this.apiUrl}/add-manyMealPlans`,
       requestBodies,
       { headers: this.headerService.getHeader() }
     );

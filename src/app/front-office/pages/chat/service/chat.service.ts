@@ -4,7 +4,8 @@ import { Observable, switchMap } from 'rxjs';
 import { User } from '../model/User';
 import { ChatMessage } from '../model/ChatMessage';
 import { AuthService } from 'src/app/front-office/services/auth.service';
-const apiUrl = 'http://localhost:8089/training-sessions/';
+import {environment} from "../../../../../environments/environment";
+const apiUrl = `${environment.apiUrl}/training-sessions/`;
 @Injectable({
   providedIn: 'root'
 })

@@ -3,13 +3,14 @@ import { DietProgram, DietProgramRequest } from '../nutrition/models/DietProgram
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HeaderService } from './header.service';
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DietProgramService {
 
-  private apiUrl = 'http://localhost:8089/dietprogram';
+  private apiUrl = `${environment.apiUrl}/dietprogram`;
 
   constructor(private http: HttpClient, private headerService: HeaderService) {}
 
@@ -70,7 +71,7 @@ export class DietProgramService {
   findByMultipleUserIds(userIds: number[]): Observable<DietProgram[]> {
     let params = new HttpParams();
     userIds.forEach(id => params = params.append('userIds', id.toString()));
-  
+
     return this.http.get<DietProgram[]>(`${this.apiUrl}/findByMultipleUserIds`, {
       headers: this.headerService.getHeader(),
       params: params
@@ -79,7 +80,7 @@ export class DietProgramService {
     // tconverty e diet programm l dietprogram request (aka dto)
     private convertToDietProgramRequest(dietProgram: DietProgram): DietProgramRequest {
       const creationDate =  new Date()?.toISOString()?.split('T')[0];  //sinon nestaaml lwakt l actuel
-    
+
       return {
         idDiet: dietProgram.idDiet,
         name: dietProgram.name,
@@ -87,10 +88,10 @@ export class DietProgramService {
         calories: dietProgram.calories,
         duration: dietProgram.duration,
         targetGoal: dietProgram.targetGoal,
-        creationDate: creationDate,  
+        creationDate: creationDate,
         userUsername: dietProgram.user?.username,
         userEmail: dietProgram.user?.userEmail
       };
     }
-    
+
 }

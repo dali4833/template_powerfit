@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from, switchMap, Observable } from 'rxjs';
 import { AuthService } from 'src/app/front-office/services/auth.service';
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class StatService {
 
-  private baseUrlMeetings = 'http://localhost:8089/meeting'; 
-  private baseUrlDossiers = 'http://localhost:8089/dossier';
+  private baseUrlMeetings = `${environment.apiUrl}/meeting`;
+  private baseUrlDossiers = `${environment.apiUrl}/dossier`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

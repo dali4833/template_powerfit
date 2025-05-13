@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/front-office/services/auth.service';
+import {environment} from "../../../environments/environment";
 
 export interface MedicalFolder {
   id: number;
@@ -38,7 +39,7 @@ export interface GenderStat {
   providedIn: 'root'
 })
 export class MedicalfolderService {
-  private baseUrl = 'http://localhost:8089/dossier';
+  private baseUrl = `${environment.apiUrl}/dossier`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

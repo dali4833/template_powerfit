@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SuggestedRecipe } from '../nutrition/models/SuggestedRecipes';
 import { HeaderService } from './header.service';
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,10 @@ export class SuggestedRecipesService {
    ) { }
 
   getSuggestedRecipes(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:8089/recipe/suggestedrecipes',{
+    return this.http.get<any[]>(`${environment.apiUrl}/recipe/suggestedrecipes`,{
       headers: this.headerService.getHeader(),
     });
   }
-  
-  
+
+
 }

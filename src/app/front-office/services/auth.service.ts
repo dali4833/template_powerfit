@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import {environment} from "../../../environments/environment";
 
 
 
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8089/auth';
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient,private router: Router) {}
 
@@ -73,7 +74,7 @@ export class AuthService {
     const token = localStorage.getItem('token');
 
     return this.http.post(
-      `http://localhost:8089/auth/owner/add-to-club?clubId=${clubId}`,
+      `${environment.apiUrl}/auth/owner/add-to-club?clubId=${clubId}`,
       userInfo,
       {
         headers: {

@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap } from 'rxjs';
 import {AuthService} from "../../front-office/services/auth.service";
+import {environment} from "../../../environments/environment";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class StatisticsService {
-  private apiUrl = 'http://localhost:8089/statistics';
+  private apiUrl = `${environment.apiUrl}/statistics`;
 
   constructor(
     private http: HttpClient,

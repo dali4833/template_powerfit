@@ -33,7 +33,7 @@ export class EditaddComponent implements OnInit {
   }
 
   private loadPacks(): void {
-    this.abonnementService.getpacks().subscribe({
+    this.abonnementService.getPacks().subscribe({
       next: (packs: any[]) => this.packs = packs,
       error: (error: any) => {
         this.errorMessage = 'Failed to load packs';
@@ -56,7 +56,7 @@ export class EditaddComponent implements OnInit {
        const abonnementrequest: any = {
         startDate: new Date(),
         endDate: new Date(formValue.requestedDate),
-     
+
        }
       this.abonnementService.createRequest(abonnementrequest,packId).subscribe({
         next: () => {

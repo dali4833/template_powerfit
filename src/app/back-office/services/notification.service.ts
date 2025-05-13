@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Client, IMessage } from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
 import { BehaviorSubject } from 'rxjs';
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class WebSocketNotificationService {
   }
 
   initializeWebSocketConnection() {
-    const socket = new SockJS('http://localhost:8089/ws');
+    const socket = new SockJS(`${environment.apiUrl}/ws`);
 
     this.stompClient = new Client({
       webSocketFactory: () => socket as WebSocket,

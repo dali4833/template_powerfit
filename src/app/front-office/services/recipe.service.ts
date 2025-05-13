@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { Recipe } from '../nutrition/models/Recipe';
 import { HeaderService } from './header.service';
 import { WeeklyAnalytics } from 'src/app/front-office/nutrition/models/WeeklyAnalytics';
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
-  private apiUrl = 'http://localhost:8089/recipe';
+  private apiUrl = `${environment.apiUrl}/recipe`;
 
   constructor(private http: HttpClient, private headerService: HeaderService) {}
 
@@ -30,7 +31,7 @@ export class RecipeService {
   // POST: tajouty recette
   create(recipe: Recipe): Observable<any> {
     return this.http.post(`${this.apiUrl}/add-recipe`, recipe, {
-      responseType: 'text', 
+      responseType: 'text',
         headers: this.headerService.getHeader(),
     });
   }
@@ -38,7 +39,7 @@ export class RecipeService {
   //  tmodifie fy recette
   update(recipe: Recipe): Observable<any> {
     return this.http.put(`${this.apiUrl}/update-recipe`, recipe, {
-      responseType: 'text', 
+      responseType: 'text',
         headers: this.headerService.getHeader(),
     });
   }
@@ -81,6 +82,6 @@ export class RecipeService {
   searchRecipes(query: string): Observable<Recipe[]> {
     return this.http.get<Recipe[]>(`${this.apiUrl}/recipes/search?q=${query}`);
   }
-  
+
 }
 

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import {environment} from "../../../environments/environment";
 
 
 
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AdminauthService {
-  private apiUrl = 'http://localhost:8089/auth';
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -55,7 +56,7 @@ deleteUserById(id: number) {
   const token = localStorage.getItem('token');
   return this.http.delete(`${this.apiUrl}/admin/deleteUser/${id}`, {
     headers: {
-      Authorization: `Bearer ${token}`    
+      Authorization: `Bearer ${token}`
 }
   });
 }

@@ -2,6 +2,7 @@ import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class NutritionService {
       }
     },
     local: {
-      baseUrl: 'http://localhost:8089/api/nutrition'
+      baseUrl: `${environment.apiUrl}/api/nutrition`
     }
   };
 
@@ -52,7 +53,7 @@ export class NutritionService {
    */
   getRecipeDetails(id: number): Observable<any> {
     const url = this.API_CONFIG.spoonacular.endpoints.recipeDetail.replace('{id}', id.toString());
-    
+
     return this.http.get<any>(
       `${this.API_CONFIG.spoonacular.baseUrl}${url}`,
       { params: new HttpParams().set('apiKey', this.API_CONFIG.spoonacular.apiKey) }
@@ -98,7 +99,7 @@ export class NutritionService {
    */
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Une erreur inconnue est survenue';
-    
+
     if (error.error instanceof ErrorEvent) {
       // Erreur côté client
       errorMessage = `Erreur: ${error.error.message}`;
@@ -106,7 +107,7 @@ export class NutritionService {
       // Erreur côté serveur
       errorMessage = `Code ${error.status}: ${error.message}`;
     }
-    
+
     console.error(errorMessage);
     return throwError(errorMessage);
   }

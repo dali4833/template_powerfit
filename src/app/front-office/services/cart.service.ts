@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import {AuthService} from "./auth.service";
 import {NotificationService} from "./notification.service";
+import { environment } from 'src/environments/environment';
 
 interface Command {
   id: number;
@@ -18,7 +19,7 @@ interface Command {
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  private apiUrl = 'http://localhost:8089/api/commands';
+  private apiUrl = `${environment.apiUrl}/api/commands`;
   public cartItemsSubject = new BehaviorSubject<Command[]>([]);
   private cartCountSubject = new BehaviorSubject<number>(0);
 

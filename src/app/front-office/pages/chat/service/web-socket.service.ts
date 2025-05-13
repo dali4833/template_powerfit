@@ -4,6 +4,7 @@ import SockJS from 'sockjs-client';
 import { Subject } from 'rxjs';
 import { NotificationService } from './NotificationService';
 import { ChatNotification } from '../model/ChatNotification';
+import {environment} from "../../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class WebSocketService {
   connect() {
     const token = localStorage.getItem('token');
 
-    const socket = new SockJS('http://localhost:8089/ws');
+    const socket = new SockJS(`${environment.apiUrl}/ws`);
     this.stompClient = Stomp.over(socket);
 
     const that = this;
